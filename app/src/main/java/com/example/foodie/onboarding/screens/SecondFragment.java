@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.foodie.R;
+import com.example.foodie.auth.AuthActivity;
 import com.example.foodie.home.HomeActivity;
 
 public class SecondFragment extends Fragment {
@@ -31,7 +32,7 @@ public class SecondFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity() , HomeActivity.class);
+                Intent intent = new Intent(getActivity() , AuthActivity.class);
                 startActivity(intent);
             }
         });
