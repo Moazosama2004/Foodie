@@ -23,9 +23,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        new Handler().postDelayed(()->{
-            Intent intent = new Intent(this,OnBoardingActivity.class);
-            startActivity(intent);
-        },3000);
+
     }
 }

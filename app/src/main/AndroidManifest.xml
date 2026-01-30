@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Foodie">
         <activity
-            android:name=".OnBoardingActivity"
+            android:name=".onboarding.OnBoardingActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
