@@ -6,5 +6,8 @@
     <color name="background">#FFEEDA</color>
     <color name="grey_light">#646464</color>
     <color name="background_light">#EDEDED</color>
+    <color name="text_field_border">#F1ECEC</color>
+    <color name="hint_text">#ABABAB</color>
+
 
 </resources>
