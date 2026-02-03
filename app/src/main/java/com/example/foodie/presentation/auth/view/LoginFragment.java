@@ -1,4 +1,4 @@
-package com.example.foodie.auth;
+package com.example.foodie.presentation.auth.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,19 +12,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.foodie.R;
 import com.example.foodie.home.HomeActivity;
+import com.example.foodie.presentation.auth.presenter.AuthPresenter;
+import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment  implements  AuthView{
 
     private Button btnLogin;
     private TextView txtRegister;
+    private TextView emailTxt;
+    private TextView passwordTxt;
+    private ImageView googleBtn;
+    private AuthPresenter authPresenter;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        authPresenter = new AuthPresenterImpl(this , getActivity());
     }
 
     @Override
@@ -38,12 +49,24 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         btnLogin =  view.findViewById(R.id.btn_login);
         txtRegister = view.findViewById(R.id.txt_register);
+        emailTxt = view.findViewById(R.id.login_email_txt);
+        passwordTxt = view.findViewById(R.id.login_password_txt);
+        googleBtn = view.findViewById(R.id.google_btn);
+
+
+
+        googleBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                authPresenter.firebaseWithGoogle();
+            }
+        });
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity() , HomeActivity.class);
-                startActivity(intent);
+                authPresenter.login(emailTxt.getText().toString() , passwordTxt.getText().toString());
             }
         });
 
@@ -53,5 +76,26 @@ public class LoginFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_signupFragment);
             }
         });
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(getActivity() , message , Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void navigateToHome() {
+        Intent intent = new Intent(getActivity() , HomeActivity.class);
+        startActivity(intent);
     }
 }

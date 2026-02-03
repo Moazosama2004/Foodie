@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.foodie.R;
-import com.example.foodie.auth.AuthActivity;
-import com.example.foodie.home.HomeActivity;
+import com.example.foodie.presentation.auth.view.AuthActivity;
 
 public class SecondFragment extends Fragment {
 
