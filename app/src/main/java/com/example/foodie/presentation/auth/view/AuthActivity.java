@@ -1,4 +1,4 @@
-package com.example.foodie.auth;
+package com.example.foodie.presentation.auth.view;
 
 import android.os.Bundle;
 

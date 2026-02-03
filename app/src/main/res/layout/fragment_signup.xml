@@ -67,7 +67,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editTextText"
+                android:id="@+id/signup_name_txt"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="22dp"
@@ -88,7 +88,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
             <EditText
-                android:id="@+id/editTextText2"
+                android:id="@+id/signup_email_txt"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="20dp"
@@ -102,13 +102,13 @@
                 android:paddingStart="16dp"
                 android:fontFamily="@font/open_sans"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/editTextText"
+                app:layout_constraintEnd_toEndOf="@+id/signup_name_txt"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/editTextText"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+                app:layout_constraintStart_toStartOf="@+id/signup_name_txt"
+                app:layout_constraintTop_toBottomOf="@+id/signup_name_txt" />
 
             <EditText
-                android:id="@+id/editTextText3"
+                android:id="@+id/signup_password_txt"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="20dp"
@@ -124,13 +124,13 @@
                 android:paddingEnd="16dp"
                 android:fontFamily="@font/open_sans"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/editTextText2"
-                app:layout_constraintStart_toStartOf="@+id/editTextText2"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+                app:layout_constraintEnd_toEndOf="@+id/signup_email_txt"
+                app:layout_constraintStart_toStartOf="@+id/signup_email_txt"
+                app:layout_constraintTop_toBottomOf="@+id/signup_email_txt" />
 
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/signup_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -138,9 +138,9 @@
                 android:background="@drawable/app_custom_button"
                 android:text="Create Account"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/editTextText2"
-                app:layout_constraintStart_toStartOf="@id/editTextText2"
-                app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+                app:layout_constraintEnd_toEndOf="@id/signup_email_txt"
+                app:layout_constraintStart_toStartOf="@id/signup_email_txt"
+                app:layout_constraintTop_toBottomOf="@+id/signup_password_txt" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
