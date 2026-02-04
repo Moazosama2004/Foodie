@@ -5,11 +5,10 @@ import android.app.Activity;
 import com.example.foodie.data.auth.datasource.AuthRepo;
 import com.example.foodie.presentation.auth.view.AuthView;
 
-public class AuthPresenterImpl implements AuthPresenter{
+public class AuthPresenterImpl implements AuthPresenter {
 
     private final AuthRepo authRepo;
     private AuthView authView;
-
 
 
     public AuthPresenterImpl(AuthView authView, Activity activity) {
@@ -20,7 +19,7 @@ public class AuthPresenterImpl implements AuthPresenter{
     @Override
     public void login(String email, String password) {
         authView.showLoading();
-        authRepo.login(email , password);
+        authRepo.login(email, password);
         authView.hideLoading();
         authView.navigateToHome();
     }
@@ -28,7 +27,7 @@ public class AuthPresenterImpl implements AuthPresenter{
     @Override
     public void register(String email, String password) {
         authView.showLoading();
-        authRepo.register(email , password);
+        authRepo.register(email, password);
         authView.hideLoading();
         authView.navigateToHome();
     }

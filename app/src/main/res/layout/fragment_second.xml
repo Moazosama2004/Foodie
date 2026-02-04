@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.onboarding.view.FirstFragment"
     android:background="@color/white"
-    >
+    tools:context=".presentation.onboarding.view.FirstFragment">
 
     <ImageView
         android:id="@+id/imageView3"
@@ -41,8 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center"
-        android:textColor="@color/grey_light"
         android:text="Enjoy a fast and smooth food delivery at\nyour doorstep"
+        android:textColor="@color/grey_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />

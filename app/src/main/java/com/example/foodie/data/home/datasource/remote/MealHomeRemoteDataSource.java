@@ -28,7 +28,7 @@ public class MealHomeRemoteDataSource {
 
                 if (response.code() == 200) {
                     MealsBaseResponse mealBaseResponse = response.body();
-                    List<Meal>  meals = mealBaseResponse.getMeals();
+                    List<Meal> meals = mealBaseResponse.getMeals();
                     callback.onSuccessOneMeal(meals.get(0));
                 } else {
                     callback.onFailure("Error server error");

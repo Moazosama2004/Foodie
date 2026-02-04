@@ -2,14 +2,13 @@ package com.example.foodie.presentation.onboarding.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.foodie.R;
 import com.example.foodie.presentation.auth.view.AuthActivity;
@@ -31,7 +30,7 @@ public class SecondFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity() , AuthActivity.class);
+                Intent intent = new Intent(getActivity(), AuthActivity.class);
                 startActivity(intent);
             }
         });

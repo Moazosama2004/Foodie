@@ -1,14 +1,15 @@
-package com.example.foodie;
+package com.example.foodie.presentation.onboarding.view;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import com.example.foodie.R;
 
 public class SplashFragment extends Fragment {
     @Override
@@ -21,9 +22,9 @@ public class SplashFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
-        new Handler().postDelayed(()->{
+        new Handler().postDelayed(() -> {
             Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_viewPagerFragment);
-        },3000);
+        }, 3000);
         return view;
     }
 }

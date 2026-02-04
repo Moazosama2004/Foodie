@@ -2,6 +2,10 @@ package com.example.foodie.presentation.home.view;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,11 +13,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -25,12 +24,13 @@ import com.example.foodie.presentation.home.presenter.HomePresenterImpl;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements  HomeView{
+public class HomeFragment extends Fragment implements HomeView {
     private ConstraintLayout mealOfTheDayLayout;
     private HomePresenter homePresenter;
     private RecyclerView recyclerView;
 
     private PopularMealsAdapter adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,11 +75,11 @@ public class HomeFragment extends Fragment implements  HomeView{
 
     }
 
-        @Override
-        public void showPopularMeals(List<Meal> meals) {
-            Log.d("Meals", meals.toString());
-            adapter.setPopularMeals(meals);
-        }
+    @Override
+    public void showPopularMeals(List<Meal> meals) {
+        Log.d("Meals", meals.toString());
+        adapter.setPopularMeals(meals);
+    }
 
     @Override
     public void showOneMeal(Meal meal) {

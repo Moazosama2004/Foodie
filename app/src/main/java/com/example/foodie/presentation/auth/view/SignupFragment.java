@@ -13,9 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.foodie.R;
-import com.example.foodie.presentation.home.view.HomeActivity;
 import com.example.foodie.presentation.auth.presenter.AuthPresenter;
 import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
+import com.example.foodie.presentation.home.view.HomeActivity;
 
 public class SignupFragment extends Fragment implements AuthView {
     private Button btnSignup;
@@ -29,7 +29,7 @@ public class SignupFragment extends Fragment implements AuthView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        authPresenter = new AuthPresenterImpl(this,getActivity());
+        authPresenter = new AuthPresenterImpl(this, getActivity());
     }
 
     @Override
