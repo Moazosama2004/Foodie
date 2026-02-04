@@ -48,29 +48,29 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void getPopularMeals() {
-        homeView.showProgress();
-        mealHomeRepo.getRandomMeals(10, new MealHomeNetworkResponse() {
-            @Override
-            public void onSuccessOneMeal(Meal meal) {
-            }
+            homeView.showProgress();
+            mealHomeRepo.getRandomMeals(10, new MealHomeNetworkResponse() {
+                @Override
+                public void onSuccessOneMeal(Meal meal) {
+                }
 
-            @Override
-            public void onSuccessMeals(List<Meal> meals) {
-                homeView.hideProgress();
-                homeView.showPopularMeals(meals);
-            }
+                @Override
+                public void onSuccessMeals(List<Meal> meals) {
+                    homeView.hideProgress();
+                    homeView.showPopularMeals(meals);
+                }
 
-            @Override
-            public void onFailure(String message) {
-                homeView.hideProgress();
-                homeView.showError(message);
-            }
+                @Override
+                public void onFailure(String message) {
+                    homeView.hideProgress();
+                    homeView.showError(message);
+                }
 
-            @Override
-            public void noInternet(String message) {
-                homeView.hideProgress();
-                homeView.showError(message);
-            }
-        });
+                @Override
+                public void noInternet(String message) {
+                    homeView.hideProgress();
+                    homeView.showError(message);
+                }
+            });
     }
 }

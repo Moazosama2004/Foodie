@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/bottom_nav_bar_search"
-        android:name="com.example.foodie.presentation.search.SearchFragment"
+        android:name="com.example.foodie.presentation.search.view.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment

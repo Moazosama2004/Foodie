@@ -20,8 +20,7 @@ public class PopularMealsAdapter extends RecyclerView.Adapter<PopularMealsAdapte
 
     private List<Meal> meals = new ArrayList<>();
 
-    public PopularMealsAdapter() {
-    }
+
 
     public void setPopularMeals(List<Meal> meals) {
         this.meals = meals;
