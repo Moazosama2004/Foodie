@@ -7,7 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +28,18 @@ import java.util.List;
 public class HomeFragment extends Fragment implements  HomeView{
     private ConstraintLayout mealOfTheDayLayout;
     private HomePresenter homePresenter;
+    private RecyclerView recyclerView;
 
+    private PopularMealsAdapter adapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         homePresenter = new HomePresenterImpl(this);
-        homePresenter.getRandomeMeal();
+        homePresenter.getRandomMeal();
+        homePresenter.getPopularMeals();
+        adapter = new PopularMealsAdapter();
+
+
     }
 
     @Override
@@ -43,7 +52,12 @@ public class HomeFragment extends Fragment implements  HomeView{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mealOfTheDayLayout = view.findViewById(R.id.meal_of_the_day_layout);
-
+        recyclerView = view.findViewById(R.id.meals_recycler_view);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setClipToPadding(true);
+        recyclerView.setClipChildren(true);
+        recyclerView.setPadding(50, 0, 50, 0);
     }
 
     @Override
@@ -61,10 +75,11 @@ public class HomeFragment extends Fragment implements  HomeView{
 
     }
 
-    @Override
-    public void showMeals(List<Meal> meals) {
-
-    }
+        @Override
+        public void showPopularMeals(List<Meal> meals) {
+            Log.d("Meals", meals.toString());
+            adapter.setPopularMeals(meals);
+        }
 
     @Override
     public void showOneMeal(Meal meal) {

@@ -14,4 +14,8 @@ public class MealHomeRepo {
         mealHomeRemoteDataSource.getRandomMeal(callback);
     }
 
+    public void getRandomMeals(int count, MealHomeNetworkResponse callback) {
+        mealHomeRemoteDataSource.getRandomMeals(count, callback);
+    }
+
 }

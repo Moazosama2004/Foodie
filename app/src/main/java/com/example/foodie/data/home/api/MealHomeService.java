@@ -9,4 +9,6 @@ public interface MealHomeService {
     @GET("random.php")
     Call<MealsBaseResponse> getRandomMeal();
 
+
+
 }
