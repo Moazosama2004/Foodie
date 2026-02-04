@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.foodie.R;
-import com.example.foodie.home.HomeActivity;
+import com.example.foodie.presentation.home.view.HomeActivity;
 import com.example.foodie.presentation.auth.presenter.AuthPresenter;
 import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
 

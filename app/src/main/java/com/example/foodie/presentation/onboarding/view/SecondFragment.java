@@ -1,5 +1,6 @@
-package com.example.foodie.onboarding.screens;
+package com.example.foodie.presentation.onboarding.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,8 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.foodie.R;
+import com.example.foodie.presentation.auth.view.AuthActivity;
 
-public class FirstFragment extends Fragment {
+public class SecondFragment extends Fragment {
 
 
     @Override
@@ -23,15 +25,18 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
-        Button next = view.findViewById(R.id.onboarding_one_next_btn);
+        View view = inflater.inflate(R.layout.fragment_second, container, false);
+        Button next = view.findViewById(R.id.onboarding_second_next_btn);
         ViewPager2 viewPager = getActivity().findViewById(R.id.view_pager);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewPager.setCurrentItem(1);
+                Intent intent = new Intent(getActivity() , AuthActivity.class);
+                startActivity(intent);
             }
         });
         return view;
     }
+
 }
+
