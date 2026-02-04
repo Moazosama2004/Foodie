@@ -1,9 +1,8 @@
-package com.example.foodie.onboarding;
+package com.example.foodie.presentation.onboarding.view;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
@@ -11,10 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodie.R;
-import com.example.foodie.onboarding.screens.FirstFragment;
-import com.example.foodie.onboarding.screens.SecondFragment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
