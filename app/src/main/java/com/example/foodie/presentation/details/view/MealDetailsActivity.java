@@ -1,12 +1,10 @@
-package com.example.foodie;
+package com.example.foodie.presentation.details.view;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,9 +14,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodie.R;
+import com.example.foodie.data.core.model.FavMeal;
 import com.example.foodie.data.home.model.response.Meal;
+import com.example.foodie.presentation.details.presenter.DetailsPresenter;
 import com.example.foodie.presentation.details.presenter.DetailsPresenterImpl;
-import com.example.foodie.presentation.details.view.DetailsView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MealDetailsActivity extends AppCompatActivity implements DetailsView {
 
@@ -30,18 +31,22 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     private TextView tvMealType;
     private TextView tvMealCountry;
     private TextView tvInstructions;
-    private ImageView addToFav;
-    private DetailsPresenterImpl presenter;
+    private FloatingActionButton addToFav;
+
+    private DetailsPresenter presenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_meal_details);
-
-        // Initialize presenter
-        presenter = new DetailsPresenterImpl(getApplicationContext(), this);
-
-        // Initialize adapter and views
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        presenter = new DetailsPresenterImpl(getApplicationContext() , this);
         adapter = new MealDetailsAdapter();
         recyclerView = findViewById(R.id.rv_ingredients);
         recyclerView.setAdapter(adapter);
@@ -52,56 +57,38 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
         tvMealCountry = findViewById(R.id.tv_meal_country);
         tvInstructions = findViewById(R.id.tv_instructions);
 
-        // Get meal from intent
         meal = getIntent().getParcelableExtra("MEAL_KEY");
+        Log.d("addToFav", meal.toString());
 
-        // Debug log with null check
-        if (meal != null) {
-            Log.d("MealDetailsActivity", "Meal received: " + meal.toString());
-        } else {
-            Log.e("MealDetailsActivity", "Meal is NULL from intent!");
-            // Show error and finish activity
-            Toast.makeText(this, "Failed to load meal details", Toast.LENGTH_SHORT).show();
-            finish();
-            return; // Exit early
-        }
-
-        // Setup FAB click listener
         addToFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("MealDetailsActivity", "FAB Clicked!");
+                Log.d("addToFav", "Clicked");
                 if (meal != null) {
-                    Log.d("MealDetailsActivity", "Adding to favorites: " + meal.getStrMeal());
+                    Log.d("addToFav", "added");
                     presenter.addToFav(meal);
-                    Toast.makeText(MealDetailsActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e("MealDetailsActivity", "Cannot add to favorites - meal is null");
-                    Toast.makeText(MealDetailsActivity.this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
+                }else {
+                    Log.d("addToFav", "addToFav meal is null");
                 }
             }
         });
 
-        // Load meal data
         if (meal != null) {
-            Log.d("MealDetailsActivity", "Loading meal data");
+            Log.d("Meal", meal.toString());
             Glide.with(this)
                     .load(meal.getStrMealThumb())
                     .placeholder(R.drawable.meal_of_the_day)
+//                    .error(R.drawable.error)
                     .into(imgMeal);
             tvMealName.setText(meal.getStrMeal());
             tvMealType.setText(meal.getStrCategory());
             tvMealCountry.setText(meal.getStrArea());
             tvInstructions.setText(meal.getStrInstructions());
-
-            // Check if ingredients list is not null
-            if (meal.getIngredients() != null) {
-                adapter.setIngredientList(meal.getIngredients());
-                Log.d("MealDetailsActivity", "Ingredients count: " + meal.getIngredients().size());
-            } else {
-                Log.w("MealDetailsActivity", "Ingredients list is null");
-            }
+            adapter.setIngredientList(meal.getIngredients());
+        } else {
+            Log.d("Meal", "meal is null");
         }
+
     }
 
     @Override
@@ -123,4 +110,5 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     public void onSuccess() {
 
     }
+
 }

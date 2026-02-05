@@ -1,4 +1,4 @@
-package com.example.foodie;
+package com.example.foodie.presentation.details.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodie.R;
 import com.example.foodie.data.home.model.MealIngredient;
-import com.example.foodie.data.search.model.Ingredient;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.MealDetailsViewHolder>{
@@ -29,12 +27,12 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
 
     @NonNull
     @Override
-    public MealDetailsAdapter.MealDetailsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MealDetailsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MealDetailsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food,parent ,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MealDetailsAdapter.MealDetailsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MealDetailsViewHolder holder, int position) {
         holder.foodName.setText(ingredientList.get(position).getName());
 //        holder.foodImage.setImageResource(ingredientList.get(position).getImage());
         Glide.with(holder.itemView.getContext())
