@@ -92,6 +92,7 @@ public class LoginFragment extends Fragment implements AuthView {
 
     @Override
     public void navigateToHome() {
+        authPresenter.setUserLoggedIn();
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
     }

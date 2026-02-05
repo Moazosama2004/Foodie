@@ -39,4 +39,10 @@ public class AuthPresenterImpl implements AuthPresenter {
         authView.hideLoading();
         authView.navigateToHome();
     }
+
+    @Override
+    public void setUserLoggedIn() {
+        authRepo.setUserLoggedIn();
+        authView.navigateToHome();
+    }
 }
