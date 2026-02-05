@@ -1,12 +1,17 @@
 package com.example.foodie.data.home.model.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.example.foodie.data.home.model.MealIngredient;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Meal {
+public class Meal implements Parcelable {
 
     @SerializedName("idMeal")
     private String idMeal;
@@ -294,5 +299,53 @@ public class Meal {
             }
         }
         return list;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    protected Meal(Parcel in) {
+        idMeal = in.readString();
+        strMeal = in.readString();
+        strCategory = in.readString();
+        strArea = in.readString();
+        strInstructions = in.readString();
+        strMealThumb = in.readString();
+        strIngredient1 = in.readString();
+        strIngredient2 = in.readString();
+        strIngredient3 = in.readString();
+        strMeasure1 = in.readString();
+        strMeasure2 = in.readString();
+        strMeasure3 = in.readString();
+    }
+
+    public static final Creator<Meal> CREATOR = new Creator<Meal>() {
+        @Override
+        public Meal createFromParcel(Parcel in) {
+            return new Meal(in);
+        }
+
+        @Override
+        public Meal[] newArray(int size) {
+            return new Meal[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(idMeal);
+        parcel.writeString(strMeal);
+        parcel.writeString(strCategory);
+        parcel.writeString(strArea);
+        parcel.writeString(strInstructions);
+        parcel.writeString(strMealThumb);
+        parcel.writeString(strIngredient1);
+        parcel.writeString(strIngredient2);
+        parcel.writeString(strIngredient3);
+        parcel.writeString(strMeasure1);
+        parcel.writeString(strMeasure2);
+        parcel.writeString(strMeasure3);
     }
 }
