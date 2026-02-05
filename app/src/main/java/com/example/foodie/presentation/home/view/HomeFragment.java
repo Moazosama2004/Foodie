@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment implements HomeView {
             @Override
             public void onMealClick(Meal meal) {
                 Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
+                intent.putExtra("MEAL_KEY", meal);
                 startActivity(intent);
             }
         });
