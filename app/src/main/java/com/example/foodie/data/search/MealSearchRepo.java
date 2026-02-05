@@ -9,7 +9,7 @@ import com.example.foodie.data.search.model.Category;
 import com.example.foodie.data.search.model.Ingredient;
 
 public class MealSearchRepo {
-    private MealsSearchRemoteDataSource mealsSearchRemoteDataSource;
+    private final MealsSearchRemoteDataSource mealsSearchRemoteDataSource;
 
 
     public MealSearchRepo() {

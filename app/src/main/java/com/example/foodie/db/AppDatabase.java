@@ -14,10 +14,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
 
-    public abstract FavMealsDao favMealsDao();
-
-    public static synchronized AppDatabase getInstance(Context context){
-        if (instance == null){
+    public static synchronized AppDatabase getInstance(Context context) {
+        if (instance == null) {
             instance = Room.databaseBuilder(
                     context.getApplicationContext(),
                     AppDatabase.class,
@@ -26,4 +24,6 @@ public abstract class AppDatabase extends RoomDatabase {
         }
         return instance;
     }
+
+    public abstract FavMealsDao favMealsDao();
 }

@@ -48,7 +48,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     }
 
     static class FoodViewHolder extends RecyclerView.ViewHolder {
-//        ImageView foodImage;
+        //        ImageView foodImage;
         TextView foodName;
 
         public FoodViewHolder(@NonNull View itemView) {

@@ -11,7 +11,7 @@ public class SharedPrefsImpl implements SharedPrefsService {
     private static final String KEY_ONBOARDING_SEEN = "onboarding_seen";
 
     private static SharedPrefsImpl INSTANCE;
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     private SharedPrefsImpl(Context context) {
         sharedPreferences =

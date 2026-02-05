@@ -2,22 +2,21 @@ package com.example.foodie.presentation.onboarding.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.foodie.R;
 import com.example.foodie.presentation.home.view.HomeActivity;
 import com.example.foodie.presentation.onboarding.presenter.OnboardingPresenter;
 import com.example.foodie.presentation.onboarding.presenter.OnboardingPresenterImpl;
 
-public class SplashFragment extends Fragment implements  OnboardingView{
+public class SplashFragment extends Fragment implements OnboardingView {
 
     private OnboardingPresenter presenter;
     private View rootView;

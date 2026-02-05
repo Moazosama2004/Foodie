@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodie.R;
-import com.example.foodie.data.core.model.FavMeal;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.presenter.DetailsPresenter;
 import com.example.foodie.presentation.details.presenter.DetailsPresenterImpl;
@@ -46,7 +45,7 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        presenter = new DetailsPresenterImpl(getApplicationContext() , this);
+        presenter = new DetailsPresenterImpl(getApplicationContext(), this);
         adapter = new MealDetailsAdapter();
         recyclerView = findViewById(R.id.rv_ingredients);
         recyclerView.setAdapter(adapter);
@@ -67,7 +66,7 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
                 if (meal != null) {
                     Log.d("addToFav", "added");
                     presenter.addToFav(meal);
-                }else {
+                } else {
                     Log.d("addToFav", "addToFav meal is null");
                 }
             }

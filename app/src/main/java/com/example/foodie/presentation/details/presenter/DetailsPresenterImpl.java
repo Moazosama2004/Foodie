@@ -10,8 +10,8 @@ import com.example.foodie.presentation.details.view.DetailsView;
 import java.util.concurrent.Executors;
 
 public class DetailsPresenterImpl implements DetailsPresenter {
-    private FavMealsRepo favMealsRepo;
-    private DetailsView view;
+    private final FavMealsRepo favMealsRepo;
+    private final DetailsView view;
 
     public DetailsPresenterImpl(Context context, DetailsView view) {
         this.view = view;

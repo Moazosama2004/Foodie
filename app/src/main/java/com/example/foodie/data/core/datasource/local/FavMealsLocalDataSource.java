@@ -11,25 +11,25 @@ import com.example.foodie.db.AppDatabase;
 import java.util.List;
 
 public class FavMealsLocalDataSource {
-    private FavMealsDao favMealsDao;
+    private final FavMealsDao favMealsDao;
 
     public FavMealsLocalDataSource(Context context) {
         this.favMealsDao = AppDatabase.getInstance(context).favMealsDao();
     }
 
-    public void insertMeal(FavMeal meal){
+    public void insertMeal(FavMeal meal) {
         favMealsDao.insertMeal(meal);
     }
 
-    public void deleteMeal(FavMeal meal){
+    public void deleteMeal(FavMeal meal) {
         favMealsDao.deleteMeal(meal);
     }
 
-    public LiveData<Boolean> isMealFav(String id){
+    public LiveData<Boolean> isMealFav(String id) {
         return favMealsDao.isMealFav(id);
     }
 
-    public LiveData<List<FavMeal>> getAllFavMeals(){
+    public LiveData<List<FavMeal>> getAllFavMeals() {
         return favMealsDao.getAllFavMeals();
     }
 

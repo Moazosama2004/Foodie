@@ -6,5 +6,6 @@ public interface AuthPresenter {
     void register(String email, String password);
 
     void firebaseWithGoogle();
+
     void setUserLoggedIn();
 }

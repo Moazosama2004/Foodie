@@ -1,6 +1,5 @@
 package com.example.foodie;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,11 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -57,7 +52,7 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
 
         // Debug log with null check
         if (meal != null) {
-            Log.d("MealDetailsActivity", "Meal received: " + meal.toString());
+            Log.d("MealDetailsActivity", "Meal received: " + meal);
         } else {
             Log.e("MealDetailsActivity", "Meal is NULL from intent!");
             // Show error and finish activity

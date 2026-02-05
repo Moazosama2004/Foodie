@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface FavView {
     void showProgress();
+
     void hideProgress();
+
     void showError(String message);
+
     void showFavMeals(List<FavMeal> favMeals);
 
     LifecycleOwner getLifecycleOwner();

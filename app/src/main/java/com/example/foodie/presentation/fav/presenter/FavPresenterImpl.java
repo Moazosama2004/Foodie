@@ -10,16 +10,17 @@ import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.fav.view.FavView;
 
 import java.util.List;
-import java.util.ListIterator;
 import java.util.concurrent.Executors;
 
-public class FavPresenterImpl implements FavPresenter{
-    private FavView view;
-    private FavMealsRepo favMealsRepo;
-    public FavPresenterImpl(Context context , FavView view) {
+public class FavPresenterImpl implements FavPresenter {
+    private final FavView view;
+    private final FavMealsRepo favMealsRepo;
+
+    public FavPresenterImpl(Context context, FavView view) {
         this.view = view;
         this.favMealsRepo = new FavMealsRepo(context);
     }
+
     @Override
     public LiveData<List<FavMeal>> getFavMeals() {
         return favMealsRepo.getAllFavMeals();

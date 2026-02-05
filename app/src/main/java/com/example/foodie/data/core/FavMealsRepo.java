@@ -10,7 +10,7 @@ import com.example.foodie.data.core.model.FavMeal;
 import java.util.List;
 
 public class FavMealsRepo {
-    private FavMealsLocalDataSource favMealsLocalDataSource;
+    private final FavMealsLocalDataSource favMealsLocalDataSource;
 
     public FavMealsRepo(Context context) {
         this.favMealsLocalDataSource = new FavMealsLocalDataSource(context);
@@ -29,7 +29,7 @@ public class FavMealsRepo {
         return favMealsLocalDataSource.isMealFav(id);
     }
 
-    public LiveData<List<FavMeal>> getAllFavMeals(){
+    public LiveData<List<FavMeal>> getAllFavMeals() {
         return favMealsLocalDataSource.getAllFavMeals();
     }
 }

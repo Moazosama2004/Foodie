@@ -21,7 +21,6 @@ public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAd
     private List<FavMeal> favouriteMeals = new ArrayList<>();
 
 
-
     public void setFavouriteMeals(List<FavMeal> favouriteMeals) {
         this.favouriteMeals = favouriteMeals;
         notifyDataSetChanged();

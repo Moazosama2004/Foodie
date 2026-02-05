@@ -7,6 +7,17 @@ import java.text.Normalizer;
 
 public class MealIngredient implements Parcelable {
 
+    public static final Creator<MealIngredient> CREATOR = new Creator<MealIngredient>() {
+        @Override
+        public MealIngredient createFromParcel(Parcel in) {
+            return new MealIngredient(in);
+        }
+
+        @Override
+        public MealIngredient[] newArray(int size) {
+            return new MealIngredient[size];
+        }
+    };
     private final String name;
     private final String measure;
 
@@ -19,18 +30,6 @@ public class MealIngredient implements Parcelable {
         name = in.readString();
         measure = in.readString();
     }
-
-    public static final Creator<MealIngredient> CREATOR = new Creator<MealIngredient>() {
-        @Override
-        public MealIngredient createFromParcel(Parcel in) {
-            return new MealIngredient(in);
-        }
-
-        @Override
-        public MealIngredient[] newArray(int size) {
-            return new MealIngredient[size];
-        }
-    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

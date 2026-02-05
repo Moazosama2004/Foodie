@@ -4,7 +4,7 @@ import com.example.foodie.data.home.api.MealHomeNetworkResponse;
 import com.example.foodie.data.home.datasource.remote.MealHomeRemoteDataSource;
 
 public class MealHomeRepo {
-    private MealHomeRemoteDataSource mealHomeRemoteDataSource;
+    private final MealHomeRemoteDataSource mealHomeRemoteDataSource;
 
     public MealHomeRepo() {
         this.mealHomeRemoteDataSource = new MealHomeRemoteDataSource();

@@ -1,6 +1,5 @@
 package com.example.foodie.data.search.api;
 
-import com.example.foodie.data.home.model.response.MealsBaseResponse;
 import com.example.foodie.data.search.model.AreaResponse;
 import com.example.foodie.data.search.model.CategoryResponse;
 import com.example.foodie.data.search.model.IngredientsResponse;

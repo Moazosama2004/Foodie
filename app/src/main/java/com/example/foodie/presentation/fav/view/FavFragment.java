@@ -1,6 +1,9 @@
 package com.example.foodie.presentation.fav.view;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,10 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.foodie.R;
 import com.example.foodie.data.core.model.FavMeal;
@@ -21,11 +20,10 @@ import com.example.foodie.presentation.fav.presenter.FavPresenterImpl;
 import java.util.List;
 
 
-public class FavFragment extends Fragment implements FavView{
+public class FavFragment extends Fragment implements FavView {
 
     private FavouriteMealsAdapter adapter;
     private FavPresenter presenter;
-
 
 
     @Override
@@ -54,7 +52,7 @@ public class FavFragment extends Fragment implements FavView{
                         adapter.setFavouriteMeals(favMeals);
                     }
                 }
-        );;
+        );
 
     }
 

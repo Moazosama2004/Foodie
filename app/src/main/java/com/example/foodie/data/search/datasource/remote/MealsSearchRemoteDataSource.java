@@ -19,7 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MealsSearchRemoteDataSource {
-    private MealSearchService mealSearchService;
+    private final MealSearchService mealSearchService;
 
     public MealsSearchRemoteDataSource() {
         this.mealSearchService = MealSearchApi.getService();
@@ -55,7 +55,7 @@ public class MealsSearchRemoteDataSource {
         });
     }
 
-    public void getAreas(MealsSearchNetworkResponse<Area> callback){
+    public void getAreas(MealsSearchNetworkResponse<Area> callback) {
         mealSearchService.getAreasList().enqueue(new Callback<AreaResponse>() {
             @Override
             public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
@@ -85,7 +85,7 @@ public class MealsSearchRemoteDataSource {
     }
 
 
-    public void getIngredients(MealsSearchNetworkResponse<Ingredient> callback){
+    public void getIngredients(MealsSearchNetworkResponse<Ingredient> callback) {
         Log.d("Ingredients", "1 getIngredients");
         mealSearchService.getIngredientsList().enqueue(new Callback<IngredientsResponse>() {
             @Override
