@@ -2,12 +2,6 @@ package com.example.foodie.presentation.auth.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +10,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.example.foodie.R;
-import com.example.foodie.presentation.home.view.HomeActivity;
 import com.example.foodie.presentation.auth.presenter.AuthPresenter;
 import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
+import com.example.foodie.presentation.home.view.HomeActivity;
 
-public class LoginFragment extends Fragment  implements  AuthView{
+public class LoginFragment extends Fragment implements AuthView {
 
     private Button btnLogin;
     private TextView txtRegister;
@@ -31,11 +30,10 @@ public class LoginFragment extends Fragment  implements  AuthView{
     private AuthPresenter authPresenter;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        authPresenter = new AuthPresenterImpl(this , getActivity());
+        authPresenter = new AuthPresenterImpl(this, getActivity());
     }
 
     @Override
@@ -47,12 +45,11 @@ public class LoginFragment extends Fragment  implements  AuthView{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnLogin =  view.findViewById(R.id.btn_login);
+        btnLogin = view.findViewById(R.id.btn_login);
         txtRegister = view.findViewById(R.id.txt_register);
         emailTxt = view.findViewById(R.id.login_email_txt);
         passwordTxt = view.findViewById(R.id.login_password_txt);
         googleBtn = view.findViewById(R.id.google_btn);
-
 
 
         googleBtn.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +63,7 @@ public class LoginFragment extends Fragment  implements  AuthView{
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authPresenter.login(emailTxt.getText().toString() , passwordTxt.getText().toString());
+                authPresenter.login(emailTxt.getText().toString(), passwordTxt.getText().toString());
             }
         });
 
@@ -90,12 +87,13 @@ public class LoginFragment extends Fragment  implements  AuthView{
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity() , message , Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void navigateToHome() {
-        Intent intent = new Intent(getActivity() , HomeActivity.class);
+        authPresenter.setUserLoggedIn();
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
     }
 }

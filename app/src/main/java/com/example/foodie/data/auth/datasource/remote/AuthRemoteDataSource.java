@@ -2,8 +2,8 @@ package com.example.foodie.data.auth.datasource.remote;
 
 import android.app.Activity;
 
-import com.example.foodie.FirebaseAuthImpl;
-import com.example.foodie.FirebaseAuthService;
+import com.example.foodie.utils.FirebaseAuthImpl;
+import com.example.foodie.utils.FirebaseAuthService;
 
 public class AuthRemoteDataSource {
     private FirebaseAuthService firebaseAuthService;

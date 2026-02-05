@@ -2,18 +2,19 @@ package com.example.foodie.presentation.home.view;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -25,12 +26,15 @@ import com.example.foodie.presentation.home.presenter.HomePresenterImpl;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements  HomeView{
+public class HomeFragment extends Fragment implements HomeView {
     private ConstraintLayout mealOfTheDayLayout;
     private HomePresenter homePresenter;
     private RecyclerView recyclerView;
 
     private PopularMealsAdapter adapter;
+    private Button showDetailsBtn;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,12 @@ public class HomeFragment extends Fragment implements  HomeView{
         homePresenter.getRandomMeal();
         homePresenter.getPopularMeals();
         adapter = new PopularMealsAdapter();
+        adapter.setOnMealClickListener(new OnMealClickListener() {
+            @Override
+            public void onMealClick(Meal meal) {
+                Navigation.findNavController(requireView()).navigate(R.id.action_bottom_nav_bar_home_to_mealDetailsFragment);
+            }
+        });
 
 
     }
@@ -53,6 +63,13 @@ public class HomeFragment extends Fragment implements  HomeView{
         super.onViewCreated(view, savedInstanceState);
         mealOfTheDayLayout = view.findViewById(R.id.meal_of_the_day_layout);
         recyclerView = view.findViewById(R.id.meals_recycler_view);
+        showDetailsBtn = view.findViewById(R.id.show_details_btn);
+        showDetailsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_bottom_nav_bar_home_to_mealDetailsFragment);
+            }
+        });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setClipToPadding(true);
@@ -75,11 +92,11 @@ public class HomeFragment extends Fragment implements  HomeView{
 
     }
 
-        @Override
-        public void showPopularMeals(List<Meal> meals) {
-            Log.d("Meals", meals.toString());
-            adapter.setPopularMeals(meals);
-        }
+    @Override
+    public void showPopularMeals(List<Meal> meals) {
+        Log.d("Meals", meals.toString());
+        adapter.setPopularMeals(meals);
+    }
 
     @Override
     public void showOneMeal(Meal meal) {
@@ -98,7 +115,6 @@ public class HomeFragment extends Fragment implements  HomeView{
 
                     @Override
                     public void onLoadCleared(Drawable placeholder) {
-                        // optional: خلي background افتراضي لو الصورة اتلغي تحميلها
                     }
                 });
     }

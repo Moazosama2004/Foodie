@@ -1,11 +1,10 @@
-package com.example.foodie;
+package com.example.foodie.utils;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
+import com.example.foodie.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -19,13 +18,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class FirebaseAuthImpl implements FirebaseAuthService {
 
+    public static final int RC_GOOGLE_SIGN_IN = 1001;
     private static final String TAG = "FirebaseAuthImpl";
-
     private final FirebaseAuth firebaseAuth;
     private final Activity activity;
     private GoogleSignInClient googleSignInClient;
-
-    public static final int RC_GOOGLE_SIGN_IN = 1001;
 
     public FirebaseAuthImpl(Activity activity) {
         this.firebaseAuth = FirebaseAuth.getInstance();

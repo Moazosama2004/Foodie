@@ -19,13 +19,15 @@ import java.util.List;
 public class PopularMealsAdapter extends RecyclerView.Adapter<PopularMealsAdapter.PopularMealViewHolder> {
 
     private List<Meal> meals = new ArrayList<>();
-
-    public PopularMealsAdapter() {
-    }
+    private OnMealClickListener onMealClickListener;
 
     public void setPopularMeals(List<Meal> meals) {
         this.meals = meals;
         notifyDataSetChanged();
+    }
+
+    public void setOnMealClickListener(OnMealClickListener listener) {
+        this.onMealClickListener = listener;
     }
 
     @NonNull
@@ -43,6 +45,12 @@ public class PopularMealsAdapter extends RecyclerView.Adapter<PopularMealsAdapte
         Glide.with(holder.itemView.getContext())
                 .load(meal.getStrMealThumb())
                 .into(holder.mealImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onMealClickListener != null) {
+                onMealClickListener.onMealClick(meal);
+            }
+        });
     }
 
     @Override

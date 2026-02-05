@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.onboarding.view.FirstFragment"
     android:background="@color/white"
-    >
+    tools:context=".presentation.onboarding.view.FirstFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -43,11 +42,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:gravity="center"
-        android:textColor="@color/grey_light"
         android:text="Here You Can find a chef or dish for every\ntaste and color. Enjoy!"
+        android:textColor="@color/grey_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
     <Button
         android:id="@+id/onboarding_one_next_btn"
         android:layout_width="160dp"

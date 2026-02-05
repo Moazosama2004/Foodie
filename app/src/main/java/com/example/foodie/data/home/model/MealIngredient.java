@@ -21,7 +21,7 @@ public class MealIngredient {
     }
 
     public String getImageUrl() {
-        if (name.isEmpty()) return"";
+        if (name.isEmpty()) return "";
         String normalized = Normalizer.normalize(name, Normalizer.Form.NFD)
                 .toLowerCase()
                 .replace(" ", "_");

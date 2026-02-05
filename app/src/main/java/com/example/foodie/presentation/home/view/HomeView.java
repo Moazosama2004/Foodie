@@ -10,6 +10,8 @@ public interface HomeView {
     void hideProgress();
 
     void showError(String message);
+
     void showPopularMeals(List<Meal> meals);
+
     void showOneMeal(Meal meal);
 }

@@ -10,7 +10,7 @@ public class MealHomeRepo {
         this.mealHomeRemoteDataSource = new MealHomeRemoteDataSource();
     }
 
-    public void getRandomeMeal(MealHomeNetworkResponse callback){
+    public void getRandomeMeal(MealHomeNetworkResponse callback) {
         mealHomeRemoteDataSource.getRandomMeal(callback);
     }
 

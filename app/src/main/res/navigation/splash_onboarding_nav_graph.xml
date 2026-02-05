@@ -7,18 +7,33 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.foodie.SplashFragment"
+        android:name="com.example.foodie.presentation.onboarding.view.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_viewPagerFragment"
             app:destination="@id/viewPagerFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment2"
+            app:destination="@id/loginFragment2" />
+        <action
+            android:id="@+id/action_splashFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"
         android:name="com.example.foodie.presentation.onboarding.view.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" />
+    <fragment
+        android:id="@+id/loginFragment2"
+        android:name="com.example.foodie.presentation.auth.view.LoginFragment"
+        android:label="LoginFragment" />
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="com.example.foodie.presentation.home.view.HomeActivity"
+        android:label="activity_home"
+        tools:layout="@layout/activity_home" />
 </navigation>

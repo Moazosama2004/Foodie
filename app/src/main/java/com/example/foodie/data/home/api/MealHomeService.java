@@ -10,5 +10,4 @@ public interface MealHomeService {
     Call<MealsBaseResponse> getRandomMeal();
 
 
-
 }
