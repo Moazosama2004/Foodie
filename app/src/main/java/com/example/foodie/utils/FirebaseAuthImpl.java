@@ -22,7 +22,7 @@ public class FirebaseAuthImpl implements FirebaseAuthService {
     private static final String TAG = "FirebaseAuthImpl";
     private final FirebaseAuth firebaseAuth;
     private final Activity activity;
-    private GoogleSignInClient googleSignInClient;
+    private final GoogleSignInClient googleSignInClient;
 
     public FirebaseAuthImpl(Activity activity) {
         this.firebaseAuth = FirebaseAuth.getInstance();

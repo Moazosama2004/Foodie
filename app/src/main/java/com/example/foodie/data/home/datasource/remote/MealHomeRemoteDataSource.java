@@ -15,7 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MealHomeRemoteDataSource {
-    private MealHomeService mealHomeService;
+    private final MealHomeService mealHomeService;
 
     public MealHomeRemoteDataSource() {
         this.mealHomeService = MealHomeApi.getService();

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodie.R;
-import com.example.foodie.data.search.model.Area;
 import com.example.foodie.data.search.model.Ingredient;
 
 import java.util.ArrayList;

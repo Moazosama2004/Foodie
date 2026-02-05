@@ -6,7 +6,7 @@ import com.example.foodie.utils.SharedPrefsImpl;
 import com.example.foodie.utils.SharedPrefsService;
 
 public class AuthLocalDataSource {
-    private SharedPrefsService sharedPrefsService;
+    private final SharedPrefsService sharedPrefsService;
 
     public AuthLocalDataSource(Context context) {
         this.sharedPrefsService = SharedPrefsImpl.getInstance(context);

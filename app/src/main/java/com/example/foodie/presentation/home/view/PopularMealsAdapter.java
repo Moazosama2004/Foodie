@@ -51,6 +51,8 @@ public class PopularMealsAdapter extends RecyclerView.Adapter<PopularMealsAdapte
                 onMealClickListener.onMealClick(meal);
             }
         });
+
+
     }
 
     @Override

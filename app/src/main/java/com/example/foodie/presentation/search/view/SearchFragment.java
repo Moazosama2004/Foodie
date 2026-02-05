@@ -23,19 +23,14 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.util.List;
 
-public class SearchFragment extends Fragment implements  SearchView {
-    private ChipGroup chipGroup;
-    private RecyclerView rvCategories;
-    private SearchPresenter presenter;
-
-    private CategoriesMealsAdapter adapter;
-
+public class SearchFragment extends Fragment implements SearchView {
     FoodAdapter foodAdapter;
     IngredientAdapter ingredientAdapter;
     List<Area> foodList;
-
-
-
+    private ChipGroup chipGroup;
+    private RecyclerView rvCategories;
+    private SearchPresenter presenter;
+    private CategoriesMealsAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +53,7 @@ public class SearchFragment extends Fragment implements  SearchView {
         super.onViewCreated(view, savedInstanceState);
         chipGroup = view.findViewById(R.id.chip_group);
         rvCategories = view.findViewById(R.id.rvCategories);
-        rvCategories.setLayoutManager(new GridLayoutManager(getContext() ,  2 ));
+        rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvCategories.setAdapter(adapter);
 
         chipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
@@ -82,17 +77,17 @@ public class SearchFragment extends Fragment implements  SearchView {
                     // Handle each chip
                     if (checkedId == R.id.category_chip) {
                         Log.d("Chip", "Category chip selected");
-                        rvCategories.setLayoutManager(new GridLayoutManager(getContext() ,  2 ));
+                        rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
                         rvCategories.setAdapter(adapter);
                     } else if (checkedId == R.id.ingredient_chip) {
                         Log.d("Chip", "Ingredient chip selected");
                         presenter.getIngredients();
-                        rvCategories.setLayoutManager(new GridLayoutManager(getContext() ,  3));
+                        rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
                         rvCategories.setAdapter(ingredientAdapter);
                     } else if (checkedId == R.id.country_chip) {
                         presenter.getAreas();
                         Log.d("Chip", "Country chip selected");
-                        rvCategories.setLayoutManager(new GridLayoutManager(getContext() ,  3 ));
+                        rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
                         rvCategories.setAdapter(foodAdapter);
                     }
                 } else {
@@ -107,8 +102,8 @@ public class SearchFragment extends Fragment implements  SearchView {
 
     @Override
     public void showData(List categories) {
-        if(categories.get(0) instanceof Category)  adapter.setCategories(categories);
-        else if (categories.get(0) instanceof  Area) foodAdapter.setFoodList(categories);
+        if (categories.get(0) instanceof Category) adapter.setCategories(categories);
+        else if (categories.get(0) instanceof Area) foodAdapter.setFoodList(categories);
         else ingredientAdapter.setIngredientList(categories);
     }
 

@@ -13,8 +13,8 @@ import java.util.List;
 
 public class SearchPresenterImpl implements SearchPresenter {
 
-    private MealSearchRepo searchRepo;
-    private SearchView searchView;
+    private final MealSearchRepo searchRepo;
+    private final SearchView searchView;
 
     public SearchPresenterImpl(SearchView searchView) {
         this.searchRepo = new MealSearchRepo();

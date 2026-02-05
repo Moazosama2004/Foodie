@@ -8,7 +8,7 @@ import com.example.foodie.presentation.auth.view.AuthView;
 public class AuthPresenterImpl implements AuthPresenter {
 
     private final AuthRepo authRepo;
-    private AuthView authView;
+    private final AuthView authView;
 
 
     public AuthPresenterImpl(AuthView authView, Activity activity) {

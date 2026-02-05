@@ -1,5 +1,6 @@
 package com.example.foodie.presentation.home.view;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,13 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.foodie.MealDetailsActivity;
 import com.example.foodie.R;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.home.presenter.HomePresenter;
@@ -33,6 +34,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     private PopularMealsAdapter adapter;
     private Button showDetailsBtn;
+    private Meal meal;
 
 
     @Override
@@ -45,7 +47,9 @@ public class HomeFragment extends Fragment implements HomeView {
         adapter.setOnMealClickListener(new OnMealClickListener() {
             @Override
             public void onMealClick(Meal meal) {
-                Navigation.findNavController(requireView()).navigate(R.id.action_bottom_nav_bar_home_to_mealDetailsFragment);
+                Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
+                intent.putExtra("MEAL_KEY", meal);
+                startActivity(intent);
             }
         });
 
@@ -67,7 +71,9 @@ public class HomeFragment extends Fragment implements HomeView {
         showDetailsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_bottom_nav_bar_home_to_mealDetailsFragment);
+                Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
+                intent.putExtra("MEAL_KEY", meal);
+                startActivity(intent);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -100,6 +106,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void showOneMeal(Meal meal) {
+        this.meal = meal;
         showImageofMeal(meal);
     }
 

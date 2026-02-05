@@ -7,8 +7,8 @@ import com.example.foodie.data.onboarding.OnboardingRepo;
 import com.example.foodie.presentation.onboarding.view.OnboardingView;
 
 public class OnboardingPresenterImpl implements OnboardingPresenter {
-    private OnboardingRepo repo;
-    private OnboardingView view;
+    private final OnboardingRepo repo;
+    private final OnboardingView view;
 
     public OnboardingPresenterImpl(Context context, OnboardingView view) {
         this.repo = new OnboardingRepo(context);

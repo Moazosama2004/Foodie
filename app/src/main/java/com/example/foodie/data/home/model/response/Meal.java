@@ -1,47 +1,52 @@
 package com.example.foodie.data.home.model.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.example.foodie.data.home.model.MealIngredient;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Meal {
+public class Meal implements Parcelable {
 
+    public static final Creator<Meal> CREATOR = new Creator<Meal>() {
+        @Override
+        public Meal createFromParcel(Parcel in) {
+            return new Meal(in);
+        }
+
+        @Override
+        public Meal[] newArray(int size) {
+            return new Meal[size];
+        }
+    };
     @SerializedName("idMeal")
-    private String idMeal;
-
+    private final String idMeal;
     @SerializedName("strMeal")
-    private String strMeal;
-
+    private final String strMeal;
     @SerializedName("strMealAlternate")
     private String strMealAlternate;
-
     @SerializedName("strCategory")
-    private String strCategory;
-
+    private final String strCategory;
     @SerializedName("strArea")
-    private String strArea;
-
+    private final String strArea;
     @SerializedName("strInstructions")
-    private String strInstructions;
-
+    private final String strInstructions;
     @SerializedName("strMealThumb")
-    private String strMealThumb;
-
+    private final String strMealThumb;
     @SerializedName("strTags")
     private String strTags;
-
     @SerializedName("strYoutube")
     private String strYoutube;
-
     // Ingredients
     @SerializedName("strIngredient1")
-    private String strIngredient1;
+    private final String strIngredient1;
     @SerializedName("strIngredient2")
-    private String strIngredient2;
+    private final String strIngredient2;
     @SerializedName("strIngredient3")
-    private String strIngredient3;
+    private final String strIngredient3;
     @SerializedName("strIngredient4")
     private String strIngredient4;
     @SerializedName("strIngredient5")
@@ -76,14 +81,13 @@ public class Meal {
     private String strIngredient19;
     @SerializedName("strIngredient20")
     private String strIngredient20;
-
     // Measures
     @SerializedName("strMeasure1")
-    private String strMeasure1;
+    private final String strMeasure1;
     @SerializedName("strMeasure2")
-    private String strMeasure2;
+    private final String strMeasure2;
     @SerializedName("strMeasure3")
-    private String strMeasure3;
+    private final String strMeasure3;
     @SerializedName("strMeasure4")
     private String strMeasure4;
     @SerializedName("strMeasure5")
@@ -118,20 +122,31 @@ public class Meal {
     private String strMeasure19;
     @SerializedName("strMeasure20")
     private String strMeasure20;
-
     @SerializedName("strSource")
     private String strSource;
-
     @SerializedName("strImageSource")
     private String strImageSource;
-
     @SerializedName("strCreativeCommonsConfirmed")
     private String strCreativeCommonsConfirmed;
 
+    // ===== Getters =====
     @SerializedName("dateModified")
     private String dateModified;
 
-    // ===== Getters =====
+    protected Meal(Parcel in) {
+        idMeal = in.readString();
+        strMeal = in.readString();
+        strCategory = in.readString();
+        strArea = in.readString();
+        strInstructions = in.readString();
+        strMealThumb = in.readString();
+        strIngredient1 = in.readString();
+        strIngredient2 = in.readString();
+        strIngredient3 = in.readString();
+        strMeasure1 = in.readString();
+        strMeasure2 = in.readString();
+        strMeasure3 = in.readString();
+    }
 
     public String getIdMeal() {
         return idMeal;
@@ -177,6 +192,8 @@ public class Meal {
         return strImageSource;
     }
 
+    // ===== Helpers =====
+
     public String getStrCreativeCommonsConfirmed() {
         return strCreativeCommonsConfirmed;
     }
@@ -184,8 +201,6 @@ public class Meal {
     public String getDateModified() {
         return dateModified;
     }
-
-    // ===== Helpers =====
 
     public String getStrIngredient(int index) {
         switch (index) {
@@ -294,5 +309,26 @@ public class Meal {
             }
         }
         return list;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(idMeal);
+        parcel.writeString(strMeal);
+        parcel.writeString(strCategory);
+        parcel.writeString(strArea);
+        parcel.writeString(strInstructions);
+        parcel.writeString(strMealThumb);
+        parcel.writeString(strIngredient1);
+        parcel.writeString(strIngredient2);
+        parcel.writeString(strIngredient3);
+        parcel.writeString(strMeasure1);
+        parcel.writeString(strMeasure2);
+        parcel.writeString(strMeasure3);
     }
 }

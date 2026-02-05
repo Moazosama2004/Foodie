@@ -6,7 +6,7 @@ import com.example.foodie.utils.FirebaseAuthImpl;
 import com.example.foodie.utils.FirebaseAuthService;
 
 public class AuthRemoteDataSource {
-    private FirebaseAuthService firebaseAuthService;
+    private final FirebaseAuthService firebaseAuthService;
 
     public AuthRemoteDataSource(Activity activity) {
         this.firebaseAuthService = new FirebaseAuthImpl(activity);

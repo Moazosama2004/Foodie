@@ -6,5 +6,7 @@ public class Area {
     @SerializedName("strArea")
     private String strArea;
 
-    public String getStrArea() { return strArea; }
+    public String getStrArea() {
+        return strArea;
+    }
 }
