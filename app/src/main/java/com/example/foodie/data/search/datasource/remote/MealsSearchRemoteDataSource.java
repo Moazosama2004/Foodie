@@ -2,6 +2,7 @@ package com.example.foodie.data.search.datasource.remote;
 
 import android.util.Log;
 
+import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.data.search.api.MealSearchApi;
 import com.example.foodie.data.search.api.MealSearchService;
 import com.example.foodie.data.search.api.MealsSearchNetworkResponse;
@@ -9,10 +10,15 @@ import com.example.foodie.data.search.model.Area;
 import com.example.foodie.data.search.model.AreaResponse;
 import com.example.foodie.data.search.model.Category;
 import com.example.foodie.data.search.model.CategoryResponse;
+import com.example.foodie.data.search.model.FilteredMeal;
+import com.example.foodie.data.search.model.FilteredResponse;
 import com.example.foodie.data.search.model.Ingredient;
 import com.example.foodie.data.search.model.IngredientsResponse;
+import com.example.foodie.data.search.model.MealByIdResponse;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Filter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -110,6 +116,102 @@ public class MealsSearchRemoteDataSource {
                 if (t instanceof IOException) {
                     callback.noInternet("Network Connection");
                 } else {
+                    callback.onFailure("Conversion Error! Please try again.");
+                }
+            }
+        });
+    }
+
+    public void getFilteredMealsByArea(String country, MealsSearchNetworkResponse<FilteredMeal> callback) {
+        mealSearchService.getFilteredMealsByArea(country).enqueue(new Callback<FilteredResponse>() {
+            @Override
+            public void onResponse(Call<FilteredResponse> call, Response<FilteredResponse> response) {
+                if(response.code() == 200 && response.body() != null ) {
+                    FilteredResponse filteredResponse = response.body();
+                    List<FilteredMeal> filteredMeals = filteredResponse.getFilteredMeals();
+                    callback.onSuccess(filteredMeals);
+                } else {
+                    callback.onFailure("Server error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FilteredResponse> call, Throwable t) {
+                if (t instanceof IOException) {
+                    callback.noInternet("Network Connection");
+                }else {
+                    callback.onFailure("Conversion Error! Please try again.");
+                }
+            }
+        });
+    }
+
+    public void getFilteredMealsByCategory(String category, MealsSearchNetworkResponse<FilteredMeal> callback) {
+        mealSearchService.getFilteredMealsByCategory(category).enqueue(new Callback<FilteredResponse>() {
+            @Override
+            public void onResponse(Call<FilteredResponse> call, Response<FilteredResponse> response) {
+                if(response.code() == 200 && response.body() != null ) {
+                    FilteredResponse filteredResponse = response.body();
+                    List<FilteredMeal> filteredMeals = filteredResponse.getFilteredMeals();
+                    callback.onSuccess(filteredMeals);
+                } else {
+                    callback.onFailure("Server error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FilteredResponse> call, Throwable t) {
+                if (t instanceof IOException) {
+                    callback.noInternet("Network Connection");
+                }else {
+                    callback.onFailure("Conversion Error! Please try again.");
+                }
+            }
+        });
+    }
+
+    public void getFilteredMealsByIngredient(String ingredient, MealsSearchNetworkResponse<FilteredMeal> callback) {
+        mealSearchService.getFilteredMealsByIngredient(ingredient).enqueue(new Callback<FilteredResponse>() {
+            @Override
+            public void onResponse(Call<FilteredResponse> call, Response<FilteredResponse> response) {
+                if(response.code() == 200 && response.body() != null ) {
+                    FilteredResponse filteredResponse = response.body();
+                    List<FilteredMeal> filteredMeals = filteredResponse.getFilteredMeals();
+                    callback.onSuccess(filteredMeals);
+                } else {
+                    callback.onFailure("Server error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FilteredResponse> call, Throwable t) {
+                if (t instanceof IOException) {
+                    callback.noInternet("Network Connection");
+                }else {
+                    callback.onFailure("Conversion Error! Please try again.");
+                }
+            }
+        });
+    }
+
+    public void getMealById(String id, MealsSearchNetworkResponse<Meal> callback) {
+        mealSearchService.getMealById(id).enqueue(new Callback<MealByIdResponse>() {
+            @Override
+            public void onResponse(Call<MealByIdResponse> call, Response<MealByIdResponse> response) {
+                if(response.code() == 200 && response.body() != null ) {
+                    MealByIdResponse filteredResponse = response.body();
+                    List<Meal> meal = filteredResponse.getMeals();
+                    callback.onSuccess(meal);
+                } else {
+                    callback.onFailure("Server error: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MealByIdResponse> call, Throwable t) {
+                if (t instanceof IOException) {
+                    callback.noInternet("Network Connection");
+                }else {
                     callback.onFailure("Conversion Error! Please try again.");
                 }
             }

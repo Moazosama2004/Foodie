@@ -19,9 +19,12 @@ import java.util.List;
 
 public class CategoriesMealsAdapter extends RecyclerView.Adapter<CategoriesMealsAdapter.CategoryViewHolder> {
 
-    // TODO : Replace with real data
     private List<Category> categories = new ArrayList<>();
+    private onCardClickListener onCardClickListener;
 
+    public CategoriesMealsAdapter(onCardClickListener onCardClickListener){
+        this.onCardClickListener = onCardClickListener;
+    }
     public void setCategories(List<Category> categories) {
         this.categories = categories;
         notifyDataSetChanged();
@@ -41,6 +44,12 @@ public class CategoriesMealsAdapter extends RecyclerView.Adapter<CategoriesMeals
         Glide.with(holder.itemView.getContext())
                 .load(category.getImage())
                 .into(holder.categoryImage);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCardClickListener.onCardClick(category.getTitle());
+            }
+        });
 
     }
 

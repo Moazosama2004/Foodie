@@ -18,9 +18,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
 
     private List<Area> foodList = new ArrayList<>();
+    private onCardClickListener onCardClickListener;
 
-    public FoodAdapter() {
 
+
+    public FoodAdapter(onCardClickListener onCardClickListener) {
+        this.onCardClickListener = onCardClickListener;
     }
 
     public void setFoodList(List<Area> foodList) {
@@ -40,6 +43,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         Area food = foodList.get(position);
         holder.foodName.setText(food.getStrArea());
 //        holder.foodImage.setImageResource(food.getImageRes());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCardClickListener.onCardClick(food.getStrArea());
+            }
+        });
     }
 
     @Override
