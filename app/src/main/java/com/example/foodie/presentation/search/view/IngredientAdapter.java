@@ -1,5 +1,6 @@
 package com.example.foodie.presentation.search.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Fo
 
 
     private List<Ingredient> ingredientList = new ArrayList<>();
+    private onCardClickListener onCardClickListener;
 
-    public IngredientAdapter() {
 
+    public IngredientAdapter(onCardClickListener onCardClickListener) {
+        this.onCardClickListener = onCardClickListener;
     }
 
     public void setIngredientList(List<Ingredient> ingredientList) {
@@ -44,6 +47,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Fo
         Glide.with(holder.itemView.getContext())
                 .load(food.getImage())
                 .into(holder.foodImage);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SearchFragment", food.getTitle());
+                onCardClickListener.onCardClick(food.getTitle());
+            }
+        });
     }
 
     @Override

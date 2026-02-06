@@ -7,4 +7,12 @@ public interface SearchPresenter {
 
     void getIngredients();
 
+    void getFilteredMealsByArea(String country);
+
+    void getFilteredMealsByCategory(String category);
+
+    void getFilteredMealsByIngredient(String ingredient);
+
+    void getMealById(String id);
+
 }
