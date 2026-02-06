@@ -1,6 +1,7 @@
 package com.example.foodie.presentation.auth.presenter;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.example.foodie.data.auth.datasource.AuthRepo;
 import com.example.foodie.presentation.auth.view.AuthView;
@@ -18,8 +19,11 @@ public class AuthPresenterImpl implements AuthPresenter {
 
     @Override
     public void login(String email, String password) {
+        Log.d("TAG", "start login: " + email);
+
         authView.showLoading();
         authRepo.login(email, password);
+        Log.d("TAG", "after login: " + email);
         authView.hideLoading();
         authView.navigateToHome();
     }
