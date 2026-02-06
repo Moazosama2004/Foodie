@@ -2,7 +2,7 @@ package com.example.foodie.presentation.fav.view;
 
 import androidx.lifecycle.LifecycleOwner;
 
-import com.example.foodie.data.core.model.FavMeal;
+import com.example.foodie.data.home.model.response.Meal;
 
 import java.util.List;
 
@@ -13,8 +13,9 @@ public interface FavView {
 
     void showError(String message);
 
-    void showFavMeals(List<FavMeal> favMeals);
+    void showFavMeals(List<Meal> favMeals);
 
     LifecycleOwner getLifecycleOwner();
+    void goToDetails(Meal meal);
 
 }

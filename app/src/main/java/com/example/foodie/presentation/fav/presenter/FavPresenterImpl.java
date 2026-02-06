@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 
 import com.example.foodie.data.core.FavMealsRepo;
-import com.example.foodie.data.core.model.FavMeal;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.fav.view.FavView;
 
@@ -22,17 +21,20 @@ public class FavPresenterImpl implements FavPresenter {
     }
 
     @Override
-    public LiveData<List<FavMeal>> getFavMeals() {
+    public LiveData<List<Meal>> getFavMeals() {
         return favMealsRepo.getAllFavMeals();
     }
 
 
     @Override
-    public void deleteFromFav(Meal meal) {
-        FavMeal favMeal = new FavMeal(meal.getIdMeal(), meal.getStrMeal(), meal.getStrMealThumb());
+    public void deleteFromFavLocal(Meal meal) {
         Executors.newSingleThreadExecutor().execute(() ->
-                favMealsRepo.deleteMeal(favMeal)
+                favMealsRepo.deleteMealLocal(meal)
         );
     }
 
+    @Override
+    public void deleteFromFavRemote(String id) {
+        favMealsRepo.deleteMealRemote(id);
+    }
 }
