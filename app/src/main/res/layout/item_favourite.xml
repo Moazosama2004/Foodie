@@ -46,8 +46,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/rounded_button_bg"
-        android:src="@drawable/bottom_nav_bar_heart_icon"
-        app:tint="@color/primary"
+        android:src="@drawable/trash_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

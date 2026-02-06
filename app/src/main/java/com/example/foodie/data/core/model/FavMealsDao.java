@@ -7,20 +7,22 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.example.foodie.data.home.model.response.Meal;
+
 import java.util.List;
 
 @Dao
 public interface FavMealsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMeal(FavMeal meal);
+    void insertMeal(Meal meal);
 
     @Delete
-    void deleteMeal(FavMeal meal);
+    void deleteMeal(Meal meal);
 
     @Query("SELECT EXISTS(SELECT 1 FROM fav_meals WHERE idMeal = :id)")
     LiveData<Boolean> isMealFav(String id);
 
     @Query("SELECT * FROM fav_meals")
-    LiveData<List<FavMeal>> getAllFavMeals();
+    LiveData<List<Meal>> getAllFavMeals();
 }

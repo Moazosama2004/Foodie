@@ -6,7 +6,6 @@ import android.util.Log;
 import com.example.foodie.data.calender.CalenderMealsRepo;
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.core.FavMealsRepo;
-import com.example.foodie.data.core.model.FavMeal;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.view.DetailsView;
 
@@ -27,21 +26,24 @@ public class DetailsPresenterImpl implements DetailsPresenter {
     }
 
     @Override
-    public void addToFav(Meal meal) {
+    public void saveMealLocal(Meal meal) {
         Executors.newSingleThreadExecutor().execute(() ->
-                favMealsRepo.insertMeal(new FavMeal(meal.getIdMeal(), meal.getStrMeal(), meal.getStrMealThumb()))
+                favMealsRepo.saveMealLocal(meal)
         );
+    }
+
+    @Override
+    public void saveMealRemote(Meal meal) {
+        favMealsRepo.saveMealRemote(meal);
     }
 
 
     @Override
-    public void addToCalender(Meal meal) {
+    public void addToCalender(Meal meal , String date) {
         Log.d("DetailsPresenterImpl", "Adding to Calender: " + meal.getStrMeal());
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .format(new Date());
 
         CalendarMeal calendarMeal = new CalendarMeal();
-        calendarMeal.setDate(today);
+        calendarMeal.setDate(date);
         calendarMeal.setMealId(meal.getIdMeal());
         calendarMeal.setMealName(meal.getStrMeal());
         calendarMeal.setMealImage(meal.getStrMealThumb());

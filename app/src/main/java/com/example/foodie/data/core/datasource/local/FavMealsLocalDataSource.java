@@ -3,9 +3,8 @@ package com.example.foodie.data.core.datasource.local;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
-
-import com.example.foodie.data.core.model.FavMeal;
 import com.example.foodie.data.core.model.FavMealsDao;
+import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.db.AppDatabase;
 
 import java.util.List;
@@ -17,11 +16,11 @@ public class FavMealsLocalDataSource {
         this.favMealsDao = AppDatabase.getInstance(context).favMealsDao();
     }
 
-    public void insertMeal(FavMeal meal) {
+    public void insertMeal(Meal meal) {
         favMealsDao.insertMeal(meal);
     }
 
-    public void deleteMeal(FavMeal meal) {
+    public void deleteMeal(Meal meal) {
         favMealsDao.deleteMeal(meal);
     }
 
@@ -29,7 +28,7 @@ public class FavMealsLocalDataSource {
         return favMealsDao.isMealFav(id);
     }
 
-    public LiveData<List<FavMeal>> getAllFavMeals() {
+    public LiveData<List<Meal>> getAllFavMeals() {
         return favMealsDao.getAllFavMeals();
     }
 

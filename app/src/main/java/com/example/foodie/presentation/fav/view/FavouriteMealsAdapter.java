@@ -11,17 +11,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodie.R;
-import com.example.foodie.data.core.model.FavMeal;
+import com.example.foodie.data.home.model.response.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAdapter.FavouriteMealsViewHolder> {
 
-    private List<FavMeal> favouriteMeals = new ArrayList<>();
+    private List<Meal> favouriteMeals = new ArrayList<>();
+    private OnDeleteClickListener onDeleteClickListener;
 
+    private FavView favView;
 
-    public void setFavouriteMeals(List<FavMeal> favouriteMeals) {
+    public FavouriteMealsAdapter(FavView favView, OnDeleteClickListener onDeleteClickListener) {
+        this.onDeleteClickListener = onDeleteClickListener;
+        this.favView = favView;
+    }
+
+    public void setFavouriteMeals(List<Meal> favouriteMeals) {
         this.favouriteMeals = favouriteMeals;
         notifyDataSetChanged();
     }
@@ -34,11 +41,25 @@ public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAd
 
     @Override
     public void onBindViewHolder(@NonNull FavouriteMealsViewHolder holder, int position) {
-        holder.mealName.setText(favouriteMeals.get(position).getName());
+        holder.mealName.setText(favouriteMeals.get(position).getStrMeal());
+        holder.removeFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeleteClickListener.onDeleteClick(favouriteMeals.get(position));
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favView.goToDetails(favouriteMeals.get(position));
+            }
+        });
         Glide.with(holder.itemView.getContext())
-                .load(favouriteMeals.get(position).getImage())
+                .load(favouriteMeals.get(position).getStrMealThumb())
                 .into(holder.mealImage);
     }
+
 
     @Override
     public int getItemCount() {
@@ -48,12 +69,15 @@ public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAd
     public class FavouriteMealsViewHolder extends RecyclerView.ViewHolder {
         TextView mealName;
         ImageView mealImage;
+        ImageView removeFav;
+
 
 
         public FavouriteMealsViewHolder(@NonNull View itemView) {
             super(itemView);
             mealName = itemView.findViewById(R.id.tv_fav_food_name);
             mealImage = itemView.findViewById(R.id.img_fav_food);
+            removeFav = itemView.findViewById(R.id.btn_remove_fav);
         }
     }
 }

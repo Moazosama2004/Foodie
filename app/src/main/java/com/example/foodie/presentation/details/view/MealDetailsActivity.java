@@ -1,5 +1,6 @@
 package com.example.foodie;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,9 @@ import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.presenter.DetailsPresenterImpl;
 import com.example.foodie.presentation.details.view.DetailsView;
 import com.example.foodie.presentation.details.view.MealDetailsAdapter;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 public class MealDetailsActivity extends AppCompatActivity implements DetailsView {
 
@@ -71,7 +75,8 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
                 Log.d("MealDetailsActivity", "FAB Clicked!");
                 if (meal != null) {
                     Log.d("MealDetailsActivity", "Adding to favorites: " + meal.getStrMeal());
-                    presenter.addToFav(meal);
+                    presenter.saveMealLocal(meal);
+                    presenter.saveMealRemote(meal);
                     Toast.makeText(MealDetailsActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.e("MealDetailsActivity", "Cannot add to favorites - meal is null");
@@ -84,14 +89,41 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
             @Override
             public void onClick(View v) {
                 Log.d("MealDetailsActivity", " addToCalender Clicked!");
-                if (meal != null) {
-                    Log.d("MealDetailsActivity", "Adding to Calender: " + meal.getStrMeal());
-                    presenter.addToCalender(meal);
-                    Toast.makeText(MealDetailsActivity.this, "Added to Calender!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e("MealDetailsActivity", "Cannot add to Calender - meal is null");
-                    Toast.makeText(MealDetailsActivity.this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
-                }
+
+                // GET CURRENT DATE
+                final Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        MealDetailsActivity.this,
+                        (view, selectedYear, selectedMonth, selectedDay) -> {
+
+                            String selectedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
+
+                            if (meal != null) {
+                                Log.d("MealDetailsActivity", "Adding to Calender: " + meal.getStrMeal());
+                                presenter.addToCalender(meal , selectedDate);
+                                Toast.makeText(MealDetailsActivity.this, "Added to Calender!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.e("MealDetailsActivity", "Cannot add to Calender - meal is null");
+                                Toast.makeText(MealDetailsActivity.this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
+                            }
+                            System.out.println("Selected Date: " + selectedDate);
+                        },
+                        year, month, day
+                );
+
+                datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis() - 1000);
+
+
+                calendar.add(Calendar.DAY_OF_YEAR, 7);
+                datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+
+                datePickerDialog.show();
+
+
             }
         });
 

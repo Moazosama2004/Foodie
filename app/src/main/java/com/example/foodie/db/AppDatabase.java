@@ -8,15 +8,15 @@ import androidx.room.RoomDatabase;
 
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.calender.model.CalendarMealsDao;
-import com.example.foodie.data.core.model.FavMeal;
 import com.example.foodie.data.core.model.FavMealsDao;
+import com.example.foodie.data.home.model.response.Meal;
 
 @Database(
         entities = {
-                FavMeal.class,
+                Meal.class,
                 CalendarMeal.class
         },
-        version = 2
+        version = 3
 )
 public abstract class AppDatabase extends RoomDatabase {
 

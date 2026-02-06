@@ -17,6 +17,7 @@
         android:fontFamily="@font/open_sans_bold"
         android:text="Your Favourites :"
         android:textSize="24sp"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
