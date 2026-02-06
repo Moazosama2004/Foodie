@@ -2,6 +2,7 @@ package com.example.foodie.presentation.auth.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class LoginFragment extends Fragment implements AuthView {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("TAG", "onClick: " + emailTxt.getText().toString());
                 authPresenter.login(emailTxt.getText().toString(), passwordTxt.getText().toString());
             }
         });
@@ -92,7 +94,10 @@ public class LoginFragment extends Fragment implements AuthView {
 
     @Override
     public void navigateToHome() {
+        Log.d("TAG", "navigateToHome: " + emailTxt.getText().toString());
+
         authPresenter.setUserLoggedIn();
+        Log.d("TAG", "after navigateToHome: " + emailTxt.getText().toString());
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
     }

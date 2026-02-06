@@ -23,14 +23,11 @@
             android:name=".presentation.home.view.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".onboarding.OnBoardingActivity"
-            android:exported="false" />
-        <activity
+            android:theme="@style/Theme.Foodie.Splash"
             android:name=".presentation.onboarding.view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
