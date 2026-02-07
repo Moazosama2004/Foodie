@@ -42,7 +42,6 @@ public class FavPresenterImpl implements FavPresenter {
             @Override
             public void onSuccess() {
                 Log.d("deleteFromFavRemote", "onSuccess: ");
-                view.onSuccess();
             }
 
             @Override
@@ -51,14 +50,11 @@ public class FavPresenterImpl implements FavPresenter {
             }
 
             @Override
-            public void onSuccessWithResult(List<Meal> meals) {
-
-            }
+            public void onSuccessWithResult(List<Meal> meals) { }
 
             @Override
-            public void onSuccessWithUserData(User user) {
-
-            }
+            public void onSuccessWithUserData(User user) { }
         });
     }
+
 }

@@ -1,6 +1,7 @@
 package com.example.foodie.data.auth.datasource.remote;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
@@ -33,6 +34,7 @@ public class AuthRemoteDataSource {
         firebaseAuthService.login(email, password, new AuthCallback() {
             @Override
             public void onSuccess() {
+
                 String userId = firebaseAuthService.getCurrentUserId();
                 if (userId == null) {
                     authCallback.onError("Failed to get user ID after login.");
@@ -53,6 +55,7 @@ public class AuthRemoteDataSource {
 
                     @Override
                     public void onSuccessWithUserData(User user) {
+                        Log.d("AuthRemoteDataSource", "onSuccessWithUserData: " + user.getUsername() + " " + user.getUserId());
                         sharedPrefsService.saveUser(user.getUserId(), user.getUsername(), user.getEmail());
                         authCallback.onSuccess();
                     }
