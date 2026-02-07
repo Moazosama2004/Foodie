@@ -6,10 +6,12 @@ import android.util.Log;
 import com.example.foodie.data.calender.CalenderMealsRepo;
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.core.FavMealsRepo;
+import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.view.DetailsView;
 import com.example.foodie.utils.services.StorageCallback;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 
 public class DetailsPresenterImpl implements DetailsPresenter {
@@ -43,6 +45,16 @@ public class DetailsPresenterImpl implements DetailsPresenter {
             @Override
             public void onError(String message) {
                 view.showError(message);
+            }
+
+            @Override
+            public void onSuccessWithResult(List<Meal> meals) {
+
+            }
+
+            @Override
+            public void onSuccessWithUserData(User user) {
+
             }
         });
     }

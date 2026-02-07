@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import com.example.foodie.R;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.home.presenter.HomePresenter;
 import com.example.foodie.presentation.home.presenter.HomePresenterImpl;
+import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class HomeFragment extends Fragment implements HomeView {
     private ConstraintLayout mealOfTheDayLayout;
     private HomePresenter homePresenter;
     private RecyclerView recyclerView;
+    private TextView userName;
 
     private PopularMealsAdapter adapter;
     private Button showDetailsBtn;
@@ -87,6 +90,12 @@ public class HomeFragment extends Fragment implements HomeView {
         loadingLottie = view.findViewById(R.id.loading_lottie);
         networkErrorOverlay = view.findViewById(R.id.network_error_overlay);
         retryBtn = view.findViewById(R.id.retry_btn);
+        userName = view.findViewById(R.id.username);
+
+
+        userName.setText(SharedPrefsManager.getInstance(requireContext()).getUsername());
+
+
 
         // set up adapter
         adapter = new PopularMealsAdapter();

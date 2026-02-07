@@ -1,10 +1,12 @@
 package com.example.foodie.presentation.fav.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.foodie.data.core.FavMealsRepo;
+import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.fav.view.FavView;
 import com.example.foodie.utils.services.StorageCallback;
@@ -39,12 +41,23 @@ public class FavPresenterImpl implements FavPresenter {
         favMealsRepo.deleteMealRemote(id, new StorageCallback() {
             @Override
             public void onSuccess() {
+                Log.d("deleteFromFavRemote", "onSuccess: ");
                 view.onSuccess();
             }
 
             @Override
             public void onError(String message) {
                 view.showError(message);
+            }
+
+            @Override
+            public void onSuccessWithResult(List<Meal> meals) {
+
+            }
+
+            @Override
+            public void onSuccessWithUserData(User user) {
+
             }
         });
     }

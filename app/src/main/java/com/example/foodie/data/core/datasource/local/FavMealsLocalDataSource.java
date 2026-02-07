@@ -9,12 +9,19 @@ import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.db.AppDatabase;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class FavMealsLocalDataSource {
     private final FavMealsDao favMealsDao;
 
     public FavMealsLocalDataSource(Context context) {
         this.favMealsDao = AppDatabase.getInstance(context).favMealsDao();
+    }
+
+    public void insertMeals(List<Meal> meals) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            favMealsDao.insertMeals(meals);
+        });
     }
 
     public void insertMeal(Meal meal) {

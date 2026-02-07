@@ -34,4 +34,23 @@ public class FirestoreUserStorage implements UserStorage {
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
+
+    @Override
+    public void getUserById(String userId, StorageCallback callback) {
+        firestore.collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(
+                        documentSnapshot -> {
+                            if (documentSnapshot.exists()) {
+                                User user = documentSnapshot.toObject(User.class);
+                                callback.onSuccessWithUserData(user);
+                            } else {
+                                callback.onError("User not found");
+                            }
+
+                        }
+                );
+    }
+
 }

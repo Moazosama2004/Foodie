@@ -13,11 +13,17 @@ public class FavMealsRemoteDataSource {
         this.storageService = new FirestoreMealStorage();
     }
 
+
+
     public void saveMeal(Meal meal , StorageCallback callback) {
         storageService.saveMeal(meal , callback);
     }
 
     public void deleteMeal(String id,StorageCallback callback) {
         storageService.deleteMeal(id , callback);
+    }
+
+    public void getAllFavMeals(StorageCallback callback) {
+        storageService.getAllMealsById(callback);
     }
 }
