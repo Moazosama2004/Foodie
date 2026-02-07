@@ -6,12 +6,12 @@ import android.util.Log;
 import com.example.foodie.data.calender.CalenderMealsRepo;
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.core.FavMealsRepo;
+import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.view.DetailsView;
+import com.example.foodie.utils.services.StorageCallback;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 public class DetailsPresenterImpl implements DetailsPresenter {
@@ -32,14 +32,36 @@ public class DetailsPresenterImpl implements DetailsPresenter {
         );
     }
 
+
+
     @Override
     public void saveMealRemote(Meal meal) {
-        favMealsRepo.saveMealRemote(meal);
+        favMealsRepo.saveMealRemote(meal, new StorageCallback() {
+            @Override
+            public void onSuccess() {
+                view.onSuccess();
+            }
+
+            @Override
+            public void onError(String message) {
+                view.showError(message);
+            }
+
+            @Override
+            public void onSuccessWithResult(List<Meal> meals) {
+
+            }
+
+            @Override
+            public void onSuccessWithUserData(User user) {
+
+            }
+        });
     }
 
 
     @Override
-    public void addToCalender(Meal meal , String date) {
+    public void addToCalender(Meal meal, String date) {
         Log.d("DetailsPresenterImpl", "Adding to Calender: " + meal.getStrMeal());
 
         CalendarMeal calendarMeal = new CalendarMeal();

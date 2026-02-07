@@ -14,4 +14,6 @@ public interface HomeView {
     void showPopularMeals(List<Meal> meals);
 
     void showOneMeal(Meal meal);
+    void showNetworkError(String Message);
+
 }

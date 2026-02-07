@@ -20,7 +20,7 @@ import java.util.List;
 public class CalendarMealAdapter extends RecyclerView.Adapter<CalendarMealAdapter.MealViewHolder> {
 
     private List<CalendarMeal> meals = new ArrayList<>();
-    private OnMealClickListener onMealClickListener;
+    private final OnMealClickListener onMealClickListener;
 
     public CalendarMealAdapter(OnMealClickListener onMealClickListener) {
         this.onMealClickListener = onMealClickListener;
@@ -55,7 +55,7 @@ public class CalendarMealAdapter extends RecyclerView.Adapter<CalendarMealAdapte
 
     @Override
     public int getItemCount() {
-        return meals == null ? 0 :meals.size();
+        return meals == null ? 0 : meals.size();
     }
 
     public void setMeals(List<CalendarMeal> meals) {
@@ -69,7 +69,7 @@ public class CalendarMealAdapter extends RecyclerView.Adapter<CalendarMealAdapte
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
-             mealImage = itemView.findViewById(R.id.img_details);
+            mealImage = itemView.findViewById(R.id.img_details);
             nameText = itemView.findViewById(R.id.name_details);
         }
     }

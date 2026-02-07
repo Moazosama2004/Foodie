@@ -32,18 +32,18 @@ public class MealSearchRepo {
     }
 
     public void getFilteredMealsByArea(String country, MealsSearchNetworkResponse<FilteredMeal> callback) {
-        mealsSearchRemoteDataSource.getFilteredMealsByArea(country,callback);
+        mealsSearchRemoteDataSource.getFilteredMealsByArea(country, callback);
     }
 
     public void getFilteredMealsByCategory(String category, MealsSearchNetworkResponse<FilteredMeal> callback) {
-        mealsSearchRemoteDataSource.getFilteredMealsByCategory(category,callback);
+        mealsSearchRemoteDataSource.getFilteredMealsByCategory(category, callback);
     }
 
     public void getFilteredMealsByIngredient(String ingredient, MealsSearchNetworkResponse<FilteredMeal> callback) {
-        mealsSearchRemoteDataSource.getFilteredMealsByIngredient(ingredient,callback);
+        mealsSearchRemoteDataSource.getFilteredMealsByIngredient(ingredient, callback);
     }
 
     public void getMealById(String id, MealsSearchNetworkResponse<Meal> callback) {
-        mealsSearchRemoteDataSource.getMealById(id , callback);
+        mealsSearchRemoteDataSource.getMealById(id, callback);
     }
 }

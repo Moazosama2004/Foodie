@@ -25,4 +25,7 @@ public interface FavMealsDao {
 
     @Query("SELECT * FROM fav_meals")
     LiveData<List<Meal>> getAllFavMeals();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertMeals(List<Meal> meals);
 }

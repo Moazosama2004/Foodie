@@ -6,7 +6,9 @@ import androidx.lifecycle.LiveData;
 
 import com.example.foodie.data.core.datasource.local.FavMealsLocalDataSource;
 import com.example.foodie.data.core.datasource.remote.FavMealsRemoteDataSource;
+import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
+import com.example.foodie.utils.services.StorageCallback;
 
 import java.util.List;
 
@@ -28,9 +30,7 @@ public class FavMealsRepo {
         favMealsLocalDataSource.deleteMeal(meal);
     }
 
-    public void deleteMealRemote(String id) {
-        favMealsRemoteDataSource.deleteMeal(id);
-    }
+
 
 
     public LiveData<Boolean> isMealFav(String id) {
@@ -38,10 +38,43 @@ public class FavMealsRepo {
     }
 
     public LiveData<List<Meal>> getAllFavMeals() {
-        return favMealsLocalDataSource.getAllFavMeals();
+        LiveData<List<Meal>> localMeals =
+                favMealsLocalDataSource.getAllFavMeals();
+
+        fetchFavMealsFromRemote();
+
+        return localMeals;
     }
 
-    public void saveMealRemote(Meal meal) {
-        favMealsRemoteDataSource.saveMeal(meal);
+    private void fetchFavMealsFromRemote() {
+      favMealsRemoteDataSource.getAllFavMeals(new StorageCallback() {
+          @Override
+          public void onSuccess() {
+
+          }
+
+          @Override
+          public void onError(String message) {
+
+          }
+
+          @Override
+          public void onSuccessWithResult(List<Meal> meals) {
+              favMealsLocalDataSource.insertMeals(meals);
+          }
+
+          @Override
+          public void onSuccessWithUserData(User user) {
+
+          }
+      });
+    }
+
+    public void saveMealRemote(Meal meal , StorageCallback callback) {
+        favMealsRemoteDataSource.saveMeal(meal , callback);
+    }
+
+    public void deleteMealRemote(String id , StorageCallback callback) {
+        favMealsRemoteDataSource.deleteMeal(id , callback);
     }
 }

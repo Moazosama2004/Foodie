@@ -9,7 +9,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/search_txt"
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:layout_marginStart="16dp"
@@ -35,9 +35,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText4"
-        app:layout_constraintStart_toStartOf="@+id/editTextText4"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4"
+        app:layout_constraintEnd_toEndOf="@+id/search_txt"
+        app:layout_constraintStart_toStartOf="@+id/search_txt"
+        app:layout_constraintTop_toBottomOf="@+id/search_txt"
         app:singleSelection="true"
         app:checkedChip="@id/category_chip"
         >
@@ -85,9 +85,9 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText4"
+        app:layout_constraintEnd_toEndOf="@+id/search_txt"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextText4"
+        app:layout_constraintStart_toStartOf="@+id/search_txt"
         app:layout_constraintTop_toBottomOf="@id/chip_group"
         app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/item_category" />

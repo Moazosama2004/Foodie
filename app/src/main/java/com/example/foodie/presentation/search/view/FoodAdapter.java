@@ -18,8 +18,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
 
     private List<Area> foodList = new ArrayList<>();
-    private onCardClickListener onCardClickListener;
-
+    private final onCardClickListener onCardClickListener;
 
 
     public FoodAdapter(onCardClickListener onCardClickListener) {

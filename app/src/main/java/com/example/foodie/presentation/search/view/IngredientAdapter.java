@@ -21,7 +21,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Fo
 
 
     private List<Ingredient> ingredientList = new ArrayList<>();
-    private onCardClickListener onCardClickListener;
+    private final onCardClickListener onCardClickListener;
 
 
     public IngredientAdapter(onCardClickListener onCardClickListener) {

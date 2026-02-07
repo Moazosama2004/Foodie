@@ -2,7 +2,6 @@ package com.example.foodie.presentation.onboarding.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.foodie.R;
+import com.example.foodie.presentation.auth.view.AuthActivity;
 import com.example.foodie.presentation.home.view.HomeActivity;
 import com.example.foodie.presentation.onboarding.presenter.OnboardingPresenter;
 import com.example.foodie.presentation.onboarding.presenter.OnboardingPresenterImpl;
@@ -37,11 +37,7 @@ public class SplashFragment extends Fragment implements OnboardingView {
             Bundle savedInstanceState
     ) {
         rootView = inflater.inflate(R.layout.fragment_splash, container, false);
-
-        new Handler().postDelayed(() -> {
-            presenter.decideStartDestination();
-        }, 3000);
-
+        presenter.splashLogic();
         return rootView;
     }
 
@@ -53,13 +49,15 @@ public class SplashFragment extends Fragment implements OnboardingView {
 
     @Override
     public void showLogin() {
-        Navigation.findNavController(rootView)
-                .navigate(R.id.action_splashFragment_to_loginFragment2);
+        Intent intent = new Intent(getActivity(), AuthActivity.class);
+        startActivity(intent);
+        requireActivity().finish();
     }
 
     @Override
     public void showHome() {
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
+        requireActivity().finish();
     }
 }

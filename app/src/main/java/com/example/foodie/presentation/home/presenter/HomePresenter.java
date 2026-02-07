@@ -4,5 +4,6 @@ public interface HomePresenter {
     void getRandomMeal();
 
     void getPopularMeals();
+
 }
 

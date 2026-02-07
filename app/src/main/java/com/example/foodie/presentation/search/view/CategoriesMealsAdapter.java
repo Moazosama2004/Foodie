@@ -20,11 +20,12 @@ import java.util.List;
 public class CategoriesMealsAdapter extends RecyclerView.Adapter<CategoriesMealsAdapter.CategoryViewHolder> {
 
     private List<Category> categories = new ArrayList<>();
-    private onCardClickListener onCardClickListener;
+    private final onCardClickListener onCardClickListener;
 
-    public CategoriesMealsAdapter(onCardClickListener onCardClickListener){
+    public CategoriesMealsAdapter(onCardClickListener onCardClickListener) {
         this.onCardClickListener = onCardClickListener;
     }
+
     public void setCategories(List<Category> categories) {
         this.categories = categories;
         notifyDataSetChanged();

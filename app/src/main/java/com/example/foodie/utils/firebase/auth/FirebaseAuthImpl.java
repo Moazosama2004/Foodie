@@ -1,10 +1,12 @@
-package com.example.foodie.utils;
+package com.example.foodie.utils.firebase.auth;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
 import com.example.foodie.R;
+import com.example.foodie.utils.services.AuthCallback;
+import com.example.foodie.utils.services.AuthService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -16,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class FirebaseAuthImpl implements FirebaseAuthService {
+public class FirebaseAuthImpl implements AuthService  {
 
     public static final int RC_GOOGLE_SIGN_IN = 1001;
     private static final String TAG = "FirebaseAuthImpl";
@@ -37,34 +39,41 @@ public class FirebaseAuthImpl implements FirebaseAuthService {
     }
 
     @Override
-    public void login(String email, String password) {
+    public void login(String email, String password , AuthCallback callback) {
+        Log.d("Auth", "Login started");
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, task -> {
                     if (task.isSuccessful()) {
+                        Log.d("Auth", "Login Done1");
                         Log.d(TAG, "Login successful");
                         FirebaseUser user = firebaseAuth.getCurrentUser();
+                        callback.onSuccess();
                     } else {
                         Log.e(TAG, "Login failed", task.getException());
+                        callback.onError("Login failed");
                     }
                 });
+        Log.d("Auth", "Login Done2");
     }
 
     @Override
-    public void register(String email, String password) {
+    public void register(String email, String password , AuthCallback callback) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, task -> {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "Registration successful");
                         FirebaseUser user = firebaseAuth.getCurrentUser();
+                        callback.onSuccess();
                     } else {
                         Log.e(TAG, "Registration failed", task.getException());
+                        callback.onError("Registration failed");
                     }
                 });
     }
 
     // ================= GOOGLE SIGN-IN =================
     @Override
-    public void firebaseWithGoogle() {
+    public void signInWithGoogle() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         activity.startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
@@ -85,6 +94,7 @@ public class FirebaseAuthImpl implements FirebaseAuthService {
                 .addOnCompleteListener(activity, task -> {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "Firebase Google Sign-In success");
+
                     } else {
                         Log.e(TAG, "Firebase Google auth failed", task.getException());
                     }
@@ -95,6 +105,13 @@ public class FirebaseAuthImpl implements FirebaseAuthService {
     public void logout() {
         firebaseAuth.signOut();
         googleSignInClient.signOut();
+
         Log.d(TAG, "User logged out");
+    }
+
+    @Override
+    public String getCurrentUserId() {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        return user != null ? user.getUid() : null;
     }
 }

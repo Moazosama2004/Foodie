@@ -32,7 +32,7 @@ public class FavFragment extends Fragment implements FavView, OnDeleteClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new FavouriteMealsAdapter(this , this);
+        adapter = new FavouriteMealsAdapter(this, this);
         presenter = new FavPresenterImpl(requireContext().getApplicationContext(), this);
     }
 
@@ -90,6 +90,11 @@ public class FavFragment extends Fragment implements FavView, OnDeleteClickListe
         Intent intent = new Intent(getContext(), MealDetailsActivity.class);
         intent.putExtra("MEAL_KEY", meal);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSuccess() {
+
     }
 
 

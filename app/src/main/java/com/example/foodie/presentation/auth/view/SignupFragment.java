@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class SignupFragment extends Fragment implements AuthView {
     private TextView nameTxt;
     private TextView emailTxt;
     private TextView passwordTxt;
+    private ProgressBar progressBar;
     private AuthPresenter authPresenter;
 
 
@@ -46,10 +48,13 @@ public class SignupFragment extends Fragment implements AuthView {
         nameTxt = view.findViewById(R.id.signup_name_txt);
         emailTxt = view.findViewById(R.id.signup_email_txt);
         passwordTxt = view.findViewById(R.id.signup_password_txt);
+        progressBar=  view.findViewById(R.id.signup_progress);
+
+
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authPresenter.register(emailTxt.getText().toString(), passwordTxt.getText().toString());
+                authPresenter.register(nameTxt.getText().toString(),emailTxt.getText().toString(), passwordTxt.getText().toString());
             }
         });
 
@@ -58,22 +63,38 @@ public class SignupFragment extends Fragment implements AuthView {
 
     @Override
     public void showLoading() {
-
+        btnSignup.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-
+        progressBar.setVisibility(View.GONE);
+        btnSignup.setVisibility(View.VISIBLE);
     }
+
 
     @Override
     public void showError(String message) {
-
+        showErrorDialog(message);
     }
 
     @Override
     public void navigateToHome() {
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
+        requireActivity().finish();
+
+    }
+
+    private void showErrorDialog(String message) {
+        hideLoading();
+
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Registration Failed")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .setCancelable(false)
+                .show();
     }
 }
