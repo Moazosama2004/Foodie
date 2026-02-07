@@ -8,6 +8,6 @@
     <color name="background_light">#EDEDED</color>
     <color name="text_field_border">#F1ECEC</color>
     <color name="hint_text">#ABABAB</color>
-
+<!--    <color name="bottom_nav_ripple_color">#EC2578</color>-->
 
 </resources>

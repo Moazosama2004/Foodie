@@ -41,7 +41,7 @@ public class HomePresenterImpl implements HomePresenter {
             @Override
             public void noInternet(String message) {
                 homeView.hideProgress();
-                homeView.showError(message);
+                homeView.showNetworkError(message);
             }
         });
     }
@@ -69,7 +69,7 @@ public class HomePresenterImpl implements HomePresenter {
             @Override
             public void noInternet(String message) {
                 homeView.hideProgress();
-                homeView.showError(message);
+                homeView.showNetworkError(message);
             }
         });
     }
