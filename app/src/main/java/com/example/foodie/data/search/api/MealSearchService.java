@@ -8,7 +8,6 @@ import com.example.foodie.data.search.model.MealByIdResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MealSearchService {
@@ -24,7 +23,7 @@ public interface MealSearchService {
     @GET("filter.php?")
     Call<FilteredResponse> getFilteredMealsByArea(@Query("a") String country);
 
-//    @GET("filter.php?c={category}")
+    //    @GET("filter.php?c={category}")
     @GET("filter.php?")
     Call<FilteredResponse> getFilteredMealsByCategory(@Query("c") String category);
 

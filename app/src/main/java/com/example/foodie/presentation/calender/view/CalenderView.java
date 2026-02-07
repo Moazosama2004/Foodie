@@ -13,6 +13,8 @@ public interface CalenderView {
     void showError(String message);
 
     void showMeals(List<CalendarMeal> meals);
+
     void showEmptyDay();
+
     void goToMealDetails(Meal meal);
 }

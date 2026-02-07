@@ -2,11 +2,11 @@ package com.example.foodie.data.auth.datasource.remote;
 
 import android.app.Activity;
 
-import com.example.foodie.utils.FirebaseAuthImpl;
-import com.example.foodie.utils.FirebaseAuthService;
+import com.example.foodie.utils.firebase.auth.FirebaseAuthImpl;
+import com.example.foodie.utils.services.AuthService;
 
 public class AuthRemoteDataSource {
-    private final FirebaseAuthService firebaseAuthService;
+    private final AuthService firebaseAuthService;
 
     public AuthRemoteDataSource(Activity activity) {
         this.firebaseAuthService = new FirebaseAuthImpl(activity);
@@ -21,7 +21,7 @@ public class AuthRemoteDataSource {
     }
 
     public void firebaseWithGoogle() {
-        firebaseAuthService.firebaseWithGoogle();
+        firebaseAuthService.signInWithGoogle();
     }
 
     public void logout() {

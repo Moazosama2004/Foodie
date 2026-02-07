@@ -2,17 +2,16 @@ package com.example.foodie.data.auth.datasource.local;
 
 import android.content.Context;
 
-import com.example.foodie.utils.SharedPrefsImpl;
-import com.example.foodie.utils.SharedPrefsService;
+import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 public class AuthLocalDataSource {
-    private final SharedPrefsService sharedPrefsService;
+    private final SharedPrefsManager sharedPrefsService;
 
     public AuthLocalDataSource(Context context) {
-        this.sharedPrefsService = SharedPrefsImpl.getInstance(context);
+        this.sharedPrefsService = SharedPrefsManager.getInstance(context);
     }
 
     public void setUserLoggedIn() {
-        sharedPrefsService.setUserLoggedIn(true);
+        sharedPrefsService.setLoggedIn(true);
     }
 }

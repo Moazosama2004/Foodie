@@ -1,40 +1,41 @@
-package com.example.foodie.utils;
-
-import android.util.Log;
+package com.example.foodie.utils.firebase.storage;
 
 import com.example.foodie.data.home.model.response.Meal;
+import com.example.foodie.utils.services.MealStorage;
+import com.example.foodie.utils.services.StorageCallback;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class FirebaseStorageImpl implements  StorageService{
+public class FirestoreMealStorage implements MealStorage {
     private final FirebaseFirestore firestore;
 
-    public FirebaseStorageImpl() {
+    public FirestoreMealStorage() {
         firestore = FirebaseFirestore.getInstance();
     }
 
+
     @Override
-    public void saveMeal(Meal meal) {
+    public void saveMeal(Meal meal, StorageCallback callback) {
         firestore.collection("meals")
                 .document(meal.getIdMeal())
                 .set(meal)
                 .addOnSuccessListener(unused ->
-                        Log.d("FIREBASE", "Meal saved successfully")
+                        callback.onSuccess()
                 )
                 .addOnFailureListener(e ->
-                        Log.e("FIREBASE", "Error: " + e.getMessage())
+                        callback.onError(e.getMessage())
                 );
     }
 
     @Override
-    public void deleteMeal(String id) {
+    public void deleteMeal(String id, StorageCallback callback) {
         firestore.collection("meals")
                 .document(id)
                 .delete()
                 .addOnSuccessListener(unused ->
-                        Log.d("FIREBASE", "Meal deleted successfully")
+                        callback.onSuccess()
                 )
                 .addOnFailureListener(e ->
-                        Log.e("FIREBASE", "Delete error: " + e.getMessage())
+                        callback.onError(e.getMessage())
                 );
     }
 }

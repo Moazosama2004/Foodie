@@ -19,9 +19,9 @@ import java.util.List;
 public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAdapter.FavouriteMealsViewHolder> {
 
     private List<Meal> favouriteMeals = new ArrayList<>();
-    private OnDeleteClickListener onDeleteClickListener;
+    private final OnDeleteClickListener onDeleteClickListener;
 
-    private FavView favView;
+    private final FavView favView;
 
     public FavouriteMealsAdapter(FavView favView, OnDeleteClickListener onDeleteClickListener) {
         this.onDeleteClickListener = onDeleteClickListener;
@@ -70,7 +70,6 @@ public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAd
         TextView mealName;
         ImageView mealImage;
         ImageView removeFav;
-
 
 
         public FavouriteMealsViewHolder(@NonNull View itemView) {

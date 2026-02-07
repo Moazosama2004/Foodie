@@ -28,7 +28,7 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.util.List;
 
-public class SearchFragment extends Fragment implements SearchView, onCardClickListener , OnMealCardListener {
+public class SearchFragment extends Fragment implements SearchView, onCardClickListener, OnMealCardListener {
     FoodAdapter foodAdapter;
     IngredientAdapter ingredientAdapter;
     List<Area> foodList;
@@ -158,7 +158,8 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         if (checkedId == R.id.category_chip) presenter.getFilteredMealsByCategory(query);
         else if (checkedId == R.id.ingredient_chip) presenter.getFilteredMealsByIngredient(query);
         else if (checkedId == R.id.country_chip) presenter.getFilteredMealsByArea(query);
-        else return;
+        else {
+        }
 
     }
 

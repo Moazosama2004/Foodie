@@ -1,6 +1,5 @@
 package com.example.foodie.presentation.search.view;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,8 @@ import java.util.List;
 
 public class FilteredMealsAdapter extends RecyclerView.Adapter<FilteredMealsAdapter.MealViewHolder> {
 
-    private List<FilteredMeal> meals = new ArrayList<>();
     OnMealCardListener onMealCardListener;
+    private List<FilteredMeal> meals = new ArrayList<>();
 
 
     public FilteredMealsAdapter(OnMealCardListener onMealCardListener) {

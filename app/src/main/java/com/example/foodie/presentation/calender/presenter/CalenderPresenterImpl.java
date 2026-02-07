@@ -14,10 +14,10 @@ import com.example.foodie.presentation.calender.view.CalenderView;
 
 import java.util.List;
 
-public class CalenderPresenterImpl implements  CalenderPresenter {
-    private CalenderView view;
-    private CalenderMealsRepo calenderMealsRepo;
-    private MealSearchRepo mealSearchRepo;
+public class CalenderPresenterImpl implements CalenderPresenter {
+    private final CalenderView view;
+    private final CalenderMealsRepo calenderMealsRepo;
+    private final MealSearchRepo mealSearchRepo;
 
     public CalenderPresenterImpl(Context context, CalenderView view) {
         this.calenderMealsRepo = new CalenderMealsRepo(context);
@@ -35,7 +35,7 @@ public class CalenderPresenterImpl implements  CalenderPresenter {
             List<CalendarMeal> meals = calenderMealsRepo.getMealsByDate(date);
 
             // Switch to main thread to update UI
-            if (view instanceof Fragment    ) {
+            if (view instanceof Fragment) {
                 ((Fragment) view).requireActivity().runOnUiThread(() -> {
                     if (meals == null || meals.isEmpty()) {
                         view.showEmptyDay();

@@ -18,7 +18,6 @@ import com.example.foodie.data.search.model.MealByIdResponse;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Filter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -126,7 +125,7 @@ public class MealsSearchRemoteDataSource {
         mealSearchService.getFilteredMealsByArea(country).enqueue(new Callback<FilteredResponse>() {
             @Override
             public void onResponse(Call<FilteredResponse> call, Response<FilteredResponse> response) {
-                if(response.code() == 200 && response.body() != null ) {
+                if (response.code() == 200 && response.body() != null) {
                     FilteredResponse filteredResponse = response.body();
                     List<FilteredMeal> filteredMeals = filteredResponse.getFilteredMeals();
                     callback.onSuccess(filteredMeals);
@@ -139,7 +138,7 @@ public class MealsSearchRemoteDataSource {
             public void onFailure(Call<FilteredResponse> call, Throwable t) {
                 if (t instanceof IOException) {
                     callback.noInternet("Network Connection");
-                }else {
+                } else {
                     callback.onFailure("Conversion Error! Please try again.");
                 }
             }
@@ -150,7 +149,7 @@ public class MealsSearchRemoteDataSource {
         mealSearchService.getFilteredMealsByCategory(category).enqueue(new Callback<FilteredResponse>() {
             @Override
             public void onResponse(Call<FilteredResponse> call, Response<FilteredResponse> response) {
-                if(response.code() == 200 && response.body() != null ) {
+                if (response.code() == 200 && response.body() != null) {
                     FilteredResponse filteredResponse = response.body();
                     List<FilteredMeal> filteredMeals = filteredResponse.getFilteredMeals();
                     callback.onSuccess(filteredMeals);
@@ -163,7 +162,7 @@ public class MealsSearchRemoteDataSource {
             public void onFailure(Call<FilteredResponse> call, Throwable t) {
                 if (t instanceof IOException) {
                     callback.noInternet("Network Connection");
-                }else {
+                } else {
                     callback.onFailure("Conversion Error! Please try again.");
                 }
             }
@@ -174,7 +173,7 @@ public class MealsSearchRemoteDataSource {
         mealSearchService.getFilteredMealsByIngredient(ingredient).enqueue(new Callback<FilteredResponse>() {
             @Override
             public void onResponse(Call<FilteredResponse> call, Response<FilteredResponse> response) {
-                if(response.code() == 200 && response.body() != null ) {
+                if (response.code() == 200 && response.body() != null) {
                     FilteredResponse filteredResponse = response.body();
                     List<FilteredMeal> filteredMeals = filteredResponse.getFilteredMeals();
                     callback.onSuccess(filteredMeals);
@@ -187,7 +186,7 @@ public class MealsSearchRemoteDataSource {
             public void onFailure(Call<FilteredResponse> call, Throwable t) {
                 if (t instanceof IOException) {
                     callback.noInternet("Network Connection");
-                }else {
+                } else {
                     callback.onFailure("Conversion Error! Please try again.");
                 }
             }
@@ -198,7 +197,7 @@ public class MealsSearchRemoteDataSource {
         mealSearchService.getMealById(id).enqueue(new Callback<MealByIdResponse>() {
             @Override
             public void onResponse(Call<MealByIdResponse> call, Response<MealByIdResponse> response) {
-                if(response.code() == 200 && response.body() != null ) {
+                if (response.code() == 200 && response.body() != null) {
                     MealByIdResponse filteredResponse = response.body();
                     List<Meal> meal = filteredResponse.getMeals();
                     callback.onSuccess(meal);
@@ -211,7 +210,7 @@ public class MealsSearchRemoteDataSource {
             public void onFailure(Call<MealByIdResponse> call, Throwable t) {
                 if (t instanceof IOException) {
                     callback.noInternet("Network Connection");
-                }else {
+                } else {
                     callback.onFailure("Conversion Error! Please try again.");
                 }
             }

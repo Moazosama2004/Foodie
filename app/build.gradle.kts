@@ -7,6 +7,11 @@ android {
     namespace = "com.example.foodie"
     compileSdk = 36
 
+    buildFeatures {
+        viewBinding = true
+    }
+
+
     defaultConfig {
         applicationId = "com.example.foodie"
         minSdk = 24

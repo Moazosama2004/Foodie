@@ -27,11 +27,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class PlanFragment extends Fragment implements CalenderView ,OnMealClickListener {
+public class PlanFragment extends Fragment implements CalenderView, OnMealClickListener {
 
     private CalendarView calendar;
     private TextView dateView;
-    private  RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private CalenderPresenter presenter;
 
     private View mealCard;
@@ -83,13 +83,16 @@ public class PlanFragment extends Fragment implements CalenderView ,OnMealClickL
 
 
     @Override
-    public void showProgress() {}
+    public void showProgress() {
+    }
 
     @Override
-    public void hideProgress() {}
+    public void hideProgress() {
+    }
 
     @Override
-    public void showError(String message) {}
+    public void showError(String message) {
+    }
 
     @Override
     public void showMeals(List<CalendarMeal> meals) {

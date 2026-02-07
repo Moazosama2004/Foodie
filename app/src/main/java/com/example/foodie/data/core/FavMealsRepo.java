@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.example.foodie.data.core.datasource.local.FavMealsLocalDataSource;
 import com.example.foodie.data.core.datasource.remote.FavMealsRemoteDataSource;
 import com.example.foodie.data.home.model.response.Meal;
+import com.example.foodie.utils.services.StorageCallback;
 
 import java.util.List;
 
@@ -28,9 +29,7 @@ public class FavMealsRepo {
         favMealsLocalDataSource.deleteMeal(meal);
     }
 
-    public void deleteMealRemote(String id) {
-        favMealsRemoteDataSource.deleteMeal(id);
-    }
+
 
 
     public LiveData<Boolean> isMealFav(String id) {
@@ -41,7 +40,11 @@ public class FavMealsRepo {
         return favMealsLocalDataSource.getAllFavMeals();
     }
 
-    public void saveMealRemote(Meal meal) {
-        favMealsRemoteDataSource.saveMeal(meal);
+    public void saveMealRemote(Meal meal , StorageCallback callback) {
+        favMealsRemoteDataSource.saveMeal(meal , callback);
+    }
+
+    public void deleteMealRemote(String id , StorageCallback callback) {
+        favMealsRemoteDataSource.deleteMeal(id , callback);
     }
 }

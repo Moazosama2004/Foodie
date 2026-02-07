@@ -10,5 +10,6 @@ public interface FavPresenter {
     LiveData<List<Meal>> getFavMeals();
 
     void deleteFromFavLocal(Meal meal);
+
     void deleteFromFavRemote(String id);
 }

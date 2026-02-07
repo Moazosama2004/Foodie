@@ -9,7 +9,7 @@ import com.example.foodie.db.AppDatabase;
 import java.util.List;
 
 public class CalenderMealsLocalDataSource {
-    private CalendarMealsDao calendarMealsDao;
+    private final CalendarMealsDao calendarMealsDao;
 
     public CalenderMealsLocalDataSource(Context context) {
         this.calendarMealsDao = AppDatabase.getInstance(context).calendarMealsDao();

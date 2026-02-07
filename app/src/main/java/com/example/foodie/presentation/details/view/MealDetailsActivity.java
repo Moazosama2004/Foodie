@@ -104,7 +104,7 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
 
                             if (meal != null) {
                                 Log.d("MealDetailsActivity", "Adding to Calender: " + meal.getStrMeal());
-                                presenter.addToCalender(meal , selectedDate);
+                                presenter.addToCalender(meal, selectedDate);
                                 Toast.makeText(MealDetailsActivity.this, "Added to Calender!", Toast.LENGTH_SHORT).show();
                             } else {
                                 Log.e("MealDetailsActivity", "Cannot add to Calender - meal is null");

@@ -8,12 +8,12 @@ import com.example.foodie.data.calender.model.CalendarMeal;
 import java.util.List;
 
 public class CalenderMealsRepo {
-    private CalenderMealsLocalDataSource localDataSource;
+    private final CalenderMealsLocalDataSource localDataSource;
 
 
     public CalenderMealsRepo(Context context) {
         this.localDataSource = new CalenderMealsLocalDataSource(context);
-    };
+    }
 
 
     public void insertMeal(CalendarMeal meal) {

@@ -1,10 +1,11 @@
-package com.example.foodie.utils;
+package com.example.foodie.utils.firebase.auth;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
 import com.example.foodie.R;
+import com.example.foodie.utils.services.AuthService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -16,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class FirebaseAuthImpl implements FirebaseAuthService {
+public class FirebaseAuthImpl implements AuthService {
 
     public static final int RC_GOOGLE_SIGN_IN = 1001;
     private static final String TAG = "FirebaseAuthImpl";
@@ -64,7 +65,7 @@ public class FirebaseAuthImpl implements FirebaseAuthService {
 
     // ================= GOOGLE SIGN-IN =================
     @Override
-    public void firebaseWithGoogle() {
+    public void signInWithGoogle() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         activity.startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
