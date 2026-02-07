@@ -21,8 +21,8 @@ public class AuthRepo {
         authRemoteDataSource.login(email, password,callback);
     }
 
-    public void register(String email, String password, AuthCallback callback) {
-        authRemoteDataSource.register(email, password,callback);
+    public void register(String username , String email, String password, AuthCallback callback) {
+        authRemoteDataSource.register(username, email, password,callback);
     }
 
     public void logout() {

@@ -54,7 +54,7 @@ public class SignupFragment extends Fragment implements AuthView {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authPresenter.register(emailTxt.getText().toString(), passwordTxt.getText().toString());
+                authPresenter.register(nameTxt.getText().toString(),emailTxt.getText().toString(), passwordTxt.getText().toString());
             }
         });
 

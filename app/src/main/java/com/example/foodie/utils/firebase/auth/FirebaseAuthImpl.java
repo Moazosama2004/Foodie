@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class FirebaseAuthImpl implements AuthService {
+public class FirebaseAuthImpl implements AuthService  {
 
     public static final int RC_GOOGLE_SIGN_IN = 1001;
     private static final String TAG = "FirebaseAuthImpl";
@@ -107,5 +107,11 @@ public class FirebaseAuthImpl implements AuthService {
         googleSignInClient.signOut();
 
         Log.d(TAG, "User logged out");
+    }
+
+    @Override
+    public String getCurrentUserId() {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        return user != null ? user.getUid() : null;
     }
 }

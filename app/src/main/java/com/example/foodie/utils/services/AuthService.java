@@ -8,4 +8,6 @@ public interface AuthService {
     void signInWithGoogle();
 
     void logout();
+
+    String getCurrentUserId();
 }

@@ -38,9 +38,9 @@ public class AuthPresenterImpl implements AuthPresenter {
     }
 
     @Override
-    public void register(String email, String password) {
+    public void register(String username , String email, String password) {
         authView.showLoading();
-        authRepo.register(email, password, new AuthCallback() {
+        authRepo.register(username,email, password, new AuthCallback() {
             @Override
             public void onSuccess() {
                 authView.hideLoading();
