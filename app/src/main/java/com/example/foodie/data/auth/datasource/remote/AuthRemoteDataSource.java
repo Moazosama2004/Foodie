@@ -3,6 +3,7 @@ package com.example.foodie.data.auth.datasource.remote;
 import android.app.Activity;
 
 import com.example.foodie.utils.firebase.auth.FirebaseAuthImpl;
+import com.example.foodie.utils.services.AuthCallback;
 import com.example.foodie.utils.services.AuthService;
 
 public class AuthRemoteDataSource {
@@ -12,12 +13,12 @@ public class AuthRemoteDataSource {
         this.firebaseAuthService = new FirebaseAuthImpl(activity);
     }
 
-    public void login(String email, String password) {
-        firebaseAuthService.login(email, password);
+    public void login(String email, String password, AuthCallback callback) {
+        firebaseAuthService.login(email, password,callback);
     }
 
-    public void register(String email, String password) {
-        firebaseAuthService.register(email, password);
+    public void register(String email, String password, AuthCallback callback) {
+        firebaseAuthService.register(email, password,callback);
     }
 
     public void firebaseWithGoogle() {

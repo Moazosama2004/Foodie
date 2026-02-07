@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.foodie.data.auth.datasource.AuthRepo;
 import com.example.foodie.presentation.auth.view.AuthView;
+import com.example.foodie.utils.services.AuthCallback;
 
 public class AuthPresenterImpl implements AuthPresenter {
 
@@ -19,21 +20,40 @@ public class AuthPresenterImpl implements AuthPresenter {
 
     @Override
     public void login(String email, String password) {
-        Log.d("TAG", "start login: " + email);
-
         authView.showLoading();
-        authRepo.login(email, password);
-        Log.d("TAG", "after login: " + email);
-        authView.hideLoading();
-        authView.navigateToHome();
+        authRepo.login(email, password, new AuthCallback() {
+            @Override
+            public void onSuccess() {
+                authView.hideLoading();
+                authView.navigateToHome();
+            }
+
+            @Override
+            public void onError(String message) {
+                authView.hideLoading();
+                authView.showError(message);
+            }
+        });
+
     }
 
     @Override
     public void register(String email, String password) {
         authView.showLoading();
-        authRepo.register(email, password);
-        authView.hideLoading();
-        authView.navigateToHome();
+        authRepo.register(email, password, new AuthCallback() {
+            @Override
+            public void onSuccess() {
+                authView.hideLoading();
+                authView.navigateToHome();
+            }
+
+            @Override
+            public void onError(String message) {
+                authView.hideLoading();
+                authView.showError(message);
+            }
+        });
+
     }
 
     @Override
@@ -47,6 +67,5 @@ public class AuthPresenterImpl implements AuthPresenter {
     @Override
     public void setUserLoggedIn() {
         authRepo.setUserLoggedIn();
-        authView.navigateToHome();
     }
 }

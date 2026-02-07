@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.example.foodie.data.auth.datasource.local.AuthLocalDataSource;
 import com.example.foodie.data.auth.datasource.remote.AuthRemoteDataSource;
+import com.example.foodie.utils.services.AuthCallback;
 
 public class AuthRepo {
     private final AuthRemoteDataSource authRemoteDataSource;
@@ -16,12 +17,12 @@ public class AuthRepo {
         this.authLocalDataSource = new AuthLocalDataSource(activity.getApplicationContext());
     }
 
-    public void login(String email, String password) {
-        authRemoteDataSource.login(email, password);
+    public void login(String email, String password, AuthCallback callback) {
+        authRemoteDataSource.login(email, password,callback);
     }
 
-    public void register(String email, String password) {
-        authRemoteDataSource.register(email, password);
+    public void register(String email, String password, AuthCallback callback) {
+        authRemoteDataSource.register(email, password,callback);
     }
 
     public void logout() {

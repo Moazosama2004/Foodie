@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,9 @@ public class LoginFragment extends Fragment implements AuthView {
     private TextView emailTxt;
     private TextView passwordTxt;
     private ImageView googleBtn;
+    private ProgressBar loading;
     private AuthPresenter authPresenter;
+
 
 
     @Override
@@ -51,6 +54,15 @@ public class LoginFragment extends Fragment implements AuthView {
         emailTxt = view.findViewById(R.id.login_email_txt);
         passwordTxt = view.findViewById(R.id.login_password_txt);
         googleBtn = view.findViewById(R.id.google_btn);
+        loading = view.findViewById(R.id.login_progress);
+
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                authPresenter.login(emailTxt.getText().toString(), passwordTxt.getText().toString());
+            }
+        });
 
 
         googleBtn.setOnClickListener(new View.OnClickListener() {
@@ -60,14 +72,6 @@ public class LoginFragment extends Fragment implements AuthView {
             }
         });
 
-
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("TAG", "onClick: " + emailTxt.getText().toString());
-                authPresenter.login(emailTxt.getText().toString(), passwordTxt.getText().toString());
-            }
-        });
 
         txtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,26 +83,37 @@ public class LoginFragment extends Fragment implements AuthView {
 
     @Override
     public void showLoading() {
-
+        loading.setVisibility(View.VISIBLE);
+        btnLogin.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
-
+        loading.setVisibility(View.GONE);
+        btnLogin.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        showErrorDialog(message);
     }
 
     @Override
     public void navigateToHome() {
-        Log.d("TAG", "navigateToHome: " + emailTxt.getText().toString());
-
         authPresenter.setUserLoggedIn();
-        Log.d("TAG", "after navigateToHome: " + emailTxt.getText().toString());
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
+        requireActivity().finish();
+    }
+
+    private void showErrorDialog(String message) {
+        hideLoading();
+
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Login Failed")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .setCancelable(false)
+                .show();
     }
 }
