@@ -15,7 +15,6 @@ import com.example.foodie.presentation.auth.view.AuthActivity;
 
 public class SecondFragment extends Fragment {
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +29,16 @@ public class SecondFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AuthActivity.class);
-                startActivity(intent);
+                goToLogin();
             }
         });
         return view;
+    }
+
+    private void goToLogin() {
+        Intent intent = new Intent(getActivity(), AuthActivity.class);
+        startActivity(intent);
+        requireActivity().finish();
     }
 
 }
