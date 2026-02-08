@@ -9,11 +9,14 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.foodie.R;
+import com.example.foodie.databinding.FragmentViewPagerBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPagerFragment extends Fragment {
+
+    private FragmentViewPagerBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,7 +28,8 @@ public class ViewPagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
+        binding = FragmentViewPagerBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         ArrayList<Fragment> fragments = new ArrayList<>(List.of(
                 new FirstFragment(),
@@ -38,8 +42,7 @@ public class ViewPagerFragment extends Fragment {
                 getLifecycle()
         );
 
-        ViewPager2 viewPager = view.findViewById(R.id.view_pager);
-        viewPager.setAdapter(adapter);
+        binding.viewPager.setAdapter(adapter);
         return view;
     }
 }

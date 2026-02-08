@@ -18,12 +18,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foodie.MealDetailsActivity;
 import com.example.foodie.R;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.data.search.model.Area;
 import com.example.foodie.data.search.model.Category;
 import com.example.foodie.data.search.model.Ingredient;
+import com.example.foodie.databinding.FragmentSearchBinding;
+import com.example.foodie.presentation.details.view.MealDetailsActivity;
 import com.example.foodie.presentation.search.presenter.SearchPresenter;
 import com.example.foodie.presentation.search.presenter.SearchPresenterImpl;
 import com.google.android.material.chip.Chip;
@@ -32,6 +33,7 @@ import com.google.android.material.chip.ChipGroup;
 import java.util.List;
 
 public class SearchFragment extends Fragment implements SearchView, onCardClickListener, OnMealCardListener {
+    private FragmentSearchBinding binding;
     FoodAdapter foodAdapter;
     IngredientAdapter ingredientAdapter;
     List<Area> foodList;
@@ -59,19 +61,18 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        binding = FragmentSearchBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        chipGroup = view.findViewById(R.id.chip_group);
-        rvCategories = view.findViewById(R.id.rvCategories);
-        searchText = view.findViewById(R.id.search_txt);
-        rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        rvCategories.setAdapter(adapter);
+        binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        binding.rvCategories.setAdapter(adapter);
 
-        searchText.addTextChangedListener(new TextWatcher() {
+        binding.searchTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {}
 
@@ -90,8 +91,8 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
                     return;
                 }
 
-                rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
-                rvCategories.setAdapter(filteredMealsAdapter);
+                binding.rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
+                binding.rvCategories.setAdapter(filteredMealsAdapter);
                 if (query.length() < 2) return;
                 if (checkedId == R.id.category_chip) {
                     presenter.getFilteredMealsByCategory(query);
@@ -106,7 +107,7 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         });
 
 
-        chipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+        binding.chipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
             @Override
             public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
 
@@ -127,17 +128,17 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
                     // Handle each chip
                     if (checkedId == R.id.category_chip) {
                         Log.d("Chip", "Category chip selected");
-                        rvCategories.setAdapter(adapter);
-                        rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                        binding.rvCategories.setAdapter(adapter);
+                        binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     } else if (checkedId == R.id.ingredient_chip) {
                         Log.d("Chip", "Ingredient chip selected");
-                        rvCategories.setAdapter(ingredientAdapter);
+                        binding.rvCategories.setAdapter(ingredientAdapter);
                         presenter.getIngredients();
-                        rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                        binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
                     } else if (checkedId == R.id.country_chip) {
                         Log.d("Chip", "Country chip selected");
-                        rvCategories.setAdapter(foodAdapter);
-                        rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                        binding.rvCategories.setAdapter(foodAdapter);
+                        binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
                         presenter.getAreas();
                     }
                 } else {
@@ -154,18 +155,18 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     private void resetByChip() {
 
         if (checkedId == R.id.category_chip) {
-            rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            rvCategories.setAdapter(adapter);
+            binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            binding.rvCategories.setAdapter(adapter);
             presenter.getCategories();
 
         } else if (checkedId == R.id.ingredient_chip) {
-            rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
-            rvCategories.setAdapter(ingredientAdapter);
+            binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            binding.rvCategories.setAdapter(ingredientAdapter);
             presenter.getIngredients();
 
         } else if (checkedId == R.id.country_chip) {
-            rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
-            rvCategories.setAdapter(foodAdapter);
+            binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            binding.rvCategories.setAdapter(foodAdapter);
             presenter.getAreas();
         }
     }
