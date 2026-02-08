@@ -2,6 +2,7 @@ package com.example.foodie.presentation.auth.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +76,7 @@ public class SignupFragment extends Fragment implements AuthView {
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
         requireActivity().finish();
-
+        Log.d("from SignupFragment", "navigateToHome:");
     }
 
     private void showErrorDialog(String message) {

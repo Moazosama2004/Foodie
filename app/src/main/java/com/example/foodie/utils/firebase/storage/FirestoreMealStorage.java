@@ -34,26 +34,13 @@ public class FirestoreMealStorage implements MealStorage {
     public void saveMeal(Meal meal, StorageCallback callback) {
         String userId = getUserId();
 
-        Map<String, Object> mealMap = new com.google.gson.Gson().fromJson(
-                new com.google.gson.Gson().toJson(meal),
-                Map.class
-        );
-
         firestore.collection("users")
                 .document(userId)
-                .update("meals", com.google.firebase.firestore.FieldValue.arrayUnion(mealMap))
+                .collection("meals")
+                .document(meal.getIdMeal())
+                .set(meal)
                 .addOnSuccessListener(unused -> callback.onSuccess())
-                .addOnFailureListener(e -> {
-                    Map<String, Object> data = new HashMap<>();
-                    List<Map<String, Object>> mealsList = new ArrayList<>();
-                    mealsList.add(mealMap);
-                    data.put("meals", mealsList);
-                    firestore.collection("users")
-                            .document(userId)
-                            .set(data)
-                            .addOnSuccessListener(unused1 -> callback.onSuccess())
-                            .addOnFailureListener(e1 -> callback.onError(e1.getMessage()));
-                });
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
     @Override
@@ -62,31 +49,12 @@ public class FirestoreMealStorage implements MealStorage {
 
         firestore.collection("users")
                 .document(userId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    List<Map<String, Object>> mealsArray = (List<Map<String, Object>>) documentSnapshot.get("meals");
-                    if (mealsArray == null) mealsArray = new ArrayList<>();
-
-                    List<Map<String, Object>> updatedMeals = new ArrayList<>();
-                    for (Map<String, Object> mealMap : mealsArray) {
-                        Object id = mealMap.get("idMeal");
-                        if (id != null && !id.equals(mealId)) {
-                            updatedMeals.add(mealMap);
-                        }
-                    }
-
-                    firestore.collection("users")
-                            .document(userId)
-                            .update("meals", updatedMeals)
-                            .addOnSuccessListener(unused -> callback.onSuccess())
-                            .addOnFailureListener(e -> callback.onError(e.getMessage()));
-                })
+                .collection("meals")
+                .document(mealId)
+                .delete()
+                .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
-
-
-
-
 
     @Override
     public void getAllMealsById(StorageCallback callback) {
@@ -94,27 +62,17 @@ public class FirestoreMealStorage implements MealStorage {
 
         firestore.collection("users")
                 .document(userId)
+                .collection("meals")
                 .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        List<Meal> meals = new ArrayList<>();
-                        List<Object> mealsArray = (List<Object>) documentSnapshot.get("meals");
-
-                        if (mealsArray != null) {
-                            for (Object obj : mealsArray) {
-                                Meal m = new com.google.gson.Gson().fromJson(
-                                        new com.google.gson.Gson().toJson(obj),
-                                        Meal.class
-                                );
-                                meals.add(m);
-                            }
-                        }
-
-                        callback.onSuccessWithResult(meals);
-                    } else {
-                        callback.onError("User not found");
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Meal> meals = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        Meal meal = doc.toObject(Meal.class);
+                        meals.add(meal);
                     }
+                    callback.onSuccessWithResult(meals);
                 })
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
+
 }

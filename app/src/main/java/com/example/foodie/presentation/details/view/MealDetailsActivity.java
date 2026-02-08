@@ -1,38 +1,31 @@
 package com.example.foodie.presentation.details.view;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.Lifecycle;
 
 import com.bumptech.glide.Glide;
 import com.example.foodie.R;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.databinding.ActivityMealDetailsBinding;
 import com.example.foodie.presentation.details.presenter.DetailsPresenterImpl;
-import com.example.foodie.presentation.details.view.DetailsView;
-import com.example.foodie.presentation.details.view.MealDetailsAdapter;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.Calendar;
 import java.util.Locale;
 
 public class MealDetailsActivity extends AppCompatActivity implements DetailsView {
-    private ActivityMealDetailsBinding binding;
-    private MealDetailsAdapter adapter;
-    private Meal meal;
-    private DetailsPresenterImpl presenter;
 
+    private ActivityMealDetailsBinding binding;
+    private DetailsPresenterImpl presenter;
+    private Meal meal;
+    private MealDetailsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,161 +33,102 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
         binding = ActivityMealDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Initialize presenter
+        // Presenter
         presenter = new DetailsPresenterImpl(getApplicationContext(), this);
 
-        // Initialize adapter and views
+        // Adapter
         adapter = new MealDetailsAdapter();
         binding.rvIngredients.setAdapter(adapter);
 
-        // Attach lifecycle (IMPORTANT)
         getLifecycle().addObserver(binding.youtubePlayerView);
 
-        // Get meal from intent
         meal = getIntent().getParcelableExtra("MEAL_KEY");
-
-        // Debug log with null check
-        if (meal != null) {
-            Log.d("MealDetailsActivity", "Meal received: " + meal);
-        } else {
-            Log.e("MealDetailsActivity", "Meal is NULL from intent!");
-            // Show error and finish activity
+        if (meal == null) {
             Toast.makeText(this, "Failed to load meal details", Toast.LENGTH_SHORT).show();
             finish();
-            return; // Exit early
+            return;
         }
 
-        // Setup FAB click listener
-        binding.addToFav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("MealDetailsActivity", "FAB Clicked!");
-                if (meal != null) {
-                    Log.d("MealDetailsActivity", "Adding to favorites: " + meal.getStrMeal());
-                    presenter.saveMealLocal(meal);
-                    presenter.saveMealRemote(meal);
-                    Toast.makeText(MealDetailsActivity.this, "Added to favorites!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e("MealDetailsActivity", "Cannot add to favorites - meal is null");
-                    Toast.makeText(MealDetailsActivity.this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        setupMealViews();
+        setupClicks();
+    }
 
-        binding.addToCalender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("MealDetailsActivity", " addToCalender Clicked!");
+    private void setupMealViews() {
+        Glide.with(this)
+                .load(meal.getStrMealThumb())
+                .placeholder(R.drawable.meal_of_the_day)
+                .into(binding.imgMeal);
 
-                // GET CURRENT DATE
-                final Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
+        binding.tvMealName.setText(meal.getStrMeal());
+        binding.tvMealType.setText(meal.getStrCategory());
+        binding.tvMealCountry.setText(meal.getStrArea());
+        binding.tvInstructions.setText(meal.getStrInstructions());
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        MealDetailsActivity.this,
-                        (view, selectedYear, selectedMonth, selectedDay) -> {
+        // Ingredients
+        if (meal.getIngredients() != null) {
+            adapter.setIngredientList(meal.getIngredients());
+            Log.d("MealDetailsActivity", "Ingredients count: " + meal.getIngredients().size());
+        }
 
-                            String selectedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
-
-                            if (meal != null) {
-                                Log.d("MealDetailsActivity", "Adding to Calender: " + meal.getStrMeal());
-                                presenter.addToCalender(meal, selectedDate);
-                                Toast.makeText(MealDetailsActivity.this, "Added to Calender!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Log.e("MealDetailsActivity", "Cannot add to Calender - meal is null");
-                                Toast.makeText(MealDetailsActivity.this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
-                            }
-                            System.out.println("Selected Date: " + selectedDate);
-                        },
-                        year, month, day
-                );
-
-                datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis() - 1000);
-
-
-                calendar.add(Calendar.DAY_OF_YEAR, 7);
-                datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-
-                datePickerDialog.show();
-
-
-            }
-        });
-
-        // Load meal data
-        if (meal != null) {
-            Log.d("MealDetailsActivity", "Loading meal data");
-            Glide.with(this)
-                    .load(meal.getStrMealThumb())
-                    .placeholder(R.drawable.meal_of_the_day)
-                    .into(binding.imgMeal);
-            binding.tvMealName.setText(meal.getStrMeal());
-            binding.tvMealType.setText(meal.getStrCategory());
-            binding.tvMealCountry.setText(meal.getStrArea());
-            binding.tvInstructions.setText(meal.getStrInstructions());
-
-
-            // Load YouTube video if exists
-            if (meal.getStrYoutube() != null && !meal.getStrYoutube().isEmpty()) {
-
-                binding.youtubePlayerView.setVisibility(View.VISIBLE);
-
-                binding.youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-                    @Override
-                    public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-
-                        // Extract video ID from URL
-                        String videoId = extractVideoId(meal.getStrYoutube());
-
-                        if (videoId != null) {
-                            youTubePlayer.cueVideo(videoId, 0);
-                        }
+        String youtubeUrl = meal.getStrYoutube();
+        if (youtubeUrl != null && !youtubeUrl.isEmpty()) {
+            binding.youtubePlayerView.setVisibility(android.view.View.VISIBLE);
+            binding.youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                @Override
+                public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                    String videoId = extractVideoId(youtubeUrl);
+                    if (videoId != null) {
+                        youTubePlayer.cueVideo(videoId, 0);
                     }
-                });
-
-                Log.d("VIDEO_URL", meal.getStrYoutube());
-                Log.d("VIDEO_ID", extractVideoId(meal.getStrYoutube()));
-
-            } else {
-                // Hide video if no youtube link
-                binding.youtubePlayerView.setVisibility(View.GONE);
-            }
-
-            // Check if ingredients list is not null
-            if (meal.getIngredients() != null) {
-                adapter.setIngredientList(meal.getIngredients());
-                Log.d("MealDetailsActivity", "Ingredients count: " + meal.getIngredients().size());
-            } else {
-                Log.w("MealDetailsActivity", "Ingredients list is null");
-            }
+                }
+            });
+        } else {
+            binding.youtubePlayerView.setVisibility(android.view.View.GONE);
         }
     }
 
-    @Override
-    public void showProgress() {
+    private void setupClicks() {
 
-    }
+        binding.addToFav.setOnClickListener(v -> {
+            if (meal != null) {
+                presenter.saveMealLocal(meal);
+                presenter.saveMealRemote(meal);
+                Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-    @Override
-    public void hideProgress() {
+        binding.addToCalender.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-    }
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        String selectedDate = String.format(Locale.getDefault(),
+                                "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
+                        if (meal != null) {
+                            presenter.addToCalender(meal, selectedDate);
+                            Toast.makeText(this, "Added to Calendar!", Toast.LENGTH_SHORT).show();
+                        }
+                        Log.d("MealDetailsActivity", "Selected Date: " + selectedDate);
+                    },
+                    year, month, day
+            );
 
-    @Override
-    public void showError(String message) {
+            // Min/max date
+            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis() - 1000);
+            calendar.add(Calendar.DAY_OF_YEAR, 7);
+            datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
 
-    }
-
-    @Override
-    public void onSuccess() {
-
+            datePickerDialog.show();
+        });
     }
 
     private String extractVideoId(String youtubeUrl) {
-        if (youtubeUrl == null) return null;
-
         if (youtubeUrl.contains("watch?v=")) {
             return youtubeUrl.substring(youtubeUrl.indexOf("watch?v=") + 8);
         } else if (youtubeUrl.contains("youtu.be/")) {
@@ -204,10 +138,23 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     }
 
     @Override
+    public void showProgress() { }
+
+    @Override
+    public void hideProgress() { }
+
+    @Override
+    public void showError(String message) { }
+
+    @Override
+    public void onSuccess() { }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (binding.youtubePlayerView != null) {
+        if (binding.youtubePlayerView != null && getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)) {
             binding.youtubePlayerView.release();
         }
+        binding = null;
     }
 }

@@ -24,6 +24,7 @@ public class AuthPresenterImpl implements AuthPresenter {
         authRepo.login(email, password, new AuthCallback() {
             @Override
             public void onSuccess() {
+                Log.d("Auth" , "onSuccess:");
                 authView.hideLoading();
                 authView.navigateToHome();
             }

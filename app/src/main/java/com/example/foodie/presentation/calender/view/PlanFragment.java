@@ -12,12 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.foodie.MealDetailsActivity;
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.databinding.FragmentPlanBinding;
 import com.example.foodie.presentation.calender.presenter.CalenderPresenter;
 import com.example.foodie.presentation.calender.presenter.CalenderPresenterImpl;
+import com.example.foodie.presentation.details.view.MealDetailsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

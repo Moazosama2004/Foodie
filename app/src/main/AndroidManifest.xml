@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Foodie">
         <activity
-            android:name=".MealDetailsActivity"
+            android:name=".presentation.details.view.MealDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.auth.view.AuthActivity"
