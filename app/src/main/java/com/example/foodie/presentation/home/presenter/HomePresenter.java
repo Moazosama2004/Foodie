@@ -5,5 +5,6 @@ public interface HomePresenter {
 
     void getPopularMeals();
 
+    void destroy();
 }
 

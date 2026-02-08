@@ -73,12 +73,7 @@ public class HomeFragment extends Fragment implements HomeView {
         homePresenter.getPopularMeals();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        handler.removeCallbacksAndMessages(null);
-        binding = null;
-    }
+
 
 
     private void initViews() {
@@ -169,7 +164,7 @@ public class HomeFragment extends Fragment implements HomeView {
     }
 
     @Override
-    public void showOneMeal(Meal meal) {
+    public void showRandomMeal(Meal meal) {
         this.meal = meal;
         randomMealLoaded = true;
         showMealImage(meal);
@@ -213,5 +208,14 @@ public class HomeFragment extends Fragment implements HomeView {
                 binding.networkErrorOverlay.setVisibility(View.VISIBLE);
             }
         }, 5000);
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        handler.removeCallbacksAndMessages(null);
+        binding = null;
+        homePresenter.destroy();
     }
 }
