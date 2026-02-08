@@ -1,0 +1,62 @@
+package com.example.foodie.presentation.profile.view;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.example.foodie.R;
+import com.example.foodie.databinding.FragmentProfileBinding;
+import com.example.foodie.presentation.auth.view.AuthActivity;
+import com.example.foodie.presentation.profile.presenter.ProfilePresenter;
+import com.example.foodie.presentation.profile.presenter.ProfilePresenterImpl;
+import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
+
+
+public class ProfileFragment extends Fragment implements ProfileView {
+    private FragmentProfileBinding binding;
+    private ProfilePresenter presenter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new ProfilePresenterImpl(getActivity(), this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding =  FragmentProfileBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding.profileEmail.setEnabled(false);
+        binding.profileUsername.setText(SharedPrefsManager.getInstance(requireContext()).getUsername());
+        binding.profileEmail.setText(SharedPrefsManager.getInstance(requireContext()).getEmail());
+        binding.btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.logout();
+            }
+        });
+
+    }
+
+    @Override
+    public void goToAuth() {
+        Intent intent = new Intent(getActivity(), AuthActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
+}

@@ -117,5 +117,7 @@ public class AuthRemoteDataSource {
 
     public void logout() {
         firebaseAuthService.logout();
-    }
+        sharedPrefsService.clearUser();
+        sharedPrefsService.setLoggedIn(false);
+        }
 }
