@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/bottom_nav_bar_profile"
-        android:name="com.example.foodie.ProfileFragment"
+        android:name="com.example.foodie.presentation.profile.view.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
