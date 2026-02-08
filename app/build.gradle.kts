@@ -12,6 +12,7 @@ android {
     }
 
 
+
     defaultConfig {
         applicationId = "com.example.foodie"
         minSdk = 24
@@ -70,4 +71,19 @@ dependencies {
     val room_version = "2.8.4"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+
+
+
+    //retrofit with RXJava
+    implementation("com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0")
+
+    //room with RXJava
+    implementation("androidx.room:room-rxjava3:$room_version")
+
+    implementation("com.f2prateek.rx.preferences2:rx-preferences:2.0.1")
+
+
+    //rxjava
+    implementation("io.reactivex.rxjava3:rxjava:3.1.6")
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
 }

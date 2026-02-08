@@ -14,18 +14,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.foodie.R;
+import com.example.foodie.databinding.FragmentSignupBinding;
 import com.example.foodie.presentation.auth.presenter.AuthPresenter;
 import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
 import com.example.foodie.presentation.home.view.HomeActivity;
 
 public class SignupFragment extends Fragment implements AuthView {
-    private Button btnSignup;
-    private TextView txtLogin;
-    private TextView nameTxt;
-    private TextView emailTxt;
-    private TextView passwordTxt;
-    private ProgressBar progressBar;
     private AuthPresenter authPresenter;
+    private FragmentSignupBinding binding;
 
 
     @Override
@@ -37,24 +33,19 @@ public class SignupFragment extends Fragment implements AuthView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_signup, container, false);
+        binding = FragmentSignupBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnSignup = view.findViewById(R.id.signup_btn);
-        txtLogin = view.findViewById(R.id.textView8);
-        nameTxt = view.findViewById(R.id.signup_name_txt);
-        emailTxt = view.findViewById(R.id.signup_email_txt);
-        passwordTxt = view.findViewById(R.id.signup_password_txt);
-        progressBar=  view.findViewById(R.id.signup_progress);
 
-
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        binding.signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authPresenter.register(nameTxt.getText().toString(),emailTxt.getText().toString(), passwordTxt.getText().toString());
+                authPresenter.register(binding.signupNameTxt.getText().toString(),binding.signupEmailTxt.getText().toString(), binding.signupPasswordTxt.getText().toString());
             }
         });
 
@@ -63,14 +54,14 @@ public class SignupFragment extends Fragment implements AuthView {
 
     @Override
     public void showLoading() {
-        btnSignup.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        binding.signupBtn.setVisibility(View.INVISIBLE);
+        binding.signupProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        progressBar.setVisibility(View.GONE);
-        btnSignup.setVisibility(View.VISIBLE);
+        binding.signupProgress.setVisibility(View.GONE);
+        binding.signupBtn.setVisibility(View.VISIBLE);
     }
 
 

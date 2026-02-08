@@ -148,7 +148,7 @@ public class SearchPresenterImpl implements SearchPresenter {
     @Override
     public void getFilteredMealsByIngredient(String ingredient) {
         searchView.showLoading();
-        searchRepo.getFilteredMealsByCategory(ingredient, new MealsSearchNetworkResponse<FilteredMeal>() {
+        searchRepo.getFilteredMealsByIngredient(ingredient, new MealsSearchNetworkResponse<FilteredMeal>() {
             @Override
             public void onSuccess(List<FilteredMeal> data) {
                 searchView.hideLoading();

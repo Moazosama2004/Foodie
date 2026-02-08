@@ -3,10 +3,13 @@ package com.example.foodie.presentation.search.view;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +41,7 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     private CategoriesMealsAdapter adapter;
     private FilteredMealsAdapter filteredMealsAdapter;
     private int checkedId = -1;
+    private EditText searchText;
 
 
     @Override
@@ -48,6 +52,7 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         foodAdapter = new FoodAdapter(this);
         ingredientAdapter = new IngredientAdapter(this);
         filteredMealsAdapter = new FilteredMealsAdapter(this);
+
         presenter.getCategories();
     }
 
@@ -62,8 +67,44 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         super.onViewCreated(view, savedInstanceState);
         chipGroup = view.findViewById(R.id.chip_group);
         rvCategories = view.findViewById(R.id.rvCategories);
+        searchText = view.findViewById(R.id.search_txt);
         rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvCategories.setAdapter(adapter);
+
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                String query = s.toString().trim();
+
+                if (checkedId == -1) return;
+
+                if (query.isEmpty()) {
+                    resetByChip();
+                    return;
+                }
+
+                rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
+                rvCategories.setAdapter(filteredMealsAdapter);
+                if (query.length() < 2) return;
+                if (checkedId == R.id.category_chip) {
+                    presenter.getFilteredMealsByCategory(query);
+
+                } else if (checkedId == R.id.ingredient_chip) {
+                    presenter.getFilteredMealsByIngredient(query);
+
+                } else if (checkedId == R.id.country_chip) {
+                    presenter.getFilteredMealsByArea(query);
+                }
+            }
+        });
+
 
         chipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
             @Override
@@ -107,6 +148,26 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         });
 
 
+    }
+
+
+    private void resetByChip() {
+
+        if (checkedId == R.id.category_chip) {
+            rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            rvCategories.setAdapter(adapter);
+            presenter.getCategories();
+
+        } else if (checkedId == R.id.ingredient_chip) {
+            rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            rvCategories.setAdapter(ingredientAdapter);
+            presenter.getIngredients();
+
+        } else if (checkedId == R.id.country_chip) {
+            rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            rvCategories.setAdapter(foodAdapter);
+            presenter.getAreas();
+        }
     }
 
     @Override

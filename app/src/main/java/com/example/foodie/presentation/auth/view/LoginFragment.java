@@ -18,20 +18,16 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.foodie.R;
+import com.example.foodie.databinding.FragmentLoginBinding;
 import com.example.foodie.presentation.auth.presenter.AuthPresenter;
 import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
 import com.example.foodie.presentation.home.view.HomeActivity;
 
 public class LoginFragment extends Fragment implements AuthView {
 
-    private Button btnLogin;
-    private TextView txtRegister;
-    private TextView emailTxt;
-    private TextView passwordTxt;
-    private ImageView googleBtn;
-    private ProgressBar loading;
     private AuthPresenter authPresenter;
 
+    private FragmentLoginBinding binding;
 
 
     @Override
@@ -43,29 +39,26 @@ public class LoginFragment extends Fragment implements AuthView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        btnLogin = view.findViewById(R.id.btn_login);
-        txtRegister = view.findViewById(R.id.txt_register);
-        emailTxt = view.findViewById(R.id.login_email_txt);
-        passwordTxt = view.findViewById(R.id.login_password_txt);
-        googleBtn = view.findViewById(R.id.google_btn);
-        loading = view.findViewById(R.id.login_progress);
 
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authPresenter.login(emailTxt.getText().toString(), passwordTxt.getText().toString());
+                authPresenter.login(binding.loginEmailTxt.getText().toString(), binding.loginPasswordTxt.getText().toString());
             }
         });
 
 
-        googleBtn.setOnClickListener(new View.OnClickListener() {
+        binding.googleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 authPresenter.firebaseWithGoogle();
@@ -73,7 +66,7 @@ public class LoginFragment extends Fragment implements AuthView {
         });
 
 
-        txtRegister.setOnClickListener(new View.OnClickListener() {
+        binding.txtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_signupFragment);
@@ -83,14 +76,14 @@ public class LoginFragment extends Fragment implements AuthView {
 
     @Override
     public void showLoading() {
-        loading.setVisibility(View.VISIBLE);
-        btnLogin.setVisibility(View.GONE);
+        binding.loginProgress.setVisibility(View.VISIBLE);
+        binding.btnLogin.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
-        loading.setVisibility(View.GONE);
-        btnLogin.setVisibility(View.VISIBLE);
+        binding.loginProgress.setVisibility(View.GONE);
+        binding.btnLogin.setVisibility(View.VISIBLE);
     }
 
     @Override
