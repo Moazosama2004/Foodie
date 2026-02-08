@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,9 @@ import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.presenter.DetailsPresenterImpl;
 import com.example.foodie.presentation.details.view.DetailsView;
 import com.example.foodie.presentation.details.view.MealDetailsAdapter;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -33,6 +37,7 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     private ImageView addToFav;
     private DetailsPresenterImpl presenter;
     private ImageView addToCalender;
+    private YouTubePlayerView youTubePlayerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,10 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
         tvMealCountry = findViewById(R.id.tv_meal_country);
         tvInstructions = findViewById(R.id.tv_instructions);
         addToCalender = findViewById(R.id.add_to_calender);
+        youTubePlayerView = findViewById(R.id.youtubePlayerView);
+
+        // Attach lifecycle (IMPORTANT)
+        getLifecycle().addObserver(youTubePlayerView);
 
         // Get meal from intent
         meal = getIntent().getParcelableExtra("MEAL_KEY");
@@ -139,6 +148,33 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
             tvMealCountry.setText(meal.getStrArea());
             tvInstructions.setText(meal.getStrInstructions());
 
+
+            // Load YouTube video if exists
+            if (meal.getStrYoutube() != null && !meal.getStrYoutube().isEmpty()) {
+
+                youTubePlayerView.setVisibility(View.VISIBLE);
+
+                youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                    @Override
+                    public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+
+                        // Extract video ID from URL
+                        String videoId = extractVideoId(meal.getStrYoutube());
+
+                        if (videoId != null) {
+                            youTubePlayer.cueVideo(videoId, 0);
+                        }
+                    }
+                });
+
+                Log.d("VIDEO_URL", meal.getStrYoutube());
+                Log.d("VIDEO_ID", extractVideoId(meal.getStrYoutube()));
+
+            } else {
+                // Hide video if no youtube link
+                youTubePlayerView.setVisibility(View.GONE);
+            }
+
             // Check if ingredients list is not null
             if (meal.getIngredients() != null) {
                 adapter.setIngredientList(meal.getIngredients());
@@ -167,5 +203,24 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     @Override
     public void onSuccess() {
 
+    }
+
+    private String extractVideoId(String youtubeUrl) {
+        if (youtubeUrl == null) return null;
+
+        if (youtubeUrl.contains("watch?v=")) {
+            return youtubeUrl.substring(youtubeUrl.indexOf("watch?v=") + 8);
+        } else if (youtubeUrl.contains("youtu.be/")) {
+            return youtubeUrl.substring(youtubeUrl.lastIndexOf("/") + 1);
+        }
+        return null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (youTubePlayerView != null) {
+            youTubePlayerView.release();
+        }
     }
 }
