@@ -11,9 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.foodie.R;
+import com.example.foodie.databinding.FragmentSecondBinding;
 import com.example.foodie.presentation.auth.view.AuthActivity;
 
 public class SecondFragment extends Fragment {
+
+    private FragmentSecondBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,10 +26,9 @@ public class SecondFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_second, container, false);
-        Button next = view.findViewById(R.id.onboarding_second_next_btn);
-        ViewPager2 viewPager = getActivity().findViewById(R.id.view_pager);
-        next.setOnClickListener(new View.OnClickListener() {
+        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        binding.onboardingSecondNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToLogin();

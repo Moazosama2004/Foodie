@@ -1,5 +1,6 @@
-package com.example.foodie;
+package com.example.foodie.presentation.details.view;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodie.R;
 import com.example.foodie.data.home.model.response.Meal;
+import com.example.foodie.databinding.ActivityMealDetailsBinding;
 import com.example.foodie.presentation.details.presenter.DetailsPresenterImpl;
 import com.example.foodie.presentation.details.view.DetailsView;
 import com.example.foodie.presentation.details.view.MealDetailsAdapter;
@@ -25,43 +28,27 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class MealDetailsActivity extends AppCompatActivity implements DetailsView {
-
-    private RecyclerView recyclerView;
+    private ActivityMealDetailsBinding binding;
     private MealDetailsAdapter adapter;
     private Meal meal;
-    private ImageView imgMeal;
-    private TextView tvMealName;
-    private TextView tvMealType;
-    private TextView tvMealCountry;
-    private TextView tvInstructions;
-    private ImageView addToFav;
     private DetailsPresenterImpl presenter;
-    private ImageView addToCalender;
-    private YouTubePlayerView youTubePlayerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_details);
+        binding = ActivityMealDetailsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // Initialize presenter
         presenter = new DetailsPresenterImpl(getApplicationContext(), this);
 
         // Initialize adapter and views
         adapter = new MealDetailsAdapter();
-        recyclerView = findViewById(R.id.rv_ingredients);
-        recyclerView.setAdapter(adapter);
-        imgMeal = findViewById(R.id.img_meal);
-        tvMealName = findViewById(R.id.tv_meal_name);
-        tvMealType = findViewById(R.id.tv_meal_type);
-        addToFav = findViewById(R.id.add_to_fav);
-        tvMealCountry = findViewById(R.id.tv_meal_country);
-        tvInstructions = findViewById(R.id.tv_instructions);
-        addToCalender = findViewById(R.id.add_to_calender);
-        youTubePlayerView = findViewById(R.id.youtubePlayerView);
+        binding.rvIngredients.setAdapter(adapter);
 
         // Attach lifecycle (IMPORTANT)
-        getLifecycle().addObserver(youTubePlayerView);
+        getLifecycle().addObserver(binding.youtubePlayerView);
 
         // Get meal from intent
         meal = getIntent().getParcelableExtra("MEAL_KEY");
@@ -78,7 +65,7 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
         }
 
         // Setup FAB click listener
-        addToFav.setOnClickListener(new View.OnClickListener() {
+        binding.addToFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("MealDetailsActivity", "FAB Clicked!");
@@ -94,7 +81,7 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
             }
         });
 
-        addToCalender.setOnClickListener(new View.OnClickListener() {
+        binding.addToCalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("MealDetailsActivity", " addToCalender Clicked!");
@@ -142,19 +129,19 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
             Glide.with(this)
                     .load(meal.getStrMealThumb())
                     .placeholder(R.drawable.meal_of_the_day)
-                    .into(imgMeal);
-            tvMealName.setText(meal.getStrMeal());
-            tvMealType.setText(meal.getStrCategory());
-            tvMealCountry.setText(meal.getStrArea());
-            tvInstructions.setText(meal.getStrInstructions());
+                    .into(binding.imgMeal);
+            binding.tvMealName.setText(meal.getStrMeal());
+            binding.tvMealType.setText(meal.getStrCategory());
+            binding.tvMealCountry.setText(meal.getStrArea());
+            binding.tvInstructions.setText(meal.getStrInstructions());
 
 
             // Load YouTube video if exists
             if (meal.getStrYoutube() != null && !meal.getStrYoutube().isEmpty()) {
 
-                youTubePlayerView.setVisibility(View.VISIBLE);
+                binding.youtubePlayerView.setVisibility(View.VISIBLE);
 
-                youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                binding.youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
                     @Override
                     public void onReady(@NonNull YouTubePlayer youTubePlayer) {
 
@@ -172,7 +159,7 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
 
             } else {
                 // Hide video if no youtube link
-                youTubePlayerView.setVisibility(View.GONE);
+                binding.youtubePlayerView.setVisibility(View.GONE);
             }
 
             // Check if ingredients list is not null
@@ -219,8 +206,8 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (youTubePlayerView != null) {
-            youTubePlayerView.release();
+        if (binding.youtubePlayerView != null) {
+            binding.youtubePlayerView.release();
         }
     }
 }

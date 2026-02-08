@@ -14,9 +14,9 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foodie.MealDetailsActivity;
 import com.example.foodie.R;
 import com.example.foodie.data.home.model.response.Meal;
+import com.example.foodie.presentation.details.view.MealDetailsActivity;
 import com.example.foodie.presentation.fav.presenter.FavPresenter;
 import com.example.foodie.presentation.fav.presenter.FavPresenterImpl;
 

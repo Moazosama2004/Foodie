@@ -10,8 +10,11 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.foodie.R;
+import com.example.foodie.databinding.FragmentFirstBinding;
 
 public class FirstFragment extends Fragment {
+
+    private FragmentFirstBinding binding;
 
 
     @Override
@@ -22,10 +25,10 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
-        Button next = view.findViewById(R.id.onboarding_one_next_btn);
+        binding = FragmentFirstBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         ViewPager2 viewPager = getActivity().findViewById(R.id.view_pager);
-        next.setOnClickListener(new View.OnClickListener() {
+        binding.onboardingOneNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);

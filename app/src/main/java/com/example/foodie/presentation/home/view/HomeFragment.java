@@ -24,9 +24,10 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.foodie.MealDetailsActivity;
 import com.example.foodie.R;
 import com.example.foodie.data.home.model.response.Meal;
+import com.example.foodie.databinding.FragmentHomeBinding;
+import com.example.foodie.presentation.details.view.MealDetailsActivity;
 import com.example.foodie.presentation.home.presenter.HomePresenter;
 import com.example.foodie.presentation.home.presenter.HomePresenterImpl;
 import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
@@ -34,6 +35,7 @@ import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements HomeView {
+    private FragmentHomeBinding binding;
     private ConstraintLayout mealOfTheDayLayout;
     private HomePresenter homePresenter;
     private RecyclerView recyclerView;
@@ -74,7 +76,9 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        binding =  FragmentHomeBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        return view;
     }
 
     @Override
@@ -82,20 +86,7 @@ public class HomeFragment extends Fragment implements HomeView {
         super.onViewCreated(view, savedInstanceState);
 
         // init views
-        mealOfTheDayLayout = view.findViewById(R.id.meal_of_the_day_layout);
-        recyclerView = view.findViewById(R.id.meals_recycler_view);
-        showDetailsBtn = view.findViewById(R.id.show_details_btn);
-        searchTxt = view.findViewById(R.id.search_txt);
-        loadingOverlay = view.findViewById(R.id.loading_overlay);
-        loadingLottie = view.findViewById(R.id.loading_lottie);
-        networkErrorOverlay = view.findViewById(R.id.network_error_overlay);
-        retryBtn = view.findViewById(R.id.retry_btn);
-        userName = view.findViewById(R.id.username);
-
-
-        userName.setText(SharedPrefsManager.getInstance(requireContext()).getUsername());
-
-
+        binding.username.setText(SharedPrefsManager.getInstance(requireContext()).getUsername());
 
         // set up adapter
         adapter = new PopularMealsAdapter();
@@ -104,16 +95,17 @@ public class HomeFragment extends Fragment implements HomeView {
             intent.putExtra("MEAL_KEY", meal);
             startActivity(intent);
         });
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setClipToPadding(true);
-        recyclerView.setClipChildren(true);
-        recyclerView.setPadding(50, 0, 50, 0);
+
+        binding.mealsRecyclerView.setAdapter(adapter);
+        binding.mealsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.mealsRecyclerView.setClipToPadding(true);
+        binding.mealsRecyclerView.setClipChildren(true);
+        binding.mealsRecyclerView.setPadding(50, 0, 50, 0);
 
         // retry button
-        retryBtn.setOnClickListener(v -> {
-            networkErrorOverlay.setVisibility(View.GONE);
-            loadingOverlay.setVisibility(View.VISIBLE);
+        binding.retryBtn.setOnClickListener(v -> {
+            binding.networkErrorOverlay.setVisibility(View.GONE);
+            binding.loadingOverlay.setVisibility(View.VISIBLE);
             randomMealLoaded = false;
             popularMealsLoaded = false;
             homePresenter.getRandomMeal();
@@ -121,12 +113,12 @@ public class HomeFragment extends Fragment implements HomeView {
         });
 
         // search click
-        searchTxt.setOnClickListener(v ->
+        binding.searchTxt.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_bottom_nav_bar_home_to_bottom_nav_bar_search)
         );
 
         // show details click
-        showDetailsBtn.setOnClickListener(v -> {
+        binding.showDetailsBtn.setOnClickListener(v -> {
             if (meal != null) {
                 Intent intent = new Intent(getActivity(), MealDetailsActivity.class);
                 intent.putExtra("MEAL_KEY", meal);
@@ -142,18 +134,18 @@ public class HomeFragment extends Fragment implements HomeView {
     // حماية ضد null
     @Override
     public void showProgress() {
-        if (loadingOverlay != null) loadingOverlay.setVisibility(View.VISIBLE);
+        if (binding.loadingOverlay != null) binding.loadingOverlay.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        if (loadingOverlay != null) loadingOverlay.setVisibility(View.GONE);
+        if (binding.loadingOverlay != null) binding.loadingOverlay.setVisibility(View.GONE);
     }
 
     @Override
     public void showNetworkError(String message) {
-        if (loadingOverlay != null) loadingOverlay.setVisibility(View.GONE);
-        if (networkErrorOverlay != null) networkErrorOverlay.setVisibility(View.VISIBLE);
+        if (binding.loadingOverlay != null) binding.loadingOverlay.setVisibility(View.GONE);
+        if (binding.networkErrorOverlay != null) binding.networkErrorOverlay.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -188,7 +180,7 @@ public class HomeFragment extends Fragment implements HomeView {
                 .into(new CustomTarget<Drawable>() {
                     @Override
                     public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                        mealOfTheDayLayout.setBackground(resource);
+                        binding.mealOfTheDayLayout.setBackground(resource);
                     }
 
                     @Override
@@ -200,12 +192,12 @@ public class HomeFragment extends Fragment implements HomeView {
     private void hideLoadingIfDataReady() {
         Log.d("Meals", "hideLoadingIfDataReady:" + randomMealLoaded + " " + popularMealsLoaded);
         if (randomMealLoaded && popularMealsLoaded) {
-            loadingOverlay.setVisibility(View.GONE);
+            binding.loadingOverlay.setVisibility(View.GONE);
         } else {
             new android.os.Handler().postDelayed(() -> {
                 if (!randomMealLoaded || !popularMealsLoaded) {
-                    loadingOverlay.setVisibility(View.GONE);
-                    networkErrorOverlay.setVisibility(View.VISIBLE);
+                    binding.loadingOverlay.setVisibility(View.GONE);
+                    binding.networkErrorOverlay.setVisibility(View.VISIBLE);
                 }
             }, 5000);
         }
