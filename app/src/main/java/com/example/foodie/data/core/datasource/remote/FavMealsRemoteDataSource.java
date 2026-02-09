@@ -3,8 +3,12 @@ package com.example.foodie.data.core.datasource.remote;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.utils.firebase.storage.FirestoreMealStorage;
 import com.example.foodie.utils.services.MealStorage;
-import com.example.foodie.utils.services.StorageCallback;
 import com.google.android.gms.auth.api.signin.internal.Storage;
+
+import java.util.List;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 
 public class FavMealsRemoteDataSource {
     private final MealStorage storageService;
@@ -15,15 +19,15 @@ public class FavMealsRemoteDataSource {
 
 
 
-    public void saveMeal(Meal meal , StorageCallback callback) {
-        storageService.saveMeal(meal , callback);
+    public Completable saveMeal(Meal meal) {
+        return storageService.saveMeal(meal);
     }
 
-    public void deleteMeal(String id,StorageCallback callback) {
-        storageService.deleteMeal(id , callback);
+    public Completable deleteMeal(String id) {
+        return  storageService.deleteMeal(id );
     }
 
-    public void getAllFavMeals(StorageCallback callback) {
-        storageService.getAllMealsById(callback);
+    public Single<List<Meal>> getAllFavMeals( ) {
+        return storageService.getAllMeals();
     }
 }

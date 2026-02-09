@@ -13,7 +13,8 @@ public interface HomeView {
 
     void showPopularMeals(List<Meal> meals);
 
-    void showOneMeal(Meal meal);
+    void showRandomMeal(Meal meal);
     void showNetworkError(String Message);
 
+    void showUserData(String username);
 }

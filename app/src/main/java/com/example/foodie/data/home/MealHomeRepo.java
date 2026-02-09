@@ -2,6 +2,11 @@ package com.example.foodie.data.home;
 
 import com.example.foodie.data.home.api.MealHomeNetworkResponse;
 import com.example.foodie.data.home.datasource.remote.MealHomeRemoteDataSource;
+import com.example.foodie.data.home.model.response.Meal;
+
+import java.util.List;
+
+import io.reactivex.rxjava3.core.Single;
 
 public class MealHomeRepo {
     private final MealHomeRemoteDataSource mealHomeRemoteDataSource;
@@ -10,12 +15,12 @@ public class MealHomeRepo {
         this.mealHomeRemoteDataSource = new MealHomeRemoteDataSource();
     }
 
-    public void getRandomeMeal(MealHomeNetworkResponse callback) {
-        mealHomeRemoteDataSource.getRandomMeal(callback);
+    public Single<Meal> getRandomeMeal() {
+        return mealHomeRemoteDataSource.getRandomMeal();
     }
 
-    public void getRandomMeals(int count, MealHomeNetworkResponse callback) {
-        mealHomeRemoteDataSource.getRandomMeals(count, callback);
+    public Single<List<Meal>> getRandomMeals(int count) {
+        return mealHomeRemoteDataSource.getRandomMeals(count);
     }
 
 }

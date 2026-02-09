@@ -8,4 +8,7 @@ public interface DetailsView {
     void showError(String message);
 
     void onSuccess();
+
+    void showError(Throwable throwable);
+
 }

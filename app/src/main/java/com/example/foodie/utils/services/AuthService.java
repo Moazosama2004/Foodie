@@ -1,13 +1,17 @@
 package com.example.foodie.utils.services;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public interface AuthService {
-    void login(String email, String password , AuthCallback callback);
 
-    void register(String email, String password , AuthCallback callback);
+    Completable login(String email, String password);
 
-    void signInWithGoogle();
+    Completable register(String email, String password);
 
-    void logout();
+    Completable signInWithGoogle(String idToken);
 
-    String getCurrentUserId();
+    Completable logout();
+
+    Single<String> getCurrentUserId();
 }

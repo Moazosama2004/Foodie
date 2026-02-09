@@ -1,49 +1,49 @@
 package com.example.foodie.data.search;
 
-import android.util.Log;
-
 import com.example.foodie.data.home.model.response.Meal;
-import com.example.foodie.data.search.api.MealsSearchNetworkResponse;
 import com.example.foodie.data.search.datasource.remote.MealsSearchRemoteDataSource;
 import com.example.foodie.data.search.model.Area;
 import com.example.foodie.data.search.model.Category;
 import com.example.foodie.data.search.model.FilteredMeal;
 import com.example.foodie.data.search.model.Ingredient;
 
-public class MealSearchRepo {
-    private final MealsSearchRemoteDataSource mealsSearchRemoteDataSource;
+import java.util.List;
 
+import io.reactivex.rxjava3.core.Single;
+
+public class MealSearchRepo {
+
+    private final MealsSearchRemoteDataSource remoteDataSource;
 
     public MealSearchRepo() {
-        this.mealsSearchRemoteDataSource = new MealsSearchRemoteDataSource();
+        this.remoteDataSource = new MealsSearchRemoteDataSource();
     }
 
-    public void getCategories(MealsSearchNetworkResponse<Category> callback) {
-        Log.d("Categories - MealSearchRepo  ", "getCategories");
-        mealsSearchRemoteDataSource.getCategories(callback);
+    public Single<List<Category>> getCategories() {
+        return remoteDataSource.getCategories();
     }
 
-    public void getAreas(MealsSearchNetworkResponse<Area> callback) {
-        mealsSearchRemoteDataSource.getAreas(callback);
+    public Single<List<Area>> getAreas() {
+        return remoteDataSource.getAreas();
     }
 
-    public void getIngredients(MealsSearchNetworkResponse<Ingredient> callback) {
-        mealsSearchRemoteDataSource.getIngredients(callback);
+    public Single<List<Ingredient>> getIngredients() {
+        return remoteDataSource.getIngredients();
     }
 
-    public void getFilteredMealsByArea(String country, MealsSearchNetworkResponse<FilteredMeal> callback) {
-        mealsSearchRemoteDataSource.getFilteredMealsByArea(country, callback);
+    public Single<List<FilteredMeal>> getFilteredMealsByArea(String country) {
+        return remoteDataSource.getFilteredMealsByArea(country);
     }
 
-    public void getFilteredMealsByCategory(String category, MealsSearchNetworkResponse<FilteredMeal> callback) {
-        mealsSearchRemoteDataSource.getFilteredMealsByCategory(category, callback);
+    public Single<List<FilteredMeal>> getFilteredMealsByCategory(String category) {
+        return remoteDataSource.getFilteredMealsByCategory(category);
     }
 
-    public void getFilteredMealsByIngredient(String ingredient, MealsSearchNetworkResponse<FilteredMeal> callback) {
-        mealsSearchRemoteDataSource.getFilteredMealsByIngredient(ingredient, callback);
+    public Single<List<FilteredMeal>> getFilteredMealsByIngredient(String ingredient) {
+        return remoteDataSource.getFilteredMealsByIngredient(ingredient);
     }
 
-    public void getMealById(String id, MealsSearchNetworkResponse<Meal> callback) {
-        mealsSearchRemoteDataSource.getMealById(id, callback);
+    public Single<Meal> getMealById(String id) {
+        return remoteDataSource.getMealById(id);
     }
 }

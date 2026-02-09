@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+
 public class PlanFragment extends Fragment implements CalenderView, OnMealClickListener {
 
     private FragmentPlanBinding binding;
@@ -56,15 +58,35 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
         // Load today's meals AFTER recyclerView is initialized
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .format(new Date());
-        presenter.getMealsByDate(today);
+        presenter.getMealsByDate(today)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(meals -> {
+                    if (meals == null || meals.isEmpty()) {
+                        showEmptyDay();
+                    } else {
+                        showMeals(meals);
+                    }
+                }, throwable -> {
+                    Log.e("PlanFragment", "Error loading meals", throwable);
+                });
 
         binding.calendar.setOnDateChangeListener((calenderView, year, month, dayOfMonth) -> {
-            String date = year + "-" +
-                    String.format("%02d", month + 1) + "-" +
-                    String.format("%02d", dayOfMonth);
+            String date = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", dayOfMonth);
             binding.dateView.setText(date);
-            presenter.getMealsByDate(date);
+
+            presenter.getMealsByDate(date)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(meals -> {
+                        if (meals == null || meals.isEmpty()) {
+                            showEmptyDay();
+                        } else {
+                            showMeals(meals);
+                        }
+                    }, throwable -> {
+                        Log.e("PlanFragment", "Error loading meals", throwable);
+                    });
         });
+
     }
 
 
@@ -104,7 +126,18 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
 
     @Override
     public void onMealClick(String id) {
-        Log.d("PlanFragment", "onMealClick: " + id);
-        presenter.getMealsByMealId(id);
+        presenter.getMealsByMealId(id)
+                .subscribe(meal -> {
+                    if (meal != null) {
+                        // تحويل CalendarMeal إلى Meal عشان نقدر نفتح التفاصيل
+                        Meal m = new Meal();
+                        m.setIdMeal(meal.getMealId());
+                        m.setStrMeal(meal.getMealName());
+                        m.setStrMealThumb(meal.getMealImage());
+                        goToMealDetails(m);
+                    }
+                }, throwable -> {
+                    Log.e("PlanFragment", "Error fetching meal by id", throwable);
+                });
     }
 }

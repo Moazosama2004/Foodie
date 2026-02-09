@@ -4,4 +4,5 @@ public interface OnboardingPresenter {
 
     void decideStartDestination();
     void splashLogic();
+    void clear();
 }

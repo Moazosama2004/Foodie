@@ -2,14 +2,14 @@ package com.example.foodie.data.core.datasource.local;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodie.data.core.model.FavMealsDao;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.db.AppDatabase;
 
 import java.util.List;
-import java.util.concurrent.Executors;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 
 public class FavMealsLocalDataSource {
     private final FavMealsDao favMealsDao;
@@ -18,26 +18,23 @@ public class FavMealsLocalDataSource {
         this.favMealsDao = AppDatabase.getInstance(context).favMealsDao();
     }
 
-    public void insertMeals(List<Meal> meals) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            favMealsDao.insertMeals(meals);
-        });
+    public Completable insertMeal(Meal meal) {
+        return favMealsDao.insertMeal(meal);
     }
 
-    public void insertMeal(Meal meal) {
-        favMealsDao.insertMeal(meal);
+    public Completable insertMeals(List<Meal> meals) {
+        return favMealsDao.insertMeals(meals);
     }
 
-    public void deleteMeal(Meal meal) {
-        favMealsDao.deleteMeal(meal);
+    public Completable deleteMeal(Meal meal) {
+        return favMealsDao.deleteMeal(meal);
     }
 
-    public LiveData<Boolean> isMealFav(String id) {
+    public Single<Boolean> isMealFav(String id) {
         return favMealsDao.isMealFav(id);
     }
 
-    public LiveData<List<Meal>> getAllFavMeals() {
+    public Single<List<Meal>> getAllFavMeals() {
         return favMealsDao.getAllFavMeals();
     }
-
 }

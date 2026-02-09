@@ -8,6 +8,9 @@ import com.example.foodie.db.AppDatabase;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public class CalenderMealsLocalDataSource {
     private final CalendarMealsDao calendarMealsDao;
 
@@ -15,15 +18,20 @@ public class CalenderMealsLocalDataSource {
         this.calendarMealsDao = AppDatabase.getInstance(context).calendarMealsDao();
     }
 
-    public void insertMeal(CalendarMeal meal) {
-        calendarMealsDao.insertMeal(meal);
+    public Completable insertMeal(CalendarMeal meal) {
+        return calendarMealsDao.insertMeal(meal);
     }
 
-    public List<CalendarMeal> getMealsByDate(String date) {
+    public Single<List<CalendarMeal>> getMealsByDate(String date) {
         return calendarMealsDao.getMealsByDate(date);
     }
 
-    public void deleteMealsByDate(String date) {
-        calendarMealsDao.deleteMealsByDate(date);
+    public Completable deleteMealsByDate(String date) {
+        return calendarMealsDao.deleteMealsByDate(date);
+    }
+
+    public Single<List<CalendarMeal>> getAllMeals() {
+        return Single.fromCallable(() -> calendarMealsDao.getAllMeals());
     }
 }
+

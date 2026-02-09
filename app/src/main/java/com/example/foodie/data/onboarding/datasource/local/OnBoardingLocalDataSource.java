@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public class OnBoardingLocalDataSource {
 
     private final SharedPrefsManager sharedPreferences;
@@ -13,20 +16,20 @@ public class OnBoardingLocalDataSource {
     }
 
 
-    public boolean userIsLoggedIn() {
+    public Single<Boolean> userIsLoggedIn() {
         return sharedPreferences.isLoggedIn();
     }
 
-    public void setUserLoggedIn(boolean isLoggedIn) {
-        sharedPreferences.setLoggedIn(isLoggedIn);
+    public Completable setUserLoggedIn(boolean isLoggedIn) {
+        return sharedPreferences.setLoggedIn(isLoggedIn);
     }
 
 
-    public boolean isOnboardingSeen() {
+    public Single<Boolean> isOnboardingSeen() {
         return sharedPreferences.isSeen();
     }
 
-    public void setOnboardingSeen(boolean seen) {
-        sharedPreferences.setSeen(seen);
+    public Completable setOnboardingSeen(boolean seen) {
+        return sharedPreferences.setSeen(seen);
     }
 }

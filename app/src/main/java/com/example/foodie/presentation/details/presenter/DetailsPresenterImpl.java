@@ -9,10 +9,13 @@ import com.example.foodie.data.core.FavMealsRepo;
 import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.view.DetailsView;
-import com.example.foodie.utils.services.StorageCallback;
 
 import java.util.List;
 import java.util.concurrent.Executors;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DetailsPresenterImpl implements DetailsPresenter {
     private final FavMealsRepo favMealsRepo;
@@ -27,60 +30,46 @@ public class DetailsPresenterImpl implements DetailsPresenter {
 
     @Override
     public void saveMealLocal(Meal meal) {
-        Executors.newSingleThreadExecutor().execute(() ->
-                favMealsRepo.saveMealLocal(meal)
-        );
+        favMealsRepo.saveMealLocal(meal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> Log.d("DetailsPresenter", "Meal saved locally"),
+                        throwable -> Log.e("DetailsPresenter", "Failed local save", throwable)
+                );
     }
 
-
-
     @Override
-    public void saveMealRemote(Meal meal) {
-        favMealsRepo.saveMealRemote(meal, new StorageCallback() {
-            @Override
-            public void onSuccess() {
-                view.onSuccess();
-            }
-
-            @Override
-            public void onError(String message) {
-                view.showError(message);
-            }
-
-            @Override
-            public void onSuccessWithResult(List<Meal> meals) {
-
-            }
-
-            @Override
-            public void onSuccessWithUserData(User user) {
-
-            }
-        });
+    public Completable saveMealRemote(Meal meal) {
+        return favMealsRepo.saveMealRemote(meal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(() -> {
+                    Log.d("DetailsPresenter", "Meal saved remotely");
+                    view.onSuccess();
+                })
+                .doOnError(view::showError);
     }
 
 
     @Override
-    public void addToCalender(Meal meal, String date) {
-        Log.d("DetailsPresenterImpl", "Adding to Calender: " + meal.getStrMeal());
-
+    public Completable addToCalender(Meal meal, String date) {
         CalendarMeal calendarMeal = new CalendarMeal();
         calendarMeal.setDate(date);
         calendarMeal.setMealId(meal.getIdMeal());
         calendarMeal.setMealName(meal.getStrMeal());
         calendarMeal.setMealImage(meal.getStrMealThumb());
 
-        Executors.newSingleThreadExecutor().execute(
-                () -> {
-                    Log.d("DetailsPresenterImpl", "before Adding to Calender: " + meal.getStrMeal());
-                    calenderMealsRepo.insertMeal(calendarMeal);
-                    Log.d("DetailsPresenterImpl", "after Adding to Calender: " + meal.getStrMeal());
-
-                }
-        );
-        Log.d("DetailsPresenterImpl", " finish Adding to Calender: " + meal.getStrMeal());
-
+        return Completable.fromAction(() -> calenderMealsRepo.insertMeal(calendarMeal))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(() -> {
+                    Log.d("DetailsPresenter", "Meal added to calendar");
+                    view.onSuccess();
+                })
+                .doOnError(throwable -> {
+                    Log.e("DetailsPresenter", "Failed to add meal to calendar", throwable);
+                    view.showError(throwable);
+                });
     }
-
-
 }

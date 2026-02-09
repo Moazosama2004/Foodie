@@ -11,21 +11,24 @@ import com.example.foodie.data.home.model.response.Meal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 @Dao
 public interface FavMealsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMeal(Meal meal);
+    Completable insertMeal(Meal meal);
 
     @Delete
-    void deleteMeal(Meal meal);
+    Completable deleteMeal(Meal meal);
 
     @Query("SELECT EXISTS(SELECT 1 FROM fav_meals WHERE idMeal = :id)")
-    LiveData<Boolean> isMealFav(String id);
+    Single<Boolean> isMealFav(String id);
 
     @Query("SELECT * FROM fav_meals")
-    LiveData<List<Meal>> getAllFavMeals();
+    Single<List<Meal>> getAllFavMeals();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMeals(List<Meal> meals);
+    Completable insertMeals(List<Meal> meals);
 }

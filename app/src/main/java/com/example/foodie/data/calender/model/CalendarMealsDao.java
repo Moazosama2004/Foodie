@@ -7,15 +7,21 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 @Dao
 public interface CalendarMealsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMeal(CalendarMeal meal);
+    Completable insertMeal(CalendarMeal meal);
 
     @Query("SELECT * FROM meal_calendar WHERE date = :date")
-    List<CalendarMeal> getMealsByDate(String date);
+    Single<List<CalendarMeal>> getMealsByDate(String date);
 
     @Query("DELETE FROM meal_calendar WHERE date = :date")
-    void deleteMealsByDate(String date);
+    Completable deleteMealsByDate(String date);
+
+    @Query("SELECT * FROM meal_calendar")
+    List<CalendarMeal> getAllMeals();
 }
