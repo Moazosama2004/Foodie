@@ -1,23 +1,58 @@
 package com.example.foodie.presentation.profile.presenter;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.example.foodie.data.auth.datasource.AuthRepo;
 import com.example.foodie.presentation.profile.view.ProfileView;
+import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ProfilePresenterImpl implements ProfilePresenter {
     private AuthRepo authRepo;
     private ProfileView view;
+    private final SharedPrefsManager prefs;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public ProfilePresenterImpl(Activity activity , ProfileView view) {
+    public ProfilePresenterImpl(Activity activity , Context context, ProfileView view) {
         authRepo = new AuthRepo(activity);
         this.view = view;
+        this.prefs = SharedPrefsManager.getInstance(context);
+    }
+
+    @Override
+    public void loadUser() {
+        disposables.add(
+                prefs.getUsername()
+                        .zipWith(
+                                prefs.getEmail(),
+                                (username, email) -> new String[]{username, email}
+                        )
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                data -> view.showUser(data[0], data[1]),
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
     }
 
     @Override
     public void logout() {
-        authRepo.logout();
+        disposables.add(
+                prefs.clearUser()
+                        .andThen(prefs.setLoggedIn(false))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                view::goToAuth,
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
+    }
 
-        view.goToAuth();
+    @Override
+    public void clear() {
+        disposables.clear();
     }
 }

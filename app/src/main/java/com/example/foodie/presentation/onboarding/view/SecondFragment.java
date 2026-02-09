@@ -42,6 +42,5 @@ public class SecondFragment extends Fragment {
         startActivity(intent);
         requireActivity().finish();
     }
-
 }
 

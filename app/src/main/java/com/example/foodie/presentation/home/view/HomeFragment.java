@@ -30,6 +30,9 @@ import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class HomeFragment extends Fragment implements HomeView {
 
     private FragmentHomeBinding binding;
@@ -47,7 +50,7 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        homePresenter = new HomePresenterImpl(this);
+        homePresenter = new HomePresenterImpl(requireContext(),this);
     }
 
     @Override
@@ -64,7 +67,7 @@ public class HomeFragment extends Fragment implements HomeView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initViews();
+        homePresenter.loadUserName();
         setupRecyclerView();
         setupClicks();
 
@@ -73,14 +76,6 @@ public class HomeFragment extends Fragment implements HomeView {
         homePresenter.getPopularMeals();
     }
 
-
-
-
-    private void initViews() {
-        binding.username.setText(
-                SharedPrefsManager.getInstance(requireContext()).getUsername()
-        );
-    }
 
     private void setupRecyclerView() {
         adapter = new PopularMealsAdapter();
@@ -149,6 +144,12 @@ public class HomeFragment extends Fragment implements HomeView {
 
         binding.loadingOverlay.setVisibility(View.GONE);
         binding.networkErrorOverlay.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showUserData(String username) {
+        Log.e("HomeFragment", username);
+        binding.username.setText(username);
     }
 
     @Override

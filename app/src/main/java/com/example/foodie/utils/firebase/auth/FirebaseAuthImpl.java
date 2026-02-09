@@ -5,32 +5,32 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.example.foodie.R;
-import com.example.foodie.utils.services.AuthCallback;
 import com.example.foodie.utils.services.AuthService;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.*;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.*;
 
-public class FirebaseAuthImpl implements AuthService  {
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class FirebaseAuthImpl implements AuthService {
 
     public static final int RC_GOOGLE_SIGN_IN = 1001;
     private static final String TAG = "FirebaseAuthImpl";
+
     private final FirebaseAuth firebaseAuth;
     private final Activity activity;
     private final GoogleSignInClient googleSignInClient;
 
     public FirebaseAuthImpl(Activity activity) {
-        this.firebaseAuth = FirebaseAuth.getInstance();
         this.activity = activity;
+        this.firebaseAuth = FirebaseAuth.getInstance();
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN
+        )
                 .requestIdToken(activity.getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -38,80 +38,110 @@ public class FirebaseAuthImpl implements AuthService  {
         googleSignInClient = GoogleSignIn.getClient(activity, gso);
     }
 
+    // ================= EMAIL / PASSWORD =================
+
     @Override
-    public void login(String email, String password , AuthCallback callback) {
-        Log.d("Auth", "Login started");
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(activity, task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Auth", "Login Done1");
-                        Log.d(TAG, "Login successful");
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        callback.onSuccess();
-                    } else {
-                        Log.e(TAG, "Login failed", task.getException());
-                        callback.onError("Login failed");
-                    }
-                });
-        Log.d("Auth", "Login Done2");
+    public Completable login(String email, String password) {
+        return Completable.create(emitter ->
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                        .addOnSuccessListener(authResult -> {
+                            Log.d(TAG, "Login success");
+                            emitter.onComplete();
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e(TAG, "Login failed", e);
+                            emitter.onError(e);
+                        })
+        ).subscribeOn(Schedulers.io());
     }
 
     @Override
-    public void register(String email, String password , AuthCallback callback) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(activity, task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "Registration successful");
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        callback.onSuccess();
-                    } else {
-                        Log.e(TAG, "Registration failed", task.getException());
-                        callback.onError("Registration failed");
-                    }
-                });
+    public Completable register(String email, String password) {
+        return Completable.create(emitter ->
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnSuccessListener(authResult -> {
+                            Log.d(TAG, "Register success");
+                            emitter.onComplete();
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e(TAG, "Register failed", e);
+                            emitter.onError(e);
+                        })
+        ).subscribeOn(Schedulers.io());
     }
 
     // ================= GOOGLE SIGN-IN =================
-    @Override
-    public void signInWithGoogle() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        activity.startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
+
+//    public Intent getGoogleSignInIntent() {
+//        return googleSignInClient.getSignInIntent();
+//    }
+
+    public Single<String> handleGoogleSignInResult(Intent data) {
+        return Single.create(emitter -> {
+            try {
+                GoogleSignInAccount account =
+                        GoogleSignIn.getSignedInAccountFromIntent(data)
+                                .getResult(ApiException.class);
+
+                emitter.onSuccess(account.getIdToken());
+
+            } catch (ApiException e) {
+                emitter.onError(e);
+            }
+        });
     }
 
-    public void handleGoogleSignInResult(Intent data) {
-        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+    @Override
+    public Completable signInWithGoogle(String idToken) {
+        return Completable.create(emitter -> {
+            AuthCredential credential =
+                    GoogleAuthProvider.getCredential(idToken, null);
+
+            firebaseAuth.signInWithCredential(credential)
+                    .addOnSuccessListener(authResult -> {
+                        Log.d(TAG, "Google login success");
+                        emitter.onComplete();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Google login failed", e);
+                        emitter.onError(e);
+                    });
+        }).subscribeOn(Schedulers.io());
+    }
+
+
+    public Intent getGoogleSignInIntent() {
+        return googleSignInClient.getSignInIntent();
+    }
+
+    public String extractIdTokenFromIntent(Intent data) {
         try {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            firebaseAuthWithGoogle(account.getIdToken());
+            return account.getIdToken();
         } catch (ApiException e) {
             Log.e(TAG, "Google Sign-In failed", e);
+            return null;
         }
     }
 
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(activity, task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "Firebase Google Sign-In success");
-
-                    } else {
-                        Log.e(TAG, "Firebase Google auth failed", task.getException());
-                    }
-                });
-    }
+    // ================= LOGOUT =================
 
     @Override
-    public void logout() {
-        firebaseAuth.signOut();
-        googleSignInClient.signOut();
-
-        Log.d(TAG, "User logged out");
+    public Completable logout() {
+        return Completable.fromAction(() -> {
+            firebaseAuth.signOut();
+            googleSignInClient.signOut();
+        }).subscribeOn(Schedulers.io());
     }
 
+    // ================= CURRENT USER =================
+
     @Override
-    public String getCurrentUserId() {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        return user != null ? user.getUid() : null;
+    public Single<String> getCurrentUserId() {
+        return Single.fromCallable(() -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            return user != null ? user.getUid() : null;
+        }).subscribeOn(Schedulers.io());
     }
 }

@@ -3,6 +3,10 @@ package com.example.foodie.utils.sharedprefs;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class SharedPrefsManager implements UserSessionManager, OnboardingManager {
 
     private static final String PREF_NAME = "foodie_prefs";
@@ -33,63 +37,72 @@ public class SharedPrefsManager implements UserSessionManager, OnboardingManager
     }
 
 
-    // User session
-    @Override
-    public boolean isLoggedIn() {
-        return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
-    }
-
-    @Override
-    public void setLoggedIn(boolean loggedIn) {
-        prefs.edit().putBoolean(KEY_IS_LOGGED_IN, loggedIn).apply();
-
-    }
-
-    // Onboarding
-
-
-    @Override
-    public boolean isSeen() {
-        return prefs.getBoolean(KEY_ONBOARDING_SEEN, false);
-
-    }
-
-    @Override
-    public void setSeen(boolean seen) {
-        prefs.edit().putBoolean(KEY_ONBOARDING_SEEN, seen).apply();
-
-    }
-
     // Save user info
-    public void saveUser(String userId, String username, String email) {
-        prefs.edit()
-                .putString(KEY_USER_ID, userId)
-                .putString(KEY_USERNAME, username)
-                .putString(KEY_EMAIL, email)
-                .apply();
+    public Completable saveUser(String userId, String username, String email) {
+        return Completable.fromAction(() ->
+                prefs.edit()
+                        .putString(KEY_USER_ID, userId)
+                        .putString(KEY_USERNAME, username)
+                        .putString(KEY_EMAIL, email)
+                        .apply()
+        ).subscribeOn(Schedulers.io());
     }
 
     // Getters
-    public String getUserId() {
-        return prefs.getString(KEY_USER_ID, null);
+    public Single<String> getUserId() {
+        return Single.fromCallable(() ->
+                prefs.getString(KEY_USER_ID, "")
+        ).subscribeOn(Schedulers.io());
     }
 
-    public String getUsername() {
-        return prefs.getString(KEY_USERNAME, null);
+    public Single<String> getUsername() {
+        return Single.fromCallable(() ->
+                prefs.getString(KEY_USERNAME, "")
+        ).subscribeOn(Schedulers.io());
     }
 
-    public String getEmail() {
-        return prefs.getString(KEY_EMAIL, null);
+    public Single<String> getEmail() {
+        return Single.fromCallable(() ->
+                prefs.getString(KEY_EMAIL, "")
+        ).subscribeOn(Schedulers.io());
     }
 
-    // Clear user info
-    public void clearUser() {
-        prefs.edit()
-                .remove(KEY_USER_ID)
-                .remove(KEY_USERNAME)
-                .remove(KEY_EMAIL)
-                .apply();
+    public Completable clearUser() {
+        return Completable.fromAction(() ->
+                prefs.edit()
+                        .remove(KEY_USER_ID)
+                        .remove(KEY_USERNAME)
+                        .remove(KEY_EMAIL)
+                        .apply()
+        ).subscribeOn(Schedulers.io());
     }
 
 
+    @Override
+    public Single<Boolean> isSeen() {
+        return Single.fromCallable(() ->
+                prefs.getBoolean(KEY_ONBOARDING_SEEN, false)
+        ).subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Completable setSeen(boolean seen) {
+        return Completable.fromAction(() ->
+                prefs.edit().putBoolean(KEY_ONBOARDING_SEEN, seen).apply()
+        ).subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Single<Boolean> isLoggedIn() {
+        return Single.fromCallable(() ->
+                prefs.getBoolean(KEY_IS_LOGGED_IN, false)
+        ).subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Completable setLoggedIn(boolean loggedIn) {
+        return Completable.fromAction(() ->
+                prefs.edit().putBoolean(KEY_IS_LOGGED_IN, loggedIn).apply()
+        ).subscribeOn(Schedulers.io());
+    }
 }

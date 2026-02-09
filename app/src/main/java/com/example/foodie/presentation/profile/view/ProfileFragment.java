@@ -27,30 +27,22 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new ProfilePresenterImpl(getActivity(), this);
+        presenter = new ProfilePresenterImpl(getActivity(),requireContext(), this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding =  FragmentProfileBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
-        return view;
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.profileEmail.setEnabled(false);
-        binding.profileUsername.setText(SharedPrefsManager.getInstance(requireContext()).getUsername());
-        binding.profileEmail.setText(SharedPrefsManager.getInstance(requireContext()).getEmail());
-        binding.btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.logout();
-            }
-        });
-
+        presenter.loadUser();
+        binding.btnLogout.setOnClickListener(v -> presenter.logout());
     }
 
     @Override
@@ -59,4 +51,16 @@ public class ProfileFragment extends Fragment implements ProfileView {
         startActivity(intent);
         getActivity().finish();
     }
+
+    @Override
+    public void showUser(String username, String email) {
+        binding.profileUsername.setText(username);
+        binding.profileEmail.setText(email);
+    }
+
+    @Override
+    public void showError(String message) {
+        // Toast / Snackbar
+    }
+
 }

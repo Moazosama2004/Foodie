@@ -16,4 +16,5 @@ public interface HomeView {
     void showRandomMeal(Meal meal);
     void showNetworkError(String Message);
 
+    void showUserData(String username);
 }

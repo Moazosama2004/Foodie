@@ -4,120 +4,115 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.example.foodie.data.core.model.User;
-import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.utils.firebase.auth.FirebaseAuthImpl;
 import com.example.foodie.utils.firebase.storage.FirestoreUserStorage;
-import com.example.foodie.utils.services.AuthCallback;
 import com.example.foodie.utils.services.AuthService;
-import com.example.foodie.utils.services.StorageCallback;
 import com.example.foodie.utils.services.UserStorage;
 import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 
 public class AuthRemoteDataSource {
 
-    private final AuthService firebaseAuthService;
+    private final AuthService authService;
     private final UserStorage userStorage;
-    private final SharedPrefsManager sharedPrefsService;
-
-
+    private final SharedPrefsManager sharedPrefs;
 
     public AuthRemoteDataSource(Activity activity) {
-        this.firebaseAuthService = new FirebaseAuthImpl(activity);
+        this.authService = new FirebaseAuthImpl(activity);
         this.userStorage = new FirestoreUserStorage();
-            this.sharedPrefsService = SharedPrefsManager.getInstance(activity);
+        this.sharedPrefs = SharedPrefsManager.getInstance(activity);
     }
 
-    public void login(String email, String password, AuthCallback authCallback) {
-        firebaseAuthService.login(email, password, new AuthCallback() {
-            @Override
-            public void onSuccess() {
+    // ================= LOGIN =================
 
-                String userId = firebaseAuthService.getCurrentUserId();
-                if (userId == null) {
-                    authCallback.onError("Failed to get user ID after login.");
-                    return;
-                }
-
-                userStorage.getUserById(userId, new StorageCallback() {
-                    @Override
-                    public void onSuccess() { }
-
-                    @Override
-                    public void onError(String message) {
-                        authCallback.onError(message);
+    public Completable login(String email, String password) {
+        return authService.login(email, password)
+                .andThen(authService.getCurrentUserId())
+                .flatMap(userId -> {
+                    if (userId == null) {
+                        return Single.error(
+                                new IllegalStateException("User ID is null after login")
+                        );
                     }
+                    return userStorage.getUserById(userId);
+                })
+                .flatMapCompletable(user -> {
+                    Log.d("AuthRemoteDataSource",
+                            "User loaded: " + user.getUsername());
 
-                    @Override
-                    public void onSuccessWithResult(List<Meal> meals) { }
-
-                    @Override
-                    public void onSuccessWithUserData(User user) {
-                        Log.d("AuthRemoteDataSource", "onSuccessWithUserData: " + user.getUsername() + " " + user.getUserId());
-                        sharedPrefsService.saveUser(user.getUserId(), user.getUsername(), user.getEmail());
-                        authCallback.onSuccess();
-                    }
+                    return sharedPrefs.saveUser(
+                                    user.getUserId(),
+                                    user.getUsername(),
+                                    user.getEmail()
+                            )
+                            .andThen(sharedPrefs.setLoggedIn(true));
                 });
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                authCallback.onError(errorMessage);
-            }
-        });
     }
 
-    public void register(String username,String email, String password, AuthCallback authCallback) {
-        firebaseAuthService.register(email, password, new AuthCallback() {
-            @Override
-            public void onSuccess() {
-                String userId = firebaseAuthService.getCurrentUserId();
-                if (userId == null) {
-                    authCallback.onError("Failed to get user ID after registration.");
-                    return;
-                }
+    // ================= REGISTER =================
 
-                User user = new User(userId, username, email, new ArrayList<>());
-
-                userStorage.saveUser(user, new StorageCallback() {
-                    @Override
-                    public void onSuccess() {
-                        sharedPrefsService.saveUser(userId, username, email);
-                        authCallback.onSuccess();
+    public Completable register(String username, String email, String password) {
+        return authService.register(email, password)
+                .andThen(authService.getCurrentUserId())
+                .flatMapCompletable(userId -> {
+                    if (userId == null) {
+                        return Completable.error(
+                                new IllegalStateException("User ID is null after register")
+                        );
                     }
 
-                    @Override
-                    public void onError(String message) {
-                        authCallback.onError("User saved, but error: " + message);
-                    }
+                    User user = new User(
+                            userId,
+                            username,
+                            email,
+                            new ArrayList<>()
+                    );
 
-                    @Override
-                    public void onSuccessWithResult(List<Meal> meals) {
-
-                    }
-
-                    @Override
-                    public void onSuccessWithUserData(User user) {
-
-                    }
+                    return userStorage.saveUser(user)
+                            .andThen(sharedPrefs.saveUser(
+                                    userId,
+                                    username,
+                                    email
+                            ))
+                            .andThen(sharedPrefs.setLoggedIn(true));
                 });
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                authCallback.onError(errorMessage);
-            }
-        });
-    }
-    public void firebaseWithGoogle() {
-        firebaseAuthService.signInWithGoogle();
     }
 
-    public void logout() {
-        firebaseAuthService.logout();
-        sharedPrefsService.clearUser();
-        sharedPrefsService.setLoggedIn(false);
-        }
+    // ================= GOOGLE SIGN-IN =================
+
+    public Completable signInWithGoogle(String idToken) {
+        return authService.signInWithGoogle(idToken)
+                .andThen(authService.getCurrentUserId())
+                .flatMap(userId -> {
+                    if (userId == null) {
+                        return Single.error(
+                                new IllegalStateException("User ID is null after Google login")
+                        );
+                    }
+                    return userStorage.getUserById(userId);
+                })
+                .flatMapCompletable(user ->
+                        sharedPrefs.saveUser(
+                                user.getUserId(),
+                                user.getUsername(),
+                                user.getEmail()
+                        ).andThen(sharedPrefs.setLoggedIn(true))
+                );
+    }
+
+    // ================= LOGOUT =================
+
+    public Completable logout() {
+        return authService.logout()
+                .andThen(sharedPrefs.clearUser())
+                .andThen(sharedPrefs.setLoggedIn(false));
+    }
+
+    public FirebaseAuthImpl getAuthService() {
+        return (FirebaseAuthImpl) this.authService;
+    }
 }

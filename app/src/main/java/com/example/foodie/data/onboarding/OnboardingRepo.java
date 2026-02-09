@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.foodie.data.onboarding.datasource.local.OnBoardingLocalDataSource;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public class OnboardingRepo {
 
     private final OnBoardingLocalDataSource localDataSource;
@@ -13,20 +16,20 @@ public class OnboardingRepo {
     }
 
 
-    public boolean userIsLoggedIn() {
+    public Single<Boolean> userIsLoggedIn() {
         return localDataSource.userIsLoggedIn();
     }
 
-    public void setUserLoggedIn(boolean isLoggedIn) {
-        localDataSource.setUserLoggedIn(isLoggedIn);
+    public Completable setUserLoggedIn(boolean isLoggedIn) {
+        return localDataSource.setUserLoggedIn(isLoggedIn);
     }
 
 
-    public boolean isOnboardingSeen() {
+    public Single<Boolean> isOnboardingSeen() {
         return localDataSource.isOnboardingSeen();
     }
 
-    public void setOnboardingSeen(boolean seen) {
-        localDataSource.setOnboardingSeen(seen);
+    public Completable setOnboardingSeen(boolean seen) {
+        return localDataSource.setOnboardingSeen(seen);
     }
 }

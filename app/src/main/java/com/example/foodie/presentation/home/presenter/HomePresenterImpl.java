@@ -1,12 +1,13 @@
 package com.example.foodie.presentation.home.presenter;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.example.foodie.data.home.MealHomeRepo;
-import com.example.foodie.data.home.api.MealHomeNetworkResponse;
-import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.home.view.HomeView;
+import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 import java.io.IOException;
-import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -15,13 +16,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class HomePresenterImpl implements HomePresenter {
     private final HomeView homeView;
     private final MealHomeRepo mealHomeRepo;
-    private CompositeDisposable compositeDisposable;
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final SharedPrefsManager sharedPrefsManager;
 
 
-    public HomePresenterImpl(HomeView homeView) {
+    public HomePresenterImpl(Context context, HomeView homeView) {
         this.mealHomeRepo = new MealHomeRepo();
         this.homeView = homeView;
-        this.compositeDisposable = new CompositeDisposable();
+        sharedPrefsManager = SharedPrefsManager.getInstance(context);
     }
 
     @Override
@@ -69,6 +71,22 @@ public class HomePresenterImpl implements HomePresenter {
                         )
         );
     }
+
+    @Override
+    public void loadUserName() {
+        compositeDisposable.add(
+                sharedPrefsManager.getUsername()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                username -> homeView.showUserData(
+                                        username.isEmpty() ? "Guest" : username
+                                ),
+                                throwable -> Log.e("HomePresenter", throwable.getMessage())
+                        )
+        );
+    }
+
+
     @Override
     public void destroy() {
         compositeDisposable.dispose();

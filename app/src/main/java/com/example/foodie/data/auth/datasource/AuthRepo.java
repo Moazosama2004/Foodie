@@ -1,39 +1,41 @@
 package com.example.foodie.data.auth.datasource;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.example.foodie.data.auth.datasource.local.AuthLocalDataSource;
 import com.example.foodie.data.auth.datasource.remote.AuthRemoteDataSource;
-import com.example.foodie.utils.services.AuthCallback;
+import com.example.foodie.utils.firebase.auth.FirebaseAuthImpl;
+
+import io.reactivex.rxjava3.core.Completable;
 
 public class AuthRepo {
+
     private final AuthRemoteDataSource authRemoteDataSource;
     private final AuthLocalDataSource authLocalDataSource;
 
-
-    // TODO : MEMORY LEAK
-    public AuthRepo(Activity activity) {
-        this.authRemoteDataSource = new AuthRemoteDataSource(activity);
-        this.authLocalDataSource = new AuthLocalDataSource(activity.getApplicationContext());
+    public AuthRepo(Context context) {
+        this.authRemoteDataSource = new AuthRemoteDataSource((Activity) context);
+        this.authLocalDataSource = new AuthLocalDataSource(context.getApplicationContext());
     }
 
-    public void login(String email, String password, AuthCallback callback) {
-        authRemoteDataSource.login(email, password,callback);
+    public Completable login(String email, String password) {
+        return authRemoteDataSource.login(email, password);
     }
 
-    public void register(String username , String email, String password, AuthCallback callback) {
-        authRemoteDataSource.register(username, email, password,callback);
+    public Completable register(String username, String email, String password) {
+        return authRemoteDataSource.register(username, email, password);
     }
 
-    public void logout() {
-        authRemoteDataSource.logout();
+    public Completable signInWithGoogle(String idToken) {
+        return authRemoteDataSource.signInWithGoogle(idToken);
     }
 
-    public void firebaseWithGoogle() {
-        authRemoteDataSource.firebaseWithGoogle();
+    public Completable logout() {
+        return authRemoteDataSource.logout();
     }
 
-    public void setUserLoggedIn() {
-        authLocalDataSource.setUserLoggedIn();
+    public FirebaseAuthImpl getAuthService() {
+        return (FirebaseAuthImpl) this.authRemoteDataSource.getAuthService();
     }
 }
