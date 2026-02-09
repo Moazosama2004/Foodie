@@ -74,13 +74,19 @@ public class HomePresenterImpl implements HomePresenter {
 
     @Override
     public void loadUserName() {
+        Log.e("HomePresenter", "loadUserName()");
+
         compositeDisposable.add(
                 sharedPrefsManager.getUsername()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                username -> homeView.showUserData(
-                                        username.isEmpty() ? "Guest" : username
-                                ),
+                                username -> {
+                                    homeView.showUserData(
+                                            username.isEmpty() ? "Guest" : username
+                                    );
+                                    Log.e("HomePresenter", username);
+
+                                },
                                 throwable -> Log.e("HomePresenter", throwable.getMessage())
                         )
         );

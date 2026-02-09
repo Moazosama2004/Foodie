@@ -1,15 +1,17 @@
 package com.example.foodie.presentation.fav.presenter;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodie.data.home.model.response.Meal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+
 public interface FavPresenter {
-    LiveData<List<Meal>> getFavMeals();
 
-    void deleteFromFavLocal(Meal meal);
+    Single<List<Meal>> getFavMeals();
 
-    void deleteFromFavRemote(String id);
+    Completable deleteFromFavLocal(Meal meal);
+
+    Completable deleteFromFavRemote(Meal meal);
 }

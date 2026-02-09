@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.e("HomeFragment", "onViewCreated");
         homePresenter.loadUserName();
         setupRecyclerView();
         setupClicks();
@@ -212,11 +212,11 @@ public class HomeFragment extends Fragment implements HomeView {
     }
 
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         handler.removeCallbacksAndMessages(null);
         binding = null;
-        homePresenter.destroy();
     }
 }

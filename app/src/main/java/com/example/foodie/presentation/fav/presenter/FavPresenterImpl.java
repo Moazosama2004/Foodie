@@ -9,10 +9,14 @@ import com.example.foodie.data.core.FavMealsRepo;
 import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.fav.view.FavView;
-import com.example.foodie.utils.services.StorageCallback;
 
 import java.util.List;
 import java.util.concurrent.Executors;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FavPresenterImpl implements FavPresenter {
     private final FavView view;
@@ -24,37 +28,43 @@ public class FavPresenterImpl implements FavPresenter {
     }
 
     @Override
-    public LiveData<List<Meal>> getFavMeals() {
-        return favMealsRepo.getAllFavMeals();
+    public Single<List<Meal>> getFavMeals() {
+        view.showProgress();
+        return favMealsRepo.fetchAllFavMealsRemote()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess(favMeals -> {
+                    view.hideProgress();
+                    view.showFavMeals(favMeals);
+                })
+                ;
     }
 
 
     @Override
-    public void deleteFromFavLocal(Meal meal) {
-        Executors.newSingleThreadExecutor().execute(() ->
-                favMealsRepo.deleteMealLocal(meal)
-        );
+    public Completable deleteFromFavLocal(Meal meal) {
+        view.showProgress();
+        return Completable.fromRunnable(() -> favMealsRepo.deleteMealLocal(meal))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(() -> {
+                    view.hideProgress();
+                    view.onDeleteSuccess(meal.getIdMeal());
+                })
+                .doOnError(e -> view.showError(e.getMessage()));
     }
 
     @Override
-    public void deleteFromFavRemote(String id) {
-        favMealsRepo.deleteMealRemote(id, new StorageCallback() {
-            @Override
-            public void onSuccess() {
-                Log.d("deleteFromFavRemote", "onSuccess: ");
-            }
+    public Completable deleteFromFavRemote(Meal meal) {
 
-            @Override
-            public void onError(String message) {
-                view.showError(message);
-            }
-
-            @Override
-            public void onSuccessWithResult(List<Meal> meals) { }
-
-            @Override
-            public void onSuccessWithUserData(User user) { }
-        });
+        return favMealsRepo.deleteMealRemote(meal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(() -> {
+                    view.hideProgress();
+                    view.onDeleteSuccess(meal.getIdMeal());
+                })
+                .doOnError(e -> view.showError(e.getMessage()));
     }
 
 }

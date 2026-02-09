@@ -1,91 +1,64 @@
 package com.example.foodie.presentation.calender.presenter;
 
 import android.content.Context;
-import android.util.Log;
-
-import androidx.fragment.app.Fragment;
 
 import com.example.foodie.data.calender.CalenderMealsRepo;
 import com.example.foodie.data.calender.model.CalendarMeal;
-import com.example.foodie.data.home.model.response.Meal;
-import com.example.foodie.data.search.MealSearchRepo;
-import com.example.foodie.data.search.api.MealsSearchNetworkResponse;
 import com.example.foodie.presentation.calender.view.CalenderView;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class CalenderPresenterImpl implements CalenderPresenter {
     private final CalenderView view;
     private final CalenderMealsRepo calenderMealsRepo;
-    private final MealSearchRepo mealSearchRepo;
 
     public CalenderPresenterImpl(Context context, CalenderView view) {
         this.calenderMealsRepo = new CalenderMealsRepo(context);
         this.view = view;
-        this.mealSearchRepo = new MealSearchRepo();
     }
 
     @Override
-    public void insertMeal(CalendarMeal meal) {
+    public Completable insertMeal(CalendarMeal meal) {
+        return calenderMealsRepo.insertMeal(meal)
+                .subscribeOn(Schedulers.io())
+                .doOnComplete(() -> view.showMeals(List.of(meal)))
+                .doOnError((t)->view.showError(t.getMessage()));
+    }
+
+    //
+    @Override
+    public Single<List<CalendarMeal>> getMealsByDate(String date) {
+        return calenderMealsRepo.getMealsByDate(date)
+                .subscribeOn(Schedulers.io())
+
+                .doOnError(error -> view.showError(error.getMessage()));
     }
 
     @Override
-    public void getMealsByDate(String date) {
-        new Thread(() -> {
-            List<CalendarMeal> meals = calenderMealsRepo.getMealsByDate(date);
+    public Completable deleteMealsByDate(String date) {
+        return calenderMealsRepo.deleteMealsByDate(date)
+                .subscribeOn(Schedulers.io())
+                .doOnComplete(() -> view.showEmptyDay())
+                .doOnError((t)->view.showError(t.getMessage()));
+    }
 
-            // Switch to main thread to update UI
-            if (view instanceof Fragment) {
-                ((Fragment) view).requireActivity().runOnUiThread(() -> {
-                    if (meals == null || meals.isEmpty()) {
-                        view.showEmptyDay();
-                        Log.d("CalenderPresenterImpl", "showEmptyDay");
-                    } else {
-                        Log.d("CalenderPresenterImpl", "showMeals");
-                        view.showMeals(meals);
+    @Override
+    public Single<CalendarMeal> getMealsByMealId(String mealId) {
+        return calenderMealsRepo.getAllMeals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(meals -> {
+                    for (CalendarMeal meal : meals) {
+                        if (meal.getMealId().equals(mealId)) return meal;
                     }
+                    return null;
                 });
-            } else {
-                // fallback if view is not a fragment
-                android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
-                mainHandler.post(() -> {
-                    if (meals == null || meals.isEmpty()) {
-                        view.showEmptyDay();
-                    } else {
-                        view.showMeals(meals);
-                    }
-                });
-            }
-        }).start();
     }
 
 
-    @Override
-    public void deleteMealsByDate(String date) {
-
-    }
-
-    @Override
-    public void getMealsByMealId(String mealId) {
-        view.showProgress();
-        mealSearchRepo.getMealById(mealId, new MealsSearchNetworkResponse<Meal>() {
-            @Override
-            public void onSuccess(List<Meal> data) {
-                view.showProgress();
-                view.goToMealDetails(data.get(0));
-            }
-
-            @Override
-            public void onFailure(String message) {
-                view.hideProgress();
-                view.showError(message);
-            }
-
-            @Override
-            public void noInternet(String message) {
-                view.hideProgress();
-                view.showError(message);
-            }
-        });
-    }
 }

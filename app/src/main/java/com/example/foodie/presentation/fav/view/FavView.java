@@ -15,9 +15,12 @@ public interface FavView {
 
     void showFavMeals(List<Meal> favMeals);
 
-    LifecycleOwner getLifecycleOwner();
 
     void goToDetails(Meal meal);
     void onSuccess();
+
+    void showError(Throwable throwable);
+
+    void onDeleteSuccess(String mealId);
 
 }

@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.data.search.MealSearchRepo;
-import com.example.foodie.data.search.api.MealsSearchNetworkResponse;
 import com.example.foodie.data.search.model.Area;
 import com.example.foodie.data.search.model.Category;
 import com.example.foodie.data.search.model.FilteredMeal;
@@ -13,183 +12,122 @@ import com.example.foodie.presentation.search.view.SearchView;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 public class SearchPresenterImpl implements SearchPresenter {
 
-    private final MealSearchRepo searchRepo;
-    private final SearchView searchView;
+    private final MealSearchRepo repo;
+    private final SearchView view;
+    private final CompositeDisposable disposables;
 
-    public SearchPresenterImpl(SearchView searchView) {
-        this.searchRepo = new MealSearchRepo();
-        this.searchView = searchView;
+    public SearchPresenterImpl(SearchView view) {
+        this.repo = new MealSearchRepo();
+        this.view = view;
+        this.disposables = new CompositeDisposable();
     }
 
     @Override
     public void getCategories() {
-
-        searchView.showLoading();
-        searchRepo.getCategories(new MealsSearchNetworkResponse<Category>() {
-            @Override
-            public void onSuccess(List<Category> data) {
-                Log.d("Categories", data.toString());
-                searchView.hideLoading();
-                searchView.showData(data);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                Log.d("Categories", message);
-                searchView.hideLoading();
-            }
-
-            @Override
-            public void noInternet(String message) {
-                Log.d("Categories", message);
-                searchView.hideLoading();
-            }
-        });
+        disposables.add(
+                repo.getCategories()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                categories -> view.showData(categories),
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
     }
 
     @Override
     public void getAreas() {
-        searchView.showLoading();
-        searchRepo.getAreas(new MealsSearchNetworkResponse<Area>() {
-            @Override
-            public void onSuccess(List<Area> data) {
-                searchView.hideLoading();
-                searchView.showData(data);
-            }
-
-            @Override
-            public void onFailure(String message) {
-
-                searchView.hideLoading();
-            }
-
-            @Override
-            public void noInternet(String message) {
-
-                searchView.hideLoading();
-            }
-        });
+        disposables.add(
+                repo.getAreas()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                areas -> view.showData(areas),
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
     }
 
     @Override
     public void getIngredients() {
-        searchView.showLoading();
-        searchRepo.getIngredients(new MealsSearchNetworkResponse<Ingredient>() {
-            @Override
-            public void onSuccess(List<Ingredient> data) {
-                Log.d("Ingredients", data.toString());
-                searchView.hideLoading();
-                searchView.showData(data);
-            }
-
-            @Override
-            public void onFailure(String message) {
-
-                searchView.hideLoading();
-            }
-
-            @Override
-            public void noInternet(String message) {
-
-                searchView.hideLoading();
-            }
-        });
+        Log.d("SearchPresenter", "getIngredients called");
+        disposables.add(
+                repo.getIngredients()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                ingredients -> view.showData(ingredients),
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
     }
 
     @Override
     public void getFilteredMealsByArea(String country) {
-        searchView.showLoading();
-        searchRepo.getFilteredMealsByArea(country, new MealsSearchNetworkResponse<FilteredMeal>() {
-            @Override
-            public void onSuccess(List<FilteredMeal> data) {
-                searchView.hideLoading();
-                searchView.showData(data);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                searchView.hideLoading();
-                searchView.showError(message);
-            }
-
-            @Override
-            public void noInternet(String message) {
-                searchView.hideLoading();
-                searchView.showError(message);
-            }
-        });
+        disposables.add(
+                repo.getFilteredMealsByArea(country)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meals -> view.showData(meals),
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
     }
 
     @Override
     public void getFilteredMealsByCategory(String category) {
-        searchRepo.getFilteredMealsByCategory(category, new MealsSearchNetworkResponse<FilteredMeal>() {
-            @Override
-            public void onSuccess(List<FilteredMeal> data) {
-                searchView.hideLoading();
-                searchView.showData(data);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                searchView.hideLoading();
-                searchView.showError(message);
-            }
-
-            @Override
-            public void noInternet(String message) {
-                searchView.hideLoading();
-                searchView.showError(message);
-            }
-        });
+        disposables.add(
+                repo.getFilteredMealsByCategory(category)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meals -> view.showData(meals),
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
     }
 
     @Override
     public void getFilteredMealsByIngredient(String ingredient) {
-        searchView.showLoading();
-        searchRepo.getFilteredMealsByIngredient(ingredient, new MealsSearchNetworkResponse<FilteredMeal>() {
-            @Override
-            public void onSuccess(List<FilteredMeal> data) {
-                searchView.hideLoading();
-                searchView.showData(data);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                searchView.hideLoading();
-                searchView.showError(message);
-            }
-
-            @Override
-            public void noInternet(String message) {
-                searchView.hideLoading();
-                searchView.showError(message);
-            }
-        });
+        Log.d("SearchPresenter", "getFilteredMealsByIngredient called");
+        disposables.add(
+                repo.getFilteredMealsByIngredient(ingredient)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meals -> view.showData(meals),
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
     }
 
     @Override
     public void getMealById(String id) {
-        searchView.showLoading();
-        searchRepo.getMealById(id, new MealsSearchNetworkResponse<Meal>() {
-            @Override
-            public void onSuccess(List<Meal> data) {
-                searchView.hideLoading();
-                searchView.goToMealDetails(data.get(0));
-            }
+        disposables.add(
+                repo.getMealById(id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                meal -> {
+                                    if (meal != null) {
+                                        view.goToMealDetails(meal);
+                                    } else {
+                                        view.showError("Meal not found");
+                                    }
+                                },
+                                throwable -> view.showError(throwable.getMessage())
+                        )
+        );
+    }
 
-            @Override
-            public void onFailure(String message) {
-                searchView.hideLoading();
-                searchView.showError(message);
-            }
-
-            @Override
-            public void noInternet(String message) {
-                searchView.hideLoading();
-                searchView.showError(message);
-            }
-        });
+    public void clear() {
+        disposables.clear();
     }
 }

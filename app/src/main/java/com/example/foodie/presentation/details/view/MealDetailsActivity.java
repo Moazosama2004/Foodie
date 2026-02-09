@@ -92,8 +92,12 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
         binding.addToFav.setOnClickListener(v -> {
             if (meal != null) {
                 presenter.saveMealLocal(meal);
-                presenter.saveMealRemote(meal);
-                Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT).show();
+                presenter.saveMealRemote(meal)
+                        .subscribe(
+                                () -> Toast.makeText(this, "Added to favorites remotely!", Toast.LENGTH_SHORT).show(),
+                                throwable -> Toast.makeText(this, "Failed to save remotely: " + throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                        );
+                Toast.makeText(this, "Added to favorites locally!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
             }
@@ -111,21 +115,24 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
                         String selectedDate = String.format(Locale.getDefault(),
                                 "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
                         if (meal != null) {
-                            presenter.addToCalender(meal, selectedDate);
-                            Toast.makeText(this, "Added to Calendar!", Toast.LENGTH_SHORT).show();
+                            presenter.addToCalender(meal, selectedDate)
+                                    .subscribe(
+                                            () -> Toast.makeText(this, "Added to Calendar!", Toast.LENGTH_SHORT).show(),
+                                            throwable -> Toast.makeText(this, "Failed to add to Calendar", Toast.LENGTH_SHORT).show()
+                                    );
                         }
                         Log.d("MealDetailsActivity", "Selected Date: " + selectedDate);
                     },
                     year, month, day
             );
 
-            // Min/max date
             datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis() - 1000);
             calendar.add(Calendar.DAY_OF_YEAR, 7);
             datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
 
             datePickerDialog.show();
         });
+
     }
 
     private String extractVideoId(String youtubeUrl) {
@@ -148,6 +155,11 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
 
     @Override
     public void onSuccess() { }
+
+    @Override
+    public void showError(Throwable throwable) {
+
+    }
 
     @Override
     protected void onDestroy() {
