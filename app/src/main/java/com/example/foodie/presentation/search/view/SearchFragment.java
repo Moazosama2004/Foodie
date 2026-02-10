@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 public class SearchFragment extends Fragment implements SearchView, onCardClickListener, OnMealCardListener {
@@ -50,6 +51,8 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     private List<Category> allCategories = new ArrayList<>();
     private List<Ingredient> allIngredients = new ArrayList<>();
     private List<Area> allAreas = new ArrayList<>();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private boolean isConnected = true;
 
     private int checkedId = -1;
     private Disposable searchDisposable;
@@ -77,13 +80,32 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        observeNetwork();
         // default adapter
         binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
         binding.rvCategories.setAdapter(categoryAdapter);
 
         setupChips();
         setupSearch();
+    }
+
+    private void showNetworkErrorOverlay(String message) {
+        binding.networkErrorOverlay.setVisibility(View.VISIBLE);
+
+        // لو حابب تغير النص ديناميكي
+        // TextView title = binding.networkErrorOverlay.findViewById(R.id.error_title);
+        // title.setText(message);
+
+        binding.retryBtn.setOnClickListener(v -> {
+            if (isConnected) {
+                hideNetworkErrorOverlay();
+                resetByChip();
+            }
+        });
+    }
+
+    private void hideNetworkErrorOverlay() {
+        binding.networkErrorOverlay.setVisibility(View.GONE);
     }
 
     private void setupChips() {
@@ -129,6 +151,26 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
             }
         });
     }
+    private void observeNetwork() {
+        compositeDisposable.add(
+                com.example.utils.NetworkUtil.observeNetwork(requireContext())
+                        .distinctUntilChanged()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(connected -> {
+                            isConnected = connected;
+
+                            if (!connected) {
+                                showNoInternet("No Internet Connection");
+                            } else {
+                                // رجّع الداتا حسب الـ chip
+                                hideNetworkErrorOverlay();
+                                resetByChip();
+                            }
+                        }, throwable -> {
+                            Log.e("SearchFragment", "Network error", throwable);
+                        })
+        );
+    }
 
     private void resetByChip() {
         if (checkedId == R.id.category_chip) {
@@ -143,6 +185,11 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
             binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
             binding.rvCategories.setAdapter(foodAdapter);
             presenter.getAreas();
+        }else {
+            binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            binding.rvCategories.setAdapter(categoryAdapter);
+            presenter.getCategories();
+
         }
     }
 
@@ -195,9 +242,18 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     }
 
 
+    @Override
+    public void showError(String message) {
+        Log.d("SearchFragment", "Error: " + message);
+        showNetworkErrorOverlay(message);
+    }
 
-    @Override public void showError(String message) { Log.d("SearchFragment", "Error: "+message); }
-    @Override public void showNoInternet(String message) { Log.d("SearchFragment", "NoInternet: "+message); }
+    @Override
+    public void showNoInternet(String message) {
+        Log.d("SearchFragment", "NoInternet: " + message);
+        showNetworkErrorOverlay(message);
+    }
+
     @Override public void showLoading() {}
     @Override public void hideLoading() {}
 
@@ -212,6 +268,10 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     public void onCardClick(String query) {
         if (checkedId == -1) return;
 
+        if (!isConnected) {
+            showNoInternet("Check your internet connection");
+            return;
+        }
         binding.rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvCategories.setAdapter(filteredMealsAdapter);
 
@@ -225,6 +285,10 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
 
     @Override
     public void onMealCardClick(String mealId) {
+        if (!isConnected) {
+            showNoInternet("Check your internet connection");
+            return;
+        }
         presenter.getMealById(mealId);
     }
 }
