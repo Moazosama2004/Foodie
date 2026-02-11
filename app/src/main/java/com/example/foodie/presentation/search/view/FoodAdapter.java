@@ -3,11 +3,13 @@ package com.example.foodie.presentation.search.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.foodie.R;
 import com.example.foodie.data.search.model.Area;
 
@@ -41,7 +43,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         Area food = foodList.get(position);
         holder.foodName.setText(food.getStrArea());
-//        holder.foodImage.setImageResource(food.getImageRes());
+        Glide.with(holder.itemView.getContext())
+                .load(food.getFlagUrl())
+                .into(holder.foodImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,12 +60,12 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     }
 
     static class FoodViewHolder extends RecyclerView.ViewHolder {
-        //        ImageView foodImage;
+        ImageView foodImage;
         TextView foodName;
 
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
-//            foodImage = itemView.findViewById(R.id.food_image);
+            foodImage = itemView.findViewById(R.id.food_image);
             foodName = itemView.findViewById(R.id.food_name);
         }
     }

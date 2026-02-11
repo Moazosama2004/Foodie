@@ -21,16 +21,19 @@ public class CalendarMealAdapter extends RecyclerView.Adapter<CalendarMealAdapte
 
     private List<CalendarMeal> meals = new ArrayList<>();
     private final OnMealClickListener onMealClickListener;
+    private final OnDeleteClickListener onDeleteClickListener;
 
-    public CalendarMealAdapter(OnMealClickListener onMealClickListener) {
+
+    public CalendarMealAdapter(OnMealClickListener onMealClickListener , OnDeleteClickListener onDeleteClickListener) {
         this.onMealClickListener = onMealClickListener;
+        this.onDeleteClickListener = onDeleteClickListener;
     }
 
     @NonNull
     @Override
     public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.calender_meal_item, parent, false);
+                .inflate(R.layout.item_favourite, parent, false);
         return new MealViewHolder(view);
     }
 
@@ -38,6 +41,12 @@ public class CalendarMealAdapter extends RecyclerView.Adapter<CalendarMealAdapte
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
         CalendarMeal meal = meals.get(position);
         holder.nameText.setText(meal.getMealName());
+        holder.removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeleteClickListener.onDeleteClick(meals.get(position));
+            }
+        });
 
         // Load image if available using Glide
         if (meal.getMealImage() != null && !meal.getMealImage().isEmpty()) {
@@ -66,11 +75,14 @@ public class CalendarMealAdapter extends RecyclerView.Adapter<CalendarMealAdapte
     static class MealViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
         ImageView mealImage;
+        ImageView removeButton;
+
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
-            mealImage = itemView.findViewById(R.id.img_details);
-            nameText = itemView.findViewById(R.id.name_details);
+            mealImage = itemView.findViewById(R.id.img_fav_food);
+            nameText = itemView.findViewById(R.id.tv_fav_food_name);
+            removeButton = itemView.findViewById(R.id.btn_remove_fav);
         }
     }
 }

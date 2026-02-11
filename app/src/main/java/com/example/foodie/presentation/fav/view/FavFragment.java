@@ -104,6 +104,13 @@ public class FavFragment extends Fragment implements FavView, OnDeleteClickListe
         startActivity(intent);
     }
     @Override public void onSuccess() {}
+
+    @Override
+    public void showEmptyFav() {
+        binding.emptyView.setVisibility(View.VISIBLE);
+        binding.favRecyclerView.setVisibility(View.GONE);
+    }
+
     @Override public void showError(Throwable throwable) {}
     @Override public void onDeleteSuccess(String mealId) {}
 }

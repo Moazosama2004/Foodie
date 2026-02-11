@@ -1,6 +1,7 @@
-package com.example.foodie.data.calender.datasource;
+package com.example.foodie.data.calender.datasource.local;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.calender.model.CalendarMealsDao;
@@ -19,6 +20,8 @@ public class CalenderMealsLocalDataSource {
     }
 
     public Completable insertMeal(CalendarMeal meal) {
+        Log.d("CalenderMealsLocalDataSource", "Inserting meal: " + meal.getMealName());
+
         return calendarMealsDao.insertMeal(meal);
     }
 
@@ -32,6 +35,10 @@ public class CalenderMealsLocalDataSource {
 
     public Single<List<CalendarMeal>> getAllMeals() {
         return Single.fromCallable(() -> calendarMealsDao.getAllMeals());
+    }
+
+    public Completable clearAllMeals() {
+        return calendarMealsDao.clearAllMeals();
     }
 }
 

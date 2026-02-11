@@ -13,8 +13,10 @@ public interface CalenderPresenter {
 
     Single<List<CalendarMeal>> getMealsByDate(String date);
 
-    Completable deleteMealsByDate(String date);
+    Completable deleteMealsByDate(CalendarMeal meal);
 
     Single<CalendarMeal> getMealsByMealId(String mealId);
+
+    Single<List<CalendarMeal>> syncMeals();
 
 }

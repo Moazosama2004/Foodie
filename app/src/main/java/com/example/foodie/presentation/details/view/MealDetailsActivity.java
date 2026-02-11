@@ -154,7 +154,9 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     public void showError(String message) { }
 
     @Override
-    public void onSuccess() { }
+    public void onSuccess() {
+        Log.d("DetailsPresenter", "hhhhhhh");
+    }
 
     @Override
     public void showError(Throwable throwable) {

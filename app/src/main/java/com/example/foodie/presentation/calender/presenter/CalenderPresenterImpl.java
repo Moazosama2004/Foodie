@@ -9,7 +9,10 @@ import com.example.foodie.presentation.calender.view.CalenderView;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableEmitter;
+import io.reactivex.rxjava3.core.CompletableOnSubscribe;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -24,10 +27,16 @@ public class CalenderPresenterImpl implements CalenderPresenter {
 
     @Override
     public Completable insertMeal(CalendarMeal meal) {
-        return calenderMealsRepo.insertMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .doOnComplete(() -> view.showMeals(List.of(meal)))
-                .doOnError((t)->view.showError(t.getMessage()));
+//        return calenderMealsRepo.insertMeal(meal)
+//                .subscribeOn(Schedulers.io())
+//                .doOnComplete(() -> view.showMeals(List.of(meal)))
+//                .doOnError((t)->view.showError(t.getMessage()));
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(@NonNull CompletableEmitter emitter) throws Throwable {
+
+            }
+        });
     }
 
     //
@@ -35,30 +44,39 @@ public class CalenderPresenterImpl implements CalenderPresenter {
     public Single<List<CalendarMeal>> getMealsByDate(String date) {
         return calenderMealsRepo.getMealsByDate(date)
                 .subscribeOn(Schedulers.io())
-
                 .doOnError(error -> view.showError(error.getMessage()));
     }
 
     @Override
-    public Completable deleteMealsByDate(String date) {
-        return calenderMealsRepo.deleteMealsByDate(date)
+    public Completable deleteMealsByDate(CalendarMeal meal) {
+        return calenderMealsRepo.deleteMealRemote(meal)
                 .subscribeOn(Schedulers.io())
-                .doOnComplete(() -> view.showEmptyDay())
-                .doOnError((t)->view.showError(t.getMessage()));
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(view::showEmptyDay)
+                .doOnError(error -> view.showError(error.getMessage()));
     }
 
     @Override
     public Single<CalendarMeal> getMealsByMealId(String mealId) {
-        return calenderMealsRepo.getAllMeals()
+
+        return calenderMealsRepo.getAllMealsLocal()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(meals -> {
                     for (CalendarMeal meal : meals) {
-                        if (meal.getMealId().equals(mealId)) return meal;
+                        if (meal.getMealId().equals(mealId)) {
+                            return meal;
+                        }
                     }
-                    return null;
-                });
+                    throw new RuntimeException("Meal not found");
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(error -> view.showError(error.getMessage()));
     }
 
 
+    public Single<List<CalendarMeal>> syncMeals() {
+        return calenderMealsRepo.syncPlannedMeals()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

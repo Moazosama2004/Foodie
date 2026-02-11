@@ -54,17 +54,20 @@ public class DetailsPresenterImpl implements DetailsPresenter {
 
     @Override
     public Completable addToCalender(Meal meal, String date) {
+
+        Log.d("DetailsPresenter", "Adding meal to calendar: " + meal.getStrMeal());
+
         CalendarMeal calendarMeal = new CalendarMeal();
         calendarMeal.setDate(date);
         calendarMeal.setMealId(meal.getIdMeal());
         calendarMeal.setMealName(meal.getStrMeal());
         calendarMeal.setMealImage(meal.getStrMealThumb());
 
-        return Completable.fromAction(() -> calenderMealsRepo.insertMeal(calendarMeal))
+        return calenderMealsRepo.saveMealRemote(calendarMeal)  
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete(() -> {
-                    Log.d("DetailsPresenter", "Meal added to calendar");
+                    Log.d("DetailsPresenter", "Meal added remotely then locally");
                     view.onSuccess();
                 })
                 .doOnError(throwable -> {

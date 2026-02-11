@@ -162,7 +162,6 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
                             if (!connected) {
                                 showNoInternet("No Internet Connection");
                             } else {
-                                // رجّع الداتا حسب الـ chip
                                 hideNetworkErrorOverlay();
                                 resetByChip();
                             }
