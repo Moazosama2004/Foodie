@@ -25,8 +25,9 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class PlanFragment extends Fragment implements CalenderView, OnMealClickListener {
+public class PlanFragment extends Fragment implements CalenderView, OnMealClickListener ,OnDeleteClickListener{
 
     private FragmentPlanBinding binding;
     private CalenderPresenter presenter;
@@ -51,24 +52,27 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new CalendarMealAdapter(this);
+        adapter = new CalendarMealAdapter(this,this);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Load today's meals AFTER recyclerView is initialized
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 .format(new Date());
-        presenter.getMealsByDate(today)
+
+        presenter.syncMeals()
+                .flatMap(meals -> presenter.getMealsByDate(today))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(meals -> {
-                    if (meals == null || meals.isEmpty()) {
+                .subscribe(dayMeals -> {
+                    if (dayMeals == null || dayMeals.isEmpty()) {
                         showEmptyDay();
                     } else {
-                        showMeals(meals);
+                        showMeals(dayMeals);
                     }
                 }, throwable -> {
-                    Log.e("PlanFragment", "Error loading meals", throwable);
+                    Log.e("PlanFragment", "Error", throwable);
                 });
+
 
         binding.calendar.setOnDateChangeListener((calenderView, year, month, dayOfMonth) -> {
             String date = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", dayOfMonth);
@@ -88,6 +92,7 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
         });
 
     }
+
 
 
     @Override
@@ -129,7 +134,6 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
         presenter.getMealsByMealId(id)
                 .subscribe(meal -> {
                     if (meal != null) {
-                        // تحويل CalendarMeal إلى Meal عشان نقدر نفتح التفاصيل
                         Meal m = new Meal();
                         m.setIdMeal(meal.getMealId());
                         m.setStrMeal(meal.getMealName());
@@ -139,5 +143,26 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
                 }, throwable -> {
                     Log.e("PlanFragment", "Error fetching meal by id", throwable);
                 });
+    }
+
+    @Override
+    public void onDeleteClick(CalendarMeal meal) {
+        Log.d("PlanFragment", "onDeleteClick: " + meal.getMealName());
+        presenter.deleteMealsByDate(meal) .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            Log.d("PlanFragment", "Meal deleted successfully");
+                            String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                    .format(new Date());
+                            presenter.getMealsByDate(today)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(this::showMeals, throwable -> showError(throwable.getMessage()));
+                        },
+                        throwable -> {
+                            Log.e("PlanFragment", "Error deleting meal", throwable);
+                            showError(throwable.getMessage());
+                        }
+                );;
     }
 }

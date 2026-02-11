@@ -34,6 +34,9 @@ public class FavPresenterImpl implements FavPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess(favMeals -> {
+                    if(favMeals.isEmpty()) {
+                        view.showEmptyFav();
+                    }
                     view.hideProgress();
                     view.showFavMeals(favMeals);
                 })

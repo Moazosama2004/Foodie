@@ -18,6 +18,7 @@ public interface FavView {
 
     void goToDetails(Meal meal);
     void onSuccess();
+    void showEmptyFav();
 
     void showError(Throwable throwable);
 

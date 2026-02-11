@@ -24,4 +24,8 @@ public interface CalendarMealsDao {
 
     @Query("SELECT * FROM meal_calendar")
     List<CalendarMeal> getAllMeals();
+
+    @Query("DELETE FROM meal_calendar")
+    Completable clearAllMeals();
+
 }
