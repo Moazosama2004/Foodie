@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.foodie.R;
 import com.example.foodie.databinding.FragmentProfileBinding;
 import com.example.foodie.presentation.auth.view.AuthActivity;
 import com.example.foodie.presentation.profile.presenter.ProfilePresenter;
@@ -39,7 +40,6 @@ public class ProfileFragment extends Fragment implements ProfileView {
         super.onViewCreated(view, savedInstanceState);
         binding.profileEmail.setEnabled(false);
         presenter.loadUser();
-        binding.btnLogout.setOnClickListener(v -> presenter.logout());
     }
 
     @Override
@@ -51,9 +51,16 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showUser(String username, String email) {
-        Log.d("UserNAME" , username +" " + email);
+        if (username.equals("Guest")) {
+            binding.profileUsername.setText(username);
+            binding.profileEmail.setText("No Email");
+            binding.btnLogout.setText("Sign In");
+            binding.btnLogout.setOnClickListener(v -> goToAuth());
+        } else {
             binding.profileUsername.setText(username);
             binding.profileEmail.setText(email);
+            binding.btnLogout.setOnClickListener(v -> presenter.logout());
+        }
     }
 
     @Override

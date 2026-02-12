@@ -10,7 +10,6 @@ import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;

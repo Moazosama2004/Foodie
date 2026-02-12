@@ -1,210 +1,57 @@
-
-# 🍽️ Foodie – Android Meal Planner App
-
-Foodie is a modern Android application built using **MVP Architecture** and **RxJava3** that allows users to explore meals, manage favorites, and plan meals using a calendar-based system.
-
-The app supports both **Guest Mode** and **Authenticated Mode** with remote synchronization.
-
----
-
-# 📱 Features
-
-## 🔐 Authentication
-- Firebase Authentication
-- Guest Mode support
-- Login required for favorites & planning
-
-## 🌍 Meal Browsing
-- Browse meals by categories
-- View meal details
-- View meal images
-
-## 🔎 Search
-- Search meals dynamically
-
-## ❤️ Favorites
-- Add meals to favorites
-- Remove meals from favorites
-- Sync favorites with remote database
-- Local caching support
-
-## 📅 Meal Planning
-- Plan meals by date
-- View meals per selected day
-- Delete planned meals
-- Sync between local & remote
-
----
-
-# 🏗️ Architecture
-
-This project follows **MVP (Model - View - Presenter)** architecture with clear separation of responsibilities.
-
-
-### Responsibilities
-
-- **View** → UI only (Fragments / Activities)
-- **Presenter** → Business logic & Rx handling
-- **Repository** → Data source abstraction
-- **Local** → Room / SharedPrefs
-- **Remote** → Firebase / API
-
----
-
-## 🛠️ Tech Stack
-
-- ✅ Java
-- ✅ MVP Architecture
-- ✅ RxJava3
-- ✅ Firebase Authentication
-- ✅ Firebase Firestore
-- ✅ Room Database
-- ✅ RecyclerView
-- ✅ ViewBinding
-- ✅ Material Design
-
----
-
-## 🔄 Reactive Programming (RX-uesd)
-
-All asynchronous operations are handled using **RxJava3**:
-
-- `Single`
-- `Completable`
-- `CompositeDisposable`
-- Proper thread management:
-  - `Schedulers.io()`
-  - `AndroidSchedulers.mainThread()`
-
----
-
-## 👤 User Modes
-
-### Guest Mode
-- Can browse meals
-- Cannot add favorites
-- Cannot plan meals
-- Alert dialog prompts login
-
-### Logged-in Mode
-- Full access to:
-  - Favorites
-  - Calendar planning
-  - Remote synchronization
-
----
-
-## 📂 Project Structure
-
-```bash
-com.example.foodie
-│
-│
-│── config
-│   ├── db
-│   ├── network
-│   └── networkconnection
-│
-│
-│── core
-│
-│
-├── data
-│   ├── home
-│   ├── fav
-│   ├── calender
-│   └── core
-│
-├── presentation
-│   ├── home
-│   ├── fav
-│   ├── calender
-│   ├── search
-│   └── details
-│
-├── utils
-│   ├── firebase
-│   ├── services
-│   └──sharedPrefrences
-
-```
-
-
-
-
----
-
-## ⚙️ How to Run
-
-1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/foodie.git
-```
-
-2️⃣ Open Project in Android Studio
-
-Open Android Studio
-
-Select Open Project
-
-Choose the cloned repository folder
-
-3️⃣ Configure Firebase
-
-Go to Firebase Console
-
-Create a new Firebase project
-
-Add an Android app using your package name:
-
-```
-com.example.foodie
-```
-
-
-Download the google-services.json file
-
-Place it inside:
-```
-app/google-services.json
-```
-
-
-
-4️⃣ Sync Gradle
-
-Click Sync Now when prompted
-OR
-
-Go to:
-
-File → Sync Project with Gradle Files
-
-5️⃣ Run the Application
-
-Connect a real device OR start an emulator
-
-Click Run ▶
-
-
-
-✅ Requirements
-
-Android Studio Hedgehog or newer
-
-Minimum SDK: 21+
-
-Java 8+
-
-Internet connection (for remote data & Firebase)
-
-🧪 Test Accounts
-
-You can:
-
-Create a new account inside the app
-OR
-
-Use Guest Mode (limited features)
-
+# Foodie - Your Personal Comfort Food Companion
+
+Foodie is a modern Android application designed to help users discover, save, and plan their favorite meals. Whether you're looking for a quick recipe or planning your weekly menu, Foodie provides a seamless and beautiful user experience.
+
+## ✨ Features
+
+- **User Authentication:** Secure sign-up and login with Email/Password and Google Sign-In. A guest mode is also available for anonymous browsing.
+- **Meal Discovery:**
+    - A "Meal of the Day" feature on the home screen to inspire your next cooking adventure.
+    - Browse a list of popular meals.
+- **Powerful Search:**
+    - Search for meals by **Category**, **Ingredient**, or **Country**.
+    - Dynamic filtering and search-as-you-type functionality.
+- **Detailed Meal View:**
+    - View comprehensive meal details including ingredients and step-by-step instructions.
+    - Watch embedded YouTube videos for a visual cooking guide.
+- **Personalized Experience:**
+    - **Favorites:** Save your favorite meals for quick access.
+    - **Meal Planner:** Add meals to a calendar to plan your food for the week.
+    - **Profile Management:** View your profile information and sign in or out.
+- **Modern & Responsive UI:**
+    - A clean, intuitive, and modern user interface built with Material Design components.
+    - Smooth animations and responsive layouts.
+
+## 🛠 Tech Stack & Architecture
+
+- **Language:** **Java**
+- **Architecture:** **Model-View-Presenter (MVP)**
+    - **Model:** Data layer consisting of repositories that handle data from both network (Retrofit) and local (Room) sources.
+    - **View:** Activities/Fragments responsible for displaying the UI and passing user actions to the Presenter.
+    - **Presenter:** Handles the business logic and acts as the bridge between the View and the Model.
+- **Core Libraries:**
+    - **UI:** AndroidX (AppCompat, ConstraintLayout, RecyclerView, CardView), Material Components, ViewBinding
+    - **Navigation:** AndroidX Navigation Component
+    - **Networking:** Retrofit & Gson
+    - **Asynchronous Programming:** RxJava 3
+    - **Image Loading:** Glide
+    - **Local Storage:** Room Persistence Library & SharedPreferences
+    - **Backend & Authentication:** Firebase (Authentication, Firestore), Google Sign-In
+    - **Video Playback:** android-youtube-player
+
+## 🚀 Setup and Installation
+
+1.  **Clone the repository.**
+2.  **Firebase Setup:**
+    - Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
+    - Add an Android app to the project with the package name `com.example.foodie`.
+    - Download the `google-services.json` file and place it in the `app/` directory (`C:/ITI - Foodie/app/`).
+3.  **Open in Android Studio:**
+    - Open the project in Android Studio.
+    - Let Gradle sync the dependencies.
+4.  **Build and Run:**
+    - Run the app on an emulator or a physical device.
+
+## 📸 Screenshots
+
+*(Add your app screenshots here to showcase the beautiful UI!)*

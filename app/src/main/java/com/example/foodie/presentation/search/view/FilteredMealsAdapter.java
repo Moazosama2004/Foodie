@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.example.foodie.R;
 import com.example.foodie.data.search.model.FilteredMeal;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +69,7 @@ public class FilteredMealsAdapter extends RecyclerView.Adapter<FilteredMealsAdap
 
         ImageView imgMeal;
         TextView txtMealName;
+
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);

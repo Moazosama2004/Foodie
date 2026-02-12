@@ -15,14 +15,13 @@ public class OnboardingRepo {
         this.localDataSource = new OnBoardingLocalDataSource(context);
     }
 
-
     public Single<Boolean> userIsLoggedIn() {
         return localDataSource.userIsLoggedIn();
     }
 
-    public Completable setUserLoggedIn(boolean isLoggedIn) {
-        return localDataSource.setUserLoggedIn(isLoggedIn);
-    }
+//    public Completable setUserLoggedIn(boolean isLoggedIn) {
+//        return localDataSource.setUserLoggedIn(isLoggedIn);
+//    }
 
 
     public Single<Boolean> isOnboardingSeen() {

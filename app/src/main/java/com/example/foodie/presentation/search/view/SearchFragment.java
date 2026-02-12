@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.foodie.R;
@@ -34,26 +33,22 @@ import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 
 public class SearchFragment extends Fragment implements SearchView, onCardClickListener, OnMealCardListener {
-
-    private FragmentSearchBinding binding;
-    private SearchPresenter presenter;
-
-    private CategoriesMealsAdapter categoryAdapter;
-    private FoodAdapter foodAdapter;
-    private IngredientAdapter ingredientAdapter;
-    private FilteredMealsAdapter filteredMealsAdapter;
 
     private final List<Category> allCategories = new ArrayList<>();
     private final List<Ingredient> allIngredients = new ArrayList<>();
     private final List<Area> allAreas = new ArrayList<>();
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private FragmentSearchBinding binding;
+    private SearchPresenter presenter;
+    private CategoriesMealsAdapter categoryAdapter;
+    private FoodAdapter foodAdapter;
+    private IngredientAdapter ingredientAdapter;
+    private FilteredMealsAdapter filteredMealsAdapter;
     private boolean isConnected = true;
 
     private int checkedId = -1;
-    private Disposable searchDisposable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,12 +59,10 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         foodAdapter = new FoodAdapter(this);
         ingredientAdapter = new IngredientAdapter(this);
         filteredMealsAdapter = new FilteredMealsAdapter(this);
-
-        presenter.getCategories();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -79,21 +72,24 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         observeNetwork();
-        // default adapter
-        binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        binding.rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvCategories.setAdapter(categoryAdapter);
 
         setupChips();
         setupSearch();
+
+        // Directly set the initial state: Check the Category chip, update its appearance,
+        // and call the presenter to load the initial data. This is more reliable than
+        // depending on a listener during the initial view setup.
+        checkedId = R.id.category_chip;
+        binding.chipGroup.check(checkedId);
+        updateChipAppearance(checkedId);
+        presenter.getCategories();
     }
 
     private void showNetworkErrorOverlay(String message) {
         binding.networkErrorOverlay.setVisibility(View.VISIBLE);
-
-        // لو حابب تغير النص ديناميكي
-        // TextView title = binding.networkErrorOverlay.findViewById(R.id.error_title);
-        // title.setText(message);
-
         binding.retryBtn.setOnClickListener(v -> {
             if (isConnected) {
                 hideNetworkErrorOverlay();
@@ -108,34 +104,46 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
 
     private void setupChips() {
         binding.chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            int selectedColor = getResources().getColor(R.color.primary, null);
-            int defaultColor = getResources().getColor(R.color.white, null);
-
-            for (int i = 0; i < group.getChildCount(); i++) {
-                Chip c = (Chip) group.getChildAt(i);
-                c.setChipBackgroundColor(ColorStateList.valueOf(defaultColor));
+            if (checkedIds.isEmpty()) {
+                // Keep the last selection if the user deselects by tapping again.
+                group.check(checkedId);
+                return;
             }
 
-            if (!checkedIds.isEmpty()) {
-                checkedId = checkedIds.get(0);
-                Chip chip = group.findViewById(checkedId);
-                chip.setChipBackgroundColor(ColorStateList.valueOf(selectedColor));
+            int newCheckedId = checkedIds.get(0);
+            if (newCheckedId == checkedId) {
+                return; // Do nothing if the selection hasn't changed.
+            }
+            checkedId = newCheckedId;
 
-                if (checkedId == R.id.category_chip) {
-                    binding.rvCategories.setAdapter(categoryAdapter);
-                    binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                    presenter.getCategories();
-                } else if (checkedId == R.id.ingredient_chip) {
-                    binding.rvCategories.setAdapter(ingredientAdapter);
-                    binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                    presenter.getIngredients();
-                } else if (checkedId == R.id.country_chip) {
-                    binding.rvCategories.setAdapter(foodAdapter);
-                    binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                    presenter.getAreas();
-                }
+            updateChipAppearance(checkedId);
+
+            if (checkedId == R.id.category_chip) {
+                binding.rvCategories.setAdapter(categoryAdapter);
+                presenter.getCategories();
+            } else if (checkedId == R.id.ingredient_chip) {
+                binding.rvCategories.setAdapter(ingredientAdapter);
+                presenter.getIngredients();
+            } else if (checkedId == R.id.country_chip) {
+                binding.rvCategories.setAdapter(foodAdapter);
+                presenter.getAreas();
             }
         });
+    }
+
+    // Helper method to visually update the chips based on the selection
+    private void updateChipAppearance(int currentCheckedId) {
+        int selectedColor = getResources().getColor(R.color.primary, null);
+        int defaultColor = getResources().getColor(R.color.white, null);
+
+        for (int i = 0; i < binding.chipGroup.getChildCount(); i++) {
+            Chip chip = (Chip) binding.chipGroup.getChildAt(i);
+            if (chip.getId() == currentCheckedId) {
+                chip.setChipBackgroundColor(ColorStateList.valueOf(selectedColor));
+            } else {
+                chip.setChipBackgroundColor(ColorStateList.valueOf(defaultColor));
+            }
+        }
     }
 
     private void setupSearch() {
@@ -162,12 +170,10 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(connected -> {
                             isConnected = connected;
-
                             if (!connected) {
-                                showNoInternet("No Internet Connection");
+                                showNoInternet(getString(R.string.no_internet_connection));
                             } else {
                                 hideNetworkErrorOverlay();
-                                resetByChip();
                             }
                         }, throwable -> {
                             Log.e("SearchFragment", "Network error", throwable);
@@ -177,22 +183,11 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
 
     private void resetByChip() {
         if (checkedId == R.id.category_chip) {
-            binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            binding.rvCategories.setAdapter(categoryAdapter);
             presenter.getCategories();
         } else if (checkedId == R.id.ingredient_chip) {
-            binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
-            binding.rvCategories.setAdapter(ingredientAdapter);
             presenter.getIngredients();
         } else if (checkedId == R.id.country_chip) {
-            binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
-            binding.rvCategories.setAdapter(foodAdapter);
             presenter.getAreas();
-        } else {
-            binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            binding.rvCategories.setAdapter(categoryAdapter);
-            presenter.getCategories();
-
         }
     }
 
@@ -200,15 +195,16 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     public void showData(List data) {
         if (data == null || data.isEmpty()) return;
 
-        if (data.get(0) instanceof Category) {
+        Object firstItem = data.get(0);
+        if (firstItem instanceof Category) {
             allCategories.clear();
             for (Object o : data) allCategories.add((Category) o);
             filterData();
-        } else if (data.get(0) instanceof Ingredient) {
+        } else if (firstItem instanceof Ingredient) {
             allIngredients.clear();
             for (Object o : data) allIngredients.add((Ingredient) o);
             filterData();
-        } else if (data.get(0) instanceof Area) {
+        } else if (firstItem instanceof Area) {
             allAreas.clear();
             for (Object o : data) allAreas.add((Area) o);
             filterData();
@@ -244,7 +240,6 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         }
     }
 
-
     @Override
     public void showError(String message) {
         Log.d("SearchFragment", "Error: " + message);
@@ -277,10 +272,9 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         if (checkedId == -1) return;
 
         if (!isConnected) {
-            showNoInternet("Check your internet connection");
+            showNoInternet(getString(R.string.no_internet_message));
             return;
         }
-        binding.rvCategories.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvCategories.setAdapter(filteredMealsAdapter);
 
         if (checkedId == R.id.category_chip)
@@ -294,7 +288,7 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     @Override
     public void onMealCardClick(String mealId) {
         if (!isConnected) {
-            showNoInternet("Check your internet connection");
+            showNoInternet(getString(R.string.no_internet_message));
             return;
         }
         presenter.getMealById(mealId);
