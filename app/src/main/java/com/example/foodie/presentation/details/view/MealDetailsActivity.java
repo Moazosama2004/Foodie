@@ -2,7 +2,6 @@ package com.example.foodie.presentation.details.view;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +28,7 @@ import java.util.Locale;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class MealDetailsActivity extends AppCompatActivity implements DetailsView  , CustomAlertDialog.OnConfirmationListener {
+public class MealDetailsActivity extends AppCompatActivity implements DetailsView, CustomAlertDialog.OnConfirmationListener {
 
     private ActivityMealDetailsBinding binding;
     private DetailsPresenterImpl presenter;
@@ -99,30 +98,30 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     @SuppressLint("CheckResult")
     private void setupClicks() {
         binding.addToFav.setOnClickListener(v -> {
-        SharedPrefsManager.getInstance(this)
-                .isLoggedIn()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                (isLoggedIn -> {
-                                    if (isLoggedIn) {
-                                        if (meal != null) {
-                                            presenter.saveMealLocal(meal);
-                                            presenter.saveMealRemote(meal)
-                                                    .subscribe(
-                                                            () -> Toast.makeText(this, "Added to favorites remotely!", Toast.LENGTH_SHORT).show(),
-                                                            throwable -> Toast.makeText(this, "Failed to save remotely: " + throwable.getMessage(), Toast.LENGTH_SHORT).show()
-                                                    );
-                                            Toast.makeText(this, "Added to favorites locally!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
-                                        }
+            SharedPrefsManager.getInstance(this)
+                    .isLoggedIn()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            (isLoggedIn -> {
+                                if (isLoggedIn) {
+                                    if (meal != null) {
+                                        presenter.saveMealLocal(meal);
+                                        presenter.saveMealRemote(meal)
+                                                .subscribe(
+                                                        () -> Toast.makeText(this, "Added to favorites remotely!", Toast.LENGTH_SHORT).show(),
+                                                        throwable -> Toast.makeText(this, "Failed to save remotely: " + throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                                                );
+                                        Toast.makeText(this, "Added to favorites locally!", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        CustomAlertDialog.showGuestModeAlert(this , this);
+                                        Toast.makeText(this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
                                     }
-                                }),
-                                throwable -> Toast.makeText(this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show()
-                                );
+                                } else {
+                                    CustomAlertDialog.showGuestModeAlert(this, this);
+                                }
+                            }),
+                            throwable -> Toast.makeText(this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                    );
         });
 
 

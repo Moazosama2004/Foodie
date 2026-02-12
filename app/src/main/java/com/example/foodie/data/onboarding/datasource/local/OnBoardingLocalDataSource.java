@@ -20,9 +20,9 @@ public class OnBoardingLocalDataSource {
         return sharedPreferences.isLoggedIn();
     }
 
-    public Completable setUserLoggedIn(boolean isLoggedIn) {
-        return sharedPreferences.setLoggedIn(isLoggedIn);
-    }
+//    public Completable setUserLoggedIn(boolean isLoggedIn) {
+//        return sharedPreferences.setLoggedIn(isLoggedIn);
+//    }
 
 
     public Single<Boolean> isOnboardingSeen() {

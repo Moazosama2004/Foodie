@@ -115,8 +115,4 @@ public class AuthPresenterImpl implements AuthPresenter {
         disposables.clear();
     }
 
-//    @Override
-//    public void setUserLoggedIn() {
-//
-//    }
 }

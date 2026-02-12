@@ -51,9 +51,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showUser(String username, String email) {
-        Log.d("UserNAME" , username +" " + email);
-            binding.profileUsername.setText(username);
-            binding.profileEmail.setText(email);
+        Log.d("UserNAME", username + " " + email);
+        binding.profileUsername.setText(username);
+        binding.profileEmail.setText(email);
     }
 
     @Override

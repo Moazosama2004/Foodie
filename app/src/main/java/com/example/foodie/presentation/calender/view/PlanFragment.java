@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.databinding.FragmentPlanBinding;
@@ -18,6 +20,7 @@ import com.example.foodie.presentation.calender.presenter.CalenderPresenterImpl;
 import com.example.foodie.presentation.details.view.MealDetailsActivity;
 import com.example.foodie.utils.CustomAlertDialog;
 import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 
 public class PlanFragment extends Fragment
@@ -72,10 +75,12 @@ public class PlanFragment extends Fragment
     }
 
     @Override
-    public void showProgress() { }
+    public void showProgress() {
+    }
 
     @Override
-    public void hideProgress() { }
+    public void hideProgress() {
+    }
 
     @Override
     public void showError(String message) {

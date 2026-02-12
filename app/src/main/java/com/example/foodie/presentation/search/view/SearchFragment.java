@@ -38,18 +38,16 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 public class SearchFragment extends Fragment implements SearchView, onCardClickListener, OnMealCardListener {
 
-    private FragmentSearchBinding binding;
-    private SearchPresenter presenter;
-
-    private CategoriesMealsAdapter categoryAdapter;
-    private FoodAdapter foodAdapter;
-    private IngredientAdapter ingredientAdapter;
-    private FilteredMealsAdapter filteredMealsAdapter;
-
     private final List<Category> allCategories = new ArrayList<>();
     private final List<Ingredient> allIngredients = new ArrayList<>();
     private final List<Area> allAreas = new ArrayList<>();
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private FragmentSearchBinding binding;
+    private SearchPresenter presenter;
+    private CategoriesMealsAdapter categoryAdapter;
+    private FoodAdapter foodAdapter;
+    private IngredientAdapter ingredientAdapter;
+    private FilteredMealsAdapter filteredMealsAdapter;
     private boolean isConnected = true;
 
     private int checkedId = -1;

@@ -86,7 +86,6 @@ public class LoginFragment extends Fragment implements AuthView {
 
     @Override
     public void navigateToHome() {
-//        authPresenter.setUserLoggedIn();
         goToHome();
     }
 
