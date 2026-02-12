@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.calender.model.CalendarMealsDao;
-import com.example.foodie.data.core.model.FavMealsDao;
+import com.example.foodie.data.fav.model.FavMealsDao;
 import com.example.foodie.data.home.model.response.Meal;
 
 @Database(

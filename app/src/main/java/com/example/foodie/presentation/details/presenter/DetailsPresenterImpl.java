@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.example.foodie.data.calender.CalenderMealsRepo;
 import com.example.foodie.data.calender.model.CalendarMeal;
-import com.example.foodie.data.core.FavMealsRepo;
+import com.example.foodie.data.fav.FavMealsRepo;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.view.DetailsView;
 

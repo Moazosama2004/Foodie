@@ -3,7 +3,7 @@ package com.example.foodie.data.auth.datasource.remote;
 import android.app.Activity;
 import android.util.Log;
 
-import com.example.foodie.data.core.model.User;
+import com.example.foodie.core.model.User;
 import com.example.foodie.utils.firebase.auth.FirebaseAuthImpl;
 import com.example.foodie.utils.firebase.storage.FirestoreUserStorage;
 import com.example.foodie.utils.services.AuthService;

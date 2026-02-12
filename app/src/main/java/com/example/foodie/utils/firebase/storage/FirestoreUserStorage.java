@@ -1,6 +1,6 @@
 package com.example.foodie.utils.firebase.storage;
 
-import com.example.foodie.data.core.model.User;
+import com.example.foodie.core.model.User;
 import com.example.foodie.utils.services.UserStorage;
 import com.google.firebase.firestore.FirebaseFirestore;
 

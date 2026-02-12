@@ -1,4 +1,4 @@
-package com.example.foodie.data.core.datasource.remote;
+package com.example.foodie.data.fav.datasource.remote;
 
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.utils.firebase.storage.FirestoreMealStorage;

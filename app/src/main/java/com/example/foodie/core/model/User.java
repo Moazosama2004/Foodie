@@ -1,4 +1,4 @@
-package com.example.foodie.data.core.model;
+package com.example.foodie.core.model;
 
 
 import com.example.foodie.data.home.model.response.Meal;

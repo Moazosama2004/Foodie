@@ -1,6 +1,6 @@
 package com.example.foodie.utils.services;
 
-import com.example.foodie.data.core.model.User;
+import com.example.foodie.core.model.User;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;

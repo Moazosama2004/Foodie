@@ -6,6 +6,7 @@ import com.example.foodie.data.home.model.response.Meal;
 import java.util.List;
 
 public interface CalenderView {
+
     void showProgress();
 
     void hideProgress();
@@ -17,4 +18,8 @@ public interface CalenderView {
     void showEmptyDay();
 
     void goToMealDetails(Meal meal);
+
+    void showDate(String date);
+
+    void showGuestAlert();
 }

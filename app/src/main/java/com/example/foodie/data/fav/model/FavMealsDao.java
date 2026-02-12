@@ -1,4 +1,4 @@
-package com.example.foodie.data.core.model;
+package com.example.foodie.data.fav.model;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

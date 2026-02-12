@@ -18,115 +18,62 @@ import com.example.foodie.presentation.details.view.MealDetailsActivity;
 import com.example.foodie.presentation.fav.presenter.FavPresenter;
 import com.example.foodie.presentation.fav.presenter.FavPresenterImpl;
 import com.example.foodie.utils.CustomAlertDialog;
-import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+public class FavFragment extends Fragment
+        implements FavView,
+        OnDeleteClickListener,
+        CustomAlertDialog.OnConfirmationListener {
 
-public class FavFragment extends Fragment implements FavView, OnDeleteClickListener, CustomAlertDialog.OnConfirmationListener {
-
-    private final CompositeDisposable disposables = new CompositeDisposable();
     private FavouriteMealsAdapter adapter;
     private FavPresenter presenter;
     private FragmentFavBinding binding;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new FavouriteMealsAdapter(this, this);
         presenter = new FavPresenterImpl(requireContext(), this);
+        adapter = new FavouriteMealsAdapter(this, this);
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+
         binding = FragmentFavBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View view,
+                              @Nullable Bundle savedInstanceState) {
 
-        binding.favRecyclerView.setAdapter(adapter);
         binding.favRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.favRecyclerView.setAdapter(adapter);
 
-        disposables.add(SharedPrefsManager.getInstance(requireContext()).isLoggedIn()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isLoggedIn -> {
-                    if (isLoggedIn) {
-                        loadFavorites();
-                    } else {
-                        showEmptyFav();
-                        CustomAlertDialog.showGuestModeAlert(requireContext(), this);
-                    }
-                }, this::showError)
-        );
-    }
-
-    private void loadFavorites() {
-        disposables.add(
-                presenter.getFavMeals()
-                        .subscribe(
-                                favMeals -> {
-                                    if (favMeals.isEmpty()) {
-                                        showEmptyFav();
-                                    } else {
-                                        adapter.setFavouriteMeals(favMeals);
-                                        binding.favRecyclerView.setVisibility(View.VISIBLE);
-                                        binding.emptyView.setVisibility(View.GONE);
-                                    }
-                                },
-                                this::showError
-                        )
-        );
-    }
-
-    @Override
-    public void onDeleteClick(Meal meal) {
-        disposables.add(
-                presenter.deleteFromFavRemote(meal)
-                        .andThen(presenter.deleteFromFavLocal(meal))
-                        .andThen(presenter.getFavMeals())
-                        .subscribe(
-                                favMeals -> {
-                                    if (favMeals.isEmpty()) {
-                                        showEmptyFav();
-                                    } else {
-                                        adapter.setFavouriteMeals(favMeals);
-                                    }
-                                },
-                                this::showError
-                        )
-        );
+        presenter.checkLoginAndLoad();
     }
 
     @Override
     public void onDestroyView() {
-        disposables.clear();
         super.onDestroyView();
+        presenter.clear();
         binding = null;
     }
 
     @Override
     public void showProgress() {
-        if (binding != null) {
-            binding.loadingOverlay.setVisibility(View.VISIBLE);
-            binding.favRecyclerView.setVisibility(View.GONE);
-        }
+        binding.loadingOverlay.setVisibility(View.VISIBLE);
+        binding.favRecyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgress() {
-        if (binding != null) {
-            binding.loadingOverlay.setVisibility(View.GONE);
-            binding.favRecyclerView.setVisibility(View.VISIBLE);
-        }
+        binding.loadingOverlay.setVisibility(View.GONE);
+        binding.favRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -137,10 +84,17 @@ public class FavFragment extends Fragment implements FavView, OnDeleteClickListe
     }
 
     @Override
-    public void showFavMeals(List<Meal> favMeals) {
-        // Handled in subscription
+    public void showFavMeals(List<Meal> meals) {
+        binding.emptyView.setVisibility(View.GONE);
+        binding.favRecyclerView.setVisibility(View.VISIBLE);
+        adapter.setFavouriteMeals(meals);
     }
 
+    @Override
+    public void showEmptyFav() {
+        binding.emptyView.setVisibility(View.VISIBLE);
+        binding.favRecyclerView.setVisibility(View.GONE);
+    }
 
     @Override
     public void goToDetails(Meal meal) {
@@ -150,33 +104,18 @@ public class FavFragment extends Fragment implements FavView, OnDeleteClickListe
     }
 
     @Override
-    public void onSuccess() {
+    public void showGuestAlert() {
+        CustomAlertDialog.showGuestModeAlert(requireContext(), this);
     }
 
     @Override
-    public void showEmptyFav() {
-        if (binding != null) {
-            binding.emptyView.setVisibility(View.VISIBLE);
-            binding.favRecyclerView.setVisibility(View.GONE);
-        }
+    public void onDeleteClick(Meal meal) {
+        presenter.deleteMeal(meal);
     }
 
-    @Override
-    public void showError(Throwable throwable) {
-        if (throwable != null) {
-            showError(throwable.getMessage());
-        }
-    }
-
-    @Override
-    public void onDeleteSuccess(String mealId) {
-    }
 
     @Override
     public void onConfirm() {
-        if (getActivity() != null) {
-            Intent intent = new Intent(getContext(), AuthActivity.class);
-            startActivity(intent);
-        }
+        startActivity(new Intent(getContext(), AuthActivity.class));
     }
 }

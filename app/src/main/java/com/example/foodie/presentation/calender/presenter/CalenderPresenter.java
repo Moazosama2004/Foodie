@@ -2,21 +2,17 @@ package com.example.foodie.presentation.calender.presenter;
 
 import com.example.foodie.data.calender.model.CalendarMeal;
 
-import java.util.List;
-
-import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Single;
-
 public interface CalenderPresenter {
 
-    Completable insertMeal(CalendarMeal meal);
+    void checkLoginAndLoad();
 
-    Single<List<CalendarMeal>> getMealsByDate(String date);
+    void loadTodayMeals();
 
-    Completable deleteMealsByDate(CalendarMeal meal);
+    void loadMealsByDate(String date);
 
-    Single<CalendarMeal> getMealsByMealId(String mealId);
+    void onMealSelected(String mealId);
 
-    Single<List<CalendarMeal>> syncMeals();
+    void deleteMeal(CalendarMeal meal, String date);
 
+    void clear();
 }

@@ -1,9 +1,9 @@
-package com.example.foodie.data.core;
+package com.example.foodie.data.fav;
 
 import android.content.Context;
 
-import com.example.foodie.data.core.datasource.local.FavMealsLocalDataSource;
-import com.example.foodie.data.core.datasource.remote.FavMealsRemoteDataSource;
+import com.example.foodie.data.fav.datasource.local.FavMealsLocalDataSource;
+import com.example.foodie.data.fav.datasource.remote.FavMealsRemoteDataSource;
 import com.example.foodie.data.home.model.response.Meal;
 
 import java.util.List;

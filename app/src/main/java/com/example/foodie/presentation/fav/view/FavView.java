@@ -5,23 +5,18 @@ import com.example.foodie.data.home.model.response.Meal;
 import java.util.List;
 
 public interface FavView {
+
     void showProgress();
 
     void hideProgress();
 
     void showError(String message);
 
-    void showFavMeals(List<Meal> favMeals);
-
-
-    void goToDetails(Meal meal);
-
-    void onSuccess();
+    void showFavMeals(List<Meal> meals);
 
     void showEmptyFav();
 
-    void showError(Throwable throwable);
+    void goToDetails(Meal meal);
 
-    void onDeleteSuccess(String mealId);
-
+    void showGuestAlert();
 }
