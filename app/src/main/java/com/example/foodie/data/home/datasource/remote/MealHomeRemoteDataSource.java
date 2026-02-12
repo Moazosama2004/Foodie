@@ -1,21 +1,13 @@
 package com.example.foodie.data.home.datasource.remote;
 
-import android.database.Observable;
-
 import com.example.foodie.data.home.api.MealHomeApi;
-import com.example.foodie.data.home.api.MealHomeNetworkResponse;
 import com.example.foodie.data.home.api.MealHomeService;
 import com.example.foodie.data.home.model.response.Meal;
-import com.example.foodie.data.home.model.response.MealsBaseResponse;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MealHomeRemoteDataSource {
     private final MealHomeService mealHomeService;
@@ -25,7 +17,7 @@ public class MealHomeRemoteDataSource {
     }
 
     public Single<Meal> getRandomMeal() {
-        return  mealHomeService.getRandomMeal()
+        return mealHomeService.getRandomMeal()
                 .map(response -> response.getMeals().get(0));
     }
 

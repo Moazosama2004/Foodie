@@ -1,9 +1,13 @@
 package com.example.foodie.utils.services;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public interface AuthService {
+
+    Single<FirebaseUser> getCurrentUser();
 
     Completable login(String email, String password);
 

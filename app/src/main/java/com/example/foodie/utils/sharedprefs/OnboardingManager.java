@@ -5,5 +5,6 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface OnboardingManager {
     Single<Boolean> isSeen();
+
     Completable setSeen(boolean seen);
 }

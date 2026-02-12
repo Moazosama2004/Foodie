@@ -10,6 +10,8 @@ import io.reactivex.rxjava3.core.Single;
 public interface PlannedMealStorage {
 
     Completable saveMeal(CalendarMeal meal);
+
     Completable deleteMeal(String mealId);
+
     Single<List<CalendarMeal>> getAllMeals();
 }

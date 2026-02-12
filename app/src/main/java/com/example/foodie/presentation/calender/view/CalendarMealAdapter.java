@@ -19,12 +19,12 @@ import java.util.List;
 
 public class CalendarMealAdapter extends RecyclerView.Adapter<CalendarMealAdapter.MealViewHolder> {
 
-    private List<CalendarMeal> meals = new ArrayList<>();
     private final OnMealClickListener onMealClickListener;
     private final OnDeleteClickListener onDeleteClickListener;
+    private List<CalendarMeal> meals = new ArrayList<>();
 
 
-    public CalendarMealAdapter(OnMealClickListener onMealClickListener , OnDeleteClickListener onDeleteClickListener) {
+    public CalendarMealAdapter(OnMealClickListener onMealClickListener, OnDeleteClickListener onDeleteClickListener) {
         this.onMealClickListener = onMealClickListener;
         this.onDeleteClickListener = onDeleteClickListener;
     }

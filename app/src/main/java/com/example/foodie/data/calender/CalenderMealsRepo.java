@@ -22,7 +22,6 @@ public class CalenderMealsRepo {
         this.remoteDataSource = new CalenderMealsRemoteDataSource();
     }
 
-    // ================= LOCAL =================
 
     public Completable insertMealLocal(CalendarMeal meal) {
         return localDataSource.insertMeal(meal);
@@ -40,7 +39,7 @@ public class CalenderMealsRepo {
         return localDataSource.getAllMeals();
     }
 
-    // ================= REMOTE FIRST =================
+    // Remote First
 
     public Completable saveMealRemote(CalendarMeal meal) {
         return remoteDataSource.saveMeal(meal)

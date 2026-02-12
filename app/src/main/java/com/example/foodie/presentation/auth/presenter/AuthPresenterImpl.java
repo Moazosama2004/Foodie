@@ -2,13 +2,9 @@ package com.example.foodie.presentation.auth.presenter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.example.foodie.data.auth.datasource.AuthRepo;
 import com.example.foodie.presentation.auth.view.AuthView;
-import com.example.foodie.utils.firebase.auth.FirebaseAuthImpl;
-
-import org.checkerframework.checker.units.qual.A;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -20,7 +16,7 @@ public class AuthPresenterImpl implements AuthPresenter {
     private final AuthView authView;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public AuthPresenterImpl(AuthView authView , Context context) {
+    public AuthPresenterImpl(AuthView authView, Context context) {
         this.authView = authView;
         this.authRepo = new AuthRepo(context);
     }
@@ -40,7 +36,6 @@ public class AuthPresenterImpl implements AuthPresenter {
                                 throwable -> {
                                     authView.hideLoading();
                                     authView.showError(throwable.getMessage());
-                                    Log.e("AuthPresenter", "Login error", throwable);
                                 }
                         )
         );
@@ -61,13 +56,10 @@ public class AuthPresenterImpl implements AuthPresenter {
                                 throwable -> {
                                     authView.hideLoading();
                                     authView.showError(throwable.getMessage());
-                                    Log.e("AuthPresenter", "Register error", throwable);
                                 }
                         )
         );
     }
-
-
 
 
     @Override
@@ -85,18 +77,19 @@ public class AuthPresenterImpl implements AuthPresenter {
                                 throwable -> {
                                     authView.hideLoading();
                                     authView.showError(throwable.getMessage());
-                                    Log.e("AuthPresenter", "Google Sign-In error", throwable);
                                 }
                         )
         );
     }
 
+
+    // Helpers Fot init Firebase With Google
     public Intent getGoogleSignInIntent() {
-        return ((FirebaseAuthImpl) authRepo.getAuthService()).getGoogleSignInIntent();
+        return authRepo.getAuthService().getGoogleSignInIntent();
     }
 
     public void handleGoogleSignInResult(Intent data) {
-        String idToken = ((FirebaseAuthImpl) authRepo.getAuthService())
+        String idToken = authRepo.getAuthService()
                 .extractIdTokenFromIntent(data);
 
         loginWithGoogle(idToken);
@@ -122,8 +115,8 @@ public class AuthPresenterImpl implements AuthPresenter {
         disposables.clear();
     }
 
-    @Override
-    public void setUserLoggedIn() {
-
-    }
+//    @Override
+//    public void setUserLoggedIn() {
+//
+//    }
 }

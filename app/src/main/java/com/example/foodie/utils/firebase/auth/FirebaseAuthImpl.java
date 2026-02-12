@@ -6,10 +6,16 @@ import android.util.Log;
 
 import com.example.foodie.R;
 import com.example.foodie.utils.services.AuthService;
-import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.*;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -38,7 +44,23 @@ public class FirebaseAuthImpl implements AuthService {
         googleSignInClient = GoogleSignIn.getClient(activity, gso);
     }
 
-    // ================= EMAIL / PASSWORD =================
+    // Email - Password Config
+    public Single<FirebaseUser> getCurrentUser() {
+        return Single.create(emitter -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) emitter.onSuccess(user);
+            else emitter.onError(new IllegalStateException("No FirebaseUser logged in"));
+        });
+    }
+
+    @Override
+    public Single<String> getCurrentUserId() {
+        return Single.fromCallable(() -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            return user != null ? user.getUid() : null;
+        }).subscribeOn(Schedulers.io());
+    }
+
 
     @Override
     public Completable login(String email, String password) {
@@ -70,11 +92,7 @@ public class FirebaseAuthImpl implements AuthService {
         ).subscribeOn(Schedulers.io());
     }
 
-    // ================= GOOGLE SIGN-IN =================
-
-//    public Intent getGoogleSignInIntent() {
-//        return googleSignInClient.getSignInIntent();
-//    }
+    // Google Config
 
     public Single<String> handleGoogleSignInResult(Intent data) {
         return Single.create(emitter -> {
@@ -125,23 +143,20 @@ public class FirebaseAuthImpl implements AuthService {
         }
     }
 
-    // ================= LOGOUT =================
 
+    // Logout from all States
     @Override
     public Completable logout() {
-        return Completable.fromAction(() -> {
+        return Completable.create(emitter -> {
             firebaseAuth.signOut();
-            googleSignInClient.signOut();
+
+            googleSignInClient.revokeAccess()
+                    .addOnCompleteListener(task -> {
+                        emitter.onComplete();
+                    })
+                    .addOnFailureListener(emitter::onError);
         }).subscribeOn(Schedulers.io());
     }
 
-    // ================= CURRENT USER =================
 
-    @Override
-    public Single<String> getCurrentUserId() {
-        return Single.fromCallable(() -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            return user != null ? user.getUid() : null;
-        }).subscribeOn(Schedulers.io());
-    }
 }

@@ -1,6 +1,5 @@
 package com.example.foodie.data.home;
 
-import com.example.foodie.data.home.api.MealHomeNetworkResponse;
 import com.example.foodie.data.home.datasource.remote.MealHomeRemoteDataSource;
 import com.example.foodie.data.home.model.response.Meal;
 

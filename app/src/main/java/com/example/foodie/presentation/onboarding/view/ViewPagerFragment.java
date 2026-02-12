@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.foodie.R;
 import com.example.foodie.databinding.FragmentViewPagerBinding;
 
 import java.util.ArrayList;

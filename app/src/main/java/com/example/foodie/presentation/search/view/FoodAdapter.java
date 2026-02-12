@@ -19,8 +19,8 @@ import java.util.List;
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
 
 
-    private List<Area> foodList = new ArrayList<>();
     private final onCardClickListener onCardClickListener;
+    private List<Area> foodList = new ArrayList<>();
 
 
     public FoodAdapter(onCardClickListener onCardClickListener) {

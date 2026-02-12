@@ -11,12 +11,12 @@ public class AuthLocalDataSource {
         this.sharedPrefsService = SharedPrefsManager.getInstance(context);
     }
 
-    public void setUserLoggedIn() {
-        sharedPrefsService.setLoggedIn(true);
-    }
-
-    public void saveUser(String userId, String username, String email) {
-        sharedPrefsService.saveUser(userId, username, email);
-    }
+//    public void setUserLoggedIn() {
+//        sharedPrefsService.setLoggedIn(true);
+//    }
+//
+//    public void saveUser(String userId, String username, String email) {
+//        sharedPrefsService.saveUser(userId, username, email);
+//    }
 
 }

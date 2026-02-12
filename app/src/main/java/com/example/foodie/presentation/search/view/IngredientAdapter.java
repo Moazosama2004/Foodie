@@ -20,8 +20,8 @@ import java.util.List;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.FoodViewHolder> {
 
 
-    private List<Ingredient> ingredientList = new ArrayList<>();
     private final onCardClickListener onCardClickListener;
+    private List<Ingredient> ingredientList = new ArrayList<>();
 
 
     public IngredientAdapter(onCardClickListener onCardClickListener) {

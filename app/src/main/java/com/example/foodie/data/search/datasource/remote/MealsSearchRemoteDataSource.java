@@ -6,9 +6,7 @@ import com.example.foodie.data.search.api.MealSearchService;
 import com.example.foodie.data.search.model.Area;
 import com.example.foodie.data.search.model.Category;
 import com.example.foodie.data.search.model.FilteredMeal;
-import com.example.foodie.data.search.model.FilteredResponse;
 import com.example.foodie.data.search.model.Ingredient;
-import com.example.foodie.data.search.model.MealByIdResponse;
 
 import java.util.List;
 

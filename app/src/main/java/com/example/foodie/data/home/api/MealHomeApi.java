@@ -1,6 +1,6 @@
 package com.example.foodie.data.home.api;
 
-import com.example.foodie.network.RetrofitClient;
+import com.example.foodie.config.network.RetrofitClient;
 
 public class MealHomeApi {
     private static MealHomeService mealHomeService;

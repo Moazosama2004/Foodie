@@ -1,4 +1,4 @@
-package com.example.foodie.db;
+package com.example.foodie.config.db;
 
 import android.content.Context;
 

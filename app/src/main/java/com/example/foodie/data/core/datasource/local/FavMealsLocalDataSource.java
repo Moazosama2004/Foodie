@@ -2,9 +2,9 @@ package com.example.foodie.data.core.datasource.local;
 
 import android.content.Context;
 
+import com.example.foodie.config.db.AppDatabase;
 import com.example.foodie.data.core.model.FavMealsDao;
 import com.example.foodie.data.home.model.response.Meal;
-import com.example.foodie.db.AppDatabase;
 
 import java.util.List;
 

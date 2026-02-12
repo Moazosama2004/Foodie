@@ -2,22 +2,19 @@ package com.example.foodie.presentation.profile.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.foodie.R;
 import com.example.foodie.databinding.FragmentProfileBinding;
 import com.example.foodie.presentation.auth.view.AuthActivity;
 import com.example.foodie.presentation.profile.presenter.ProfilePresenter;
 import com.example.foodie.presentation.profile.presenter.ProfilePresenterImpl;
-import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 
 public class ProfileFragment extends Fragment implements ProfileView {
@@ -27,13 +24,13 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new ProfilePresenterImpl(getActivity(),requireContext(), this);
+        presenter = new ProfilePresenterImpl(getActivity(), requireContext(), this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding =  FragmentProfileBinding.inflate(inflater, container, false);
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -54,8 +51,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showUser(String username, String email) {
-        binding.profileUsername.setText(username);
-        binding.profileEmail.setText(email);
+        Log.d("UserNAME" , username +" " + email);
+            binding.profileUsername.setText(username);
+            binding.profileEmail.setText(email);
     }
 
     @Override

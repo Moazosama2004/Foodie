@@ -2,15 +2,9 @@ package com.example.foodie.presentation.auth.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,11 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.foodie.R;
-import com.example.foodie.data.auth.datasource.AuthRepo;
 import com.example.foodie.databinding.FragmentLoginBinding;
-import com.example.foodie.presentation.auth.presenter.AuthPresenter;
 import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
 import com.example.foodie.presentation.home.view.HomeActivity;
+import com.example.foodie.utils.CustomAlertDialog;
 
 public class LoginFragment extends Fragment implements AuthView {
 
@@ -37,18 +30,9 @@ public class LoginFragment extends Fragment implements AuthView {
         super.onCreate(savedInstanceState);
         authPresenter = new AuthPresenterImpl(this, requireActivity());
 
-        googleSignInLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    Intent data = result.getData();
-                    if (data != null) {
-                        handleGoogleSignInResult(data);
-                    } else {
-                        showError("Google Sign-In failed: no data returned");
-                    }
-                }
-        );
+        googleSignInLauncher = launchGoogleSignIn();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,14 +45,15 @@ public class LoginFragment extends Fragment implements AuthView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.btnLogin.setOnClickListener(v -> {
-            String email = binding.loginEmailTxt.getText().toString().trim();
-            String password = binding.loginPasswordTxt.getText().toString().trim();
-            if (!email.isEmpty() && !password.isEmpty()) {
-                authPresenter.login(email, password);
-            } else {
-                showError("Email or Password cannot be empty");
+        binding.txtGuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHome();
             }
+        });
+
+        binding.btnLogin.setOnClickListener(v -> {
+            loginWithValidation();
         });
 
         binding.googleBtn.setOnClickListener(v -> startGoogleSignIn());
@@ -79,14 +64,6 @@ public class LoginFragment extends Fragment implements AuthView {
 
     }
 
-    private void startGoogleSignIn() {
-        Intent signInIntent = authPresenter.getGoogleSignInIntent();
-        googleSignInLauncher.launch(signInIntent);
-    }
-
-    private void handleGoogleSignInResult(Intent data) {
-        authPresenter.handleGoogleSignInResult(data);
-    }
 
     @Override
     public void showLoading() {
@@ -102,21 +79,60 @@ public class LoginFragment extends Fragment implements AuthView {
 
     @Override
     public void showError(String message) {
-        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Login Failed")
-                .setMessage(message)
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .setCancelable(false)
-                .show();
+        if (getActivity() != null) {
+            CustomAlertDialog.showError(getActivity(), message);
+        }
     }
 
     @Override
     public void navigateToHome() {
-        authPresenter.setUserLoggedIn();
+//        authPresenter.setUserLoggedIn();
+        goToHome();
+    }
+
+
+    // Helpers
+
+    private void loginWithValidation() {
+        String email = binding.loginEmailTxt.getText().toString().trim();
+        String password = binding.loginPasswordTxt.getText().toString().trim();
+        if (!email.isEmpty() && !password.isEmpty()) {
+            authPresenter.login(email, password);
+        } else {
+            showError("Email or Password cannot be empty");
+        }
+    }
+
+    @NonNull
+    private ActivityResultLauncher<Intent> launchGoogleSignIn() {
+        return registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        handleGoogleSignInResult(data);
+                    } else {
+                        showError("Google Sign-In failed: no data returned");
+                    }
+                }
+        );
+    }
+
+    private void goToHome() {
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
         requireActivity().finish();
     }
+
+    private void startGoogleSignIn() {
+        Intent signInIntent = authPresenter.getGoogleSignInIntent();
+        googleSignInLauncher.launch(signInIntent);
+    }
+
+    private void handleGoogleSignInResult(Intent data) {
+        authPresenter.handleGoogleSignInResult(data);
+    }
+
 
     @Override
     public void onDestroyView() {

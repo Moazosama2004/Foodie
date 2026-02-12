@@ -26,31 +26,23 @@ import com.example.foodie.databinding.FragmentHomeBinding;
 import com.example.foodie.presentation.details.view.MealDetailsActivity;
 import com.example.foodie.presentation.home.presenter.HomePresenter;
 import com.example.foodie.presentation.home.presenter.HomePresenterImpl;
-import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-
 public class HomeFragment extends Fragment implements HomeView {
 
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private FragmentHomeBinding binding;
     private HomePresenter homePresenter;
     private PopularMealsAdapter adapter;
-
     private Meal meal;
-
     private boolean randomMealLoaded = false;
     private boolean popularMealsLoaded = false;
-
-    private final Handler handler = new Handler(Looper.getMainLooper());
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        homePresenter = new HomePresenterImpl(requireContext(),this);
+        homePresenter = new HomePresenterImpl(requireContext(), this);
     }
 
     @Override
@@ -210,7 +202,6 @@ public class HomeFragment extends Fragment implements HomeView {
             }
         }, 5000);
     }
-
 
 
     @Override

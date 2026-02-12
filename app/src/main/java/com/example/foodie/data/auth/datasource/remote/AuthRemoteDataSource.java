@@ -27,8 +27,7 @@ public class AuthRemoteDataSource {
         this.sharedPrefs = SharedPrefsManager.getInstance(activity);
     }
 
-    // ================= LOGIN =================
-
+    // Login
     public Completable login(String email, String password) {
         return authService.login(email, password)
                 .andThen(authService.getCurrentUserId())
@@ -53,7 +52,7 @@ public class AuthRemoteDataSource {
                 });
     }
 
-    // ================= REGISTER =================
+    // Register
 
     public Completable register(String username, String email, String password) {
         return authService.register(email, password)
@@ -82,29 +81,51 @@ public class AuthRemoteDataSource {
                 });
     }
 
-    // ================= GOOGLE SIGN-IN =================
-
+    // Google Sign-in
     public Completable signInWithGoogle(String idToken) {
         return authService.signInWithGoogle(idToken)
-                .andThen(authService.getCurrentUserId())
-                .flatMap(userId -> {
-                    if (userId == null) {
-                        return Single.error(
-                                new IllegalStateException("User ID is null after Google login")
+                .andThen(authService.getCurrentUser())
+                .flatMapCompletable(firebaseUser -> {
+                    if (firebaseUser == null) {
+                        return Completable.error(
+                                new IllegalStateException("FirebaseUser is null after Google login")
                         );
                     }
-                    return userStorage.getUserById(userId);
-                })
-                .flatMapCompletable(user ->
-                        sharedPrefs.saveUser(
-                                user.getUserId(),
-                                user.getUsername(),
-                                user.getEmail()
-                        ).andThen(sharedPrefs.setLoggedIn(true))
-                );
+
+                    String userId = firebaseUser.getUid();
+                    String name = firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName() : "Google User";
+                    String email = firebaseUser.getEmail() != null ? firebaseUser.getEmail() : "";
+
+                    return userStorage.getUserById(userId)
+                            .flatMapCompletable(user -> {
+                                return sharedPrefs.saveUser(
+                                                user.getUserId(),
+                                                user.getUsername(),
+                                                user.getEmail()
+                                        )
+                                        .andThen(sharedPrefs.setLoggedIn(true));
+                            })
+                            .onErrorResumeNext(throwable -> {
+                                User newUser = new User(
+                                        userId,
+                                        name,
+                                        email,
+                                        new ArrayList<>()
+                                );
+
+                                return userStorage.saveUser(newUser)
+                                        .andThen(sharedPrefs.saveUser(
+                                                newUser.getUserId(),
+                                                newUser.getUsername(),
+                                                newUser.getEmail()
+                                        ))
+                                        .andThen(sharedPrefs.setLoggedIn(true));
+                            });
+                });
     }
 
-    // ================= LOGOUT =================
+
+    // Logout
 
     public Completable logout() {
         return authService.logout()

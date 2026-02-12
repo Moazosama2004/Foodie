@@ -11,4 +11,6 @@ public interface DetailsView {
 
     void showError(Throwable throwable);
 
+    void showGuestDialoug();
+
 }
