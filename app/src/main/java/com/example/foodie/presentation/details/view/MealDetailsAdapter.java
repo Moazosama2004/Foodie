@@ -28,7 +28,7 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
     @NonNull
     @Override
     public MealDetailsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MealDetailsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food, parent, false));
+        return new MealDetailsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ingredient_details, parent, false));
     }
 
     @Override
@@ -51,8 +51,8 @@ public class MealDetailsAdapter extends RecyclerView.Adapter<MealDetailsAdapter.
 
         public MealDetailsViewHolder(@NonNull View itemView) {
             super(itemView);
-            foodImage = itemView.findViewById(R.id.food_image);
-            foodName = itemView.findViewById(R.id.food_name);
+            foodImage = itemView.findViewById(R.id.food_image_details);
+            foodName = itemView.findViewById(R.id.food_name_details);
         }
     }
 }
