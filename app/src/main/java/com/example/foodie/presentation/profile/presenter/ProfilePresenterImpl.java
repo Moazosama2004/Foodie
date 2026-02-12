@@ -8,6 +8,7 @@ import com.example.foodie.presentation.profile.view.ProfileView;
 import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ProfilePresenterImpl implements ProfilePresenter {
@@ -25,11 +26,15 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void loadUser() {
         disposables.add(
-                prefs.getUsername()
-                        .zipWith(
-                                prefs.getEmail(),
-                                (username, email) -> new String[]{username, email}
-                        )
+                prefs.isLoggedIn()
+                        .flatMap(isLoggedIn -> {
+                            if (isLoggedIn) {
+                                return prefs.getUsername()
+                                        .zipWith(prefs.getEmail(), (username, email) -> new String[]{username, email});
+                            } else {
+                                return Single.just(new String[]{"Guest", "no Email"});
+                            }
+                        })
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 data -> view.showUser(data[0], data[1]),

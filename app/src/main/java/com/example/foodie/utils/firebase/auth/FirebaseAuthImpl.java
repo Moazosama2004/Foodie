@@ -49,7 +49,7 @@ public class FirebaseAuthImpl implements AuthService {
         return Single.create(emitter -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) emitter.onSuccess(user);
-            else emitter.onError(new IllegalStateException("No FirebaseUser logged in"));
+            else emitter.onError(new IllegalStateException(activity.getString(R.string.no_firebase_user_logged_in)));
         });
     }
 
@@ -67,11 +67,11 @@ public class FirebaseAuthImpl implements AuthService {
         return Completable.create(emitter ->
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                         .addOnSuccessListener(authResult -> {
-                            Log.d(TAG, "Login success");
+                            Log.d(TAG, activity.getString(R.string.login_success));
                             emitter.onComplete();
                         })
                         .addOnFailureListener(e -> {
-                            Log.e(TAG, "Login failed", e);
+                            Log.e(TAG, activity.getString(R.string.login_failed), e);
                             emitter.onError(e);
                         })
         ).subscribeOn(Schedulers.io());
@@ -82,11 +82,11 @@ public class FirebaseAuthImpl implements AuthService {
         return Completable.create(emitter ->
                 firebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnSuccessListener(authResult -> {
-                            Log.d(TAG, "Register success");
+                            Log.d(TAG, activity.getString(R.string.register_success));
                             emitter.onComplete();
                         })
                         .addOnFailureListener(e -> {
-                            Log.e(TAG, "Register failed", e);
+                            Log.e(TAG, activity.getString(R.string.register_failed), e);
                             emitter.onError(e);
                         })
         ).subscribeOn(Schedulers.io());
@@ -117,11 +117,11 @@ public class FirebaseAuthImpl implements AuthService {
 
             firebaseAuth.signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
-                        Log.d(TAG, "Google login success");
+                        Log.d(TAG, activity.getString(R.string.google_login_success));
                         emitter.onComplete();
                     })
                     .addOnFailureListener(e -> {
-                        Log.e(TAG, "Google login failed", e);
+                        Log.e(TAG, activity.getString(R.string.google_login_failed), e);
                         emitter.onError(e);
                     });
         }).subscribeOn(Schedulers.io());
@@ -138,7 +138,7 @@ public class FirebaseAuthImpl implements AuthService {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             return account.getIdToken();
         } catch (ApiException e) {
-            Log.e(TAG, "Google Sign-In failed", e);
+            Log.e(TAG, activity.getString(R.string.google_sign_in_failed), e);
             return null;
         }
     }

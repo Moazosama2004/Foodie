@@ -50,11 +50,22 @@
                 android:id="@+id/add_to_calender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/meal_details_icon_bg"
                 android:padding="8dp"
                 android:src="@drawable/bottom_nav_bar_calendar_icon"
+                app:layout_constraintStart_toStartOf="@+id/back_arrow"
+                app:layout_constraintTop_toBottomOf="@+id/back_arrow" />
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/back_arrow_bg"
+                android:padding="8dp"
+                android:src="@drawable/back_arrow_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,7 +91,7 @@
                         android:id="@+id/tv_meal_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sticky Toffee Pudding"
+                        android:text="@string/meal_name_details_placeholder"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
@@ -97,14 +108,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Dessert" />
+                            android:text="@string/meal_type_placeholder" />
 
                         <TextView
                             android:id="@+id/tv_meal_country"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Egypt" />
+                            android:text="@string/meal_country_placeholder" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -115,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="Ingredients:"
+                android:text="@string/ingredients"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#D35400"
@@ -139,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="Instructions:"
+                android:text="@string/instructions"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#D35400"

@@ -2,9 +2,12 @@ package com.example.foodie.presentation.auth.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -25,6 +28,7 @@ public class LoginFragment extends Fragment implements AuthView {
     private FragmentLoginBinding binding;
     private ActivityResultLauncher<Intent> googleSignInLauncher;
 
+    private EditText passwordEditText;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +65,35 @@ public class LoginFragment extends Fragment implements AuthView {
         binding.txtRegister.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_signupFragment)
         );
+        passwordEditText = binding.loginPasswordTxt;
+        passwordEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return switchPasswordVisability(event);
+            }
+        });
 
+    }
+
+    private boolean switchPasswordVisability(MotionEvent event) {
+        final int DRAWABLE_END = 2; // Right drawable
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getRawX() >= (passwordEditText.getRight() - passwordEditText.getCompoundDrawables()[DRAWABLE_END].getBounds().width())) {
+
+                if (passwordEditText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+                    // Show password
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    passwordEditText.setSelection(passwordEditText.getText().length());
+                } else {
+                    // Hide password
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    passwordEditText.setSelection(passwordEditText.getText().length());
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
 

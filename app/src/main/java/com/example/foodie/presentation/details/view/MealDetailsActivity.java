@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -59,6 +60,8 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
 
         setupMealViews();
         setupClicks();
+
+        binding.backArrow.setOnClickListener(v -> finish());
     }
 
     private void setupMealViews() {

@@ -15,7 +15,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/open_sans_bold"
-        android:text="Your Favourites :"
+        android:text="@string/your_favourites"
         android:textSize="24sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +77,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nothing saved yet"
+                android:text="@string/nothing_saved_yet"
                 android:textSize="22sp"
                 android:textAlignment="center"
                 android:fontFamily="@font/open_sans_semibold"
@@ -89,7 +89,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your favorite meals will live here once you start exploring."
+                android:text="@string/favorite_meals_placeholder"
                 android:textSize="16sp"
                 android:textAlignment="center"
                 android:fontFamily="@font/open_sans"
