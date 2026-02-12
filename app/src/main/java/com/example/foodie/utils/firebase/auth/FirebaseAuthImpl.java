@@ -147,10 +147,16 @@ public class FirebaseAuthImpl implements AuthService {
     // Logout from all States
     @Override
     public Completable logout() {
-        return Completable.fromAction(() -> {
+        return Completable.create(emitter -> {
             firebaseAuth.signOut();
-            googleSignInClient.signOut();
+
+            googleSignInClient.revokeAccess()
+                    .addOnCompleteListener(task -> {
+                        emitter.onComplete();
+                    })
+                    .addOnFailureListener(emitter::onError);
         }).subscribeOn(Schedulers.io());
     }
+
 
 }

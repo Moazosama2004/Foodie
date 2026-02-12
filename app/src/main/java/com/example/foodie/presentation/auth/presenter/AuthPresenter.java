@@ -10,5 +10,5 @@ public interface AuthPresenter {
 
     void clear();
 
-    void setUserLoggedIn();
+//    void setUserLoggedIn();
 }

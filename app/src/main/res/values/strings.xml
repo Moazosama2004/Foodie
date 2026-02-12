@@ -2,4 +2,16 @@
     <string name="app_name">Foodie</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="error">Error</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="no_recipes_found">No Recipes Found</string>
+    <!-- Guest Mode Alerts -->
+    <string name="guest_mode_title">Login Required</string>
+    <string name="guest_mode_message">You need to log in to access this feature.</string>
+    <string name="go_to_login">Login</string>
+    <string name="no_internet_message">Please check your internet connection and try again.</string>
 </resources>

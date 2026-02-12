@@ -2,7 +2,6 @@ package com.example.foodie.presentation.auth.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import com.example.foodie.databinding.FragmentSignupBinding;
 import com.example.foodie.presentation.auth.presenter.AuthPresenter;
 import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
 import com.example.foodie.presentation.home.view.HomeActivity;
+import com.example.foodie.utils.CustomAlertDialog;
 
 public class SignupFragment extends Fragment implements AuthView {
     private AuthPresenter authPresenter;
@@ -39,6 +39,14 @@ public class SignupFragment extends Fragment implements AuthView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.txtGuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHome();
+            }
+        });
+
+
         binding.signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +56,7 @@ public class SignupFragment extends Fragment implements AuthView {
 
 
     }
+
 
     @Override
     public void showLoading() {
@@ -64,25 +73,21 @@ public class SignupFragment extends Fragment implements AuthView {
 
     @Override
     public void showError(String message) {
-        showErrorDialog(message);
+        hideLoading();
+        if (getActivity() != null) {
+            CustomAlertDialog.showError(getActivity(), message);
+        }
     }
 
     @Override
     public void navigateToHome() {
+        goToHome();
+    }
+
+    // Helpers
+    private void goToHome() {
         Intent intent = new Intent(getActivity(), HomeActivity.class);
         startActivity(intent);
         requireActivity().finish();
-        Log.d("from SignupFragment", "navigateToHome:");
-    }
-
-    private void showErrorDialog(String message) {
-        hideLoading();
-
-        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Registration Failed")
-                .setMessage(message)
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .setCancelable(false)
-                .show();
     }
 }

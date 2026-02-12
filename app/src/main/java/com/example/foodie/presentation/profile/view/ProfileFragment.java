@@ -2,6 +2,7 @@ package com.example.foodie.presentation.profile.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +51,9 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
     @Override
     public void showUser(String username, String email) {
-        binding.profileUsername.setText(username);
-        binding.profileEmail.setText(email);
+        Log.d("UserNAME" , username +" " + email);
+            binding.profileUsername.setText(username);
+            binding.profileEmail.setText(email);
     }
 
     @Override

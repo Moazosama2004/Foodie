@@ -1,6 +1,9 @@
 package com.example.foodie.presentation.details.view;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,14 +16,20 @@ import com.bumptech.glide.Glide;
 import com.example.foodie.R;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.databinding.ActivityMealDetailsBinding;
+import com.example.foodie.presentation.auth.view.AuthActivity;
 import com.example.foodie.presentation.details.presenter.DetailsPresenterImpl;
+import com.example.foodie.utils.CustomAlertDialog;
+import com.example.foodie.utils.sharedprefs.SharedPrefsManager;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MealDetailsActivity extends AppCompatActivity implements DetailsView {
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class MealDetailsActivity extends AppCompatActivity implements DetailsView  , CustomAlertDialog.OnConfirmationListener {
 
     private ActivityMealDetailsBinding binding;
     private DetailsPresenterImpl presenter;
@@ -87,50 +96,76 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
         }
     }
 
+    @SuppressLint("CheckResult")
     private void setupClicks() {
-
         binding.addToFav.setOnClickListener(v -> {
-            if (meal != null) {
-                presenter.saveMealLocal(meal);
-                presenter.saveMealRemote(meal)
+        SharedPrefsManager.getInstance(this)
+                .isLoggedIn()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> Toast.makeText(this, "Added to favorites remotely!", Toast.LENGTH_SHORT).show(),
-                                throwable -> Toast.makeText(this, "Failed to save remotely: " + throwable.getMessage(), Toast.LENGTH_SHORT).show()
-                        );
-                Toast.makeText(this, "Added to favorites locally!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
-            }
+                                (isLoggedIn -> {
+                                    if (isLoggedIn) {
+                                        if (meal != null) {
+                                            presenter.saveMealLocal(meal);
+                                            presenter.saveMealRemote(meal)
+                                                    .subscribe(
+                                                            () -> Toast.makeText(this, "Added to favorites remotely!", Toast.LENGTH_SHORT).show(),
+                                                            throwable -> Toast.makeText(this, "Failed to save remotely: " + throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                                                    );
+                                            Toast.makeText(this, "Added to favorites locally!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(this, "Error: Meal not found", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        CustomAlertDialog.showGuestModeAlert(this , this);
+                                    }
+                                }),
+                                throwable -> Toast.makeText(this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                                );
         });
 
+
         binding.addToCalender.setOnClickListener(v -> {
-            final Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            SharedPrefsManager.getInstance(this)
+                    .isLoggedIn()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(isLoggedIn -> {
+                        if (isLoggedIn) {
+                            final Calendar calendar = Calendar.getInstance();
+                            int year = calendar.get(Calendar.YEAR);
+                            int month = calendar.get(Calendar.MONTH);
+                            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    this,
-                    (view, selectedYear, selectedMonth, selectedDay) -> {
-                        String selectedDate = String.format(Locale.getDefault(),
-                                "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
-                        if (meal != null) {
-                            presenter.addToCalender(meal, selectedDate)
-                                    .subscribe(
-                                            () -> Toast.makeText(this, "Added to Calendar!", Toast.LENGTH_SHORT).show(),
-                                            throwable -> Toast.makeText(this, "Failed to add to Calendar", Toast.LENGTH_SHORT).show()
-                                    );
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                    this,
+                                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                                        String selectedDate = String.format(Locale.getDefault(),
+                                                "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
+                                        if (meal != null) {
+                                            presenter.addToCalender(meal, selectedDate)
+                                                    .subscribe(
+                                                            () -> Toast.makeText(this, "Added to Calendar!", Toast.LENGTH_SHORT).show(),
+                                                            throwable -> Toast.makeText(this, "Failed to add to Calendar", Toast.LENGTH_SHORT).show()
+                                                    );
+                                        }
+                                        Log.d("MealDetailsActivity", "Selected Date: " + selectedDate);
+                                    },
+                                    year, month, day
+                            );
+
+                            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis() - 1000);
+                            calendar.add(Calendar.DAY_OF_YEAR, 7);
+                            datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+
+                            datePickerDialog.show();
+                        } else {
+                            CustomAlertDialog.showGuestModeAlert(this, this);
                         }
-                        Log.d("MealDetailsActivity", "Selected Date: " + selectedDate);
-                    },
-                    year, month, day
-            );
-
-            datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis() - 1000);
-            calendar.add(Calendar.DAY_OF_YEAR, 7);
-            datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-
-            datePickerDialog.show();
+                    }, throwable -> {
+                        Toast.makeText(this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
         });
 
     }
@@ -167,11 +202,23 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     }
 
     @Override
+    public void showGuestDialoug() {
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (binding.youtubePlayerView != null && getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.CREATED)) {
             binding.youtubePlayerView.release();
         }
         binding = null;
+    }
+
+    @Override
+    public void onConfirm() {
+        Intent intent = new Intent(this, AuthActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
