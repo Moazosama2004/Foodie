@@ -27,7 +27,7 @@ import java.util.Locale;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class PlanFragment extends Fragment implements CalenderView, OnMealClickListener ,OnDeleteClickListener{
+public class PlanFragment extends Fragment implements CalenderView, OnMealClickListener, OnDeleteClickListener {
 
     private FragmentPlanBinding binding;
     private CalenderPresenter presenter;
@@ -52,7 +52,7 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new CalendarMealAdapter(this,this);
+        adapter = new CalendarMealAdapter(this, this);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -92,7 +92,6 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
         });
 
     }
-
 
 
     @Override
@@ -148,7 +147,7 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
     @Override
     public void onDeleteClick(CalendarMeal meal) {
         Log.d("PlanFragment", "onDeleteClick: " + meal.getMealName());
-        presenter.deleteMealsByDate(meal) .subscribeOn(Schedulers.io())
+        presenter.deleteMealsByDate(meal).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         () -> {
@@ -163,6 +162,6 @@ public class PlanFragment extends Fragment implements CalenderView, OnMealClickL
                             Log.e("PlanFragment", "Error deleting meal", throwable);
                             showError(throwable.getMessage());
                         }
-                );;
+                );
     }
 }

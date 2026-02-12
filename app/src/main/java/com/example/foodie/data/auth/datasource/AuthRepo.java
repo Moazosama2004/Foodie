@@ -36,6 +36,6 @@ public class AuthRepo {
     }
 
     public FirebaseAuthImpl getAuthService() {
-        return (FirebaseAuthImpl) this.authRemoteDataSource.getAuthService();
+        return this.authRemoteDataSource.getAuthService();
     }
 }

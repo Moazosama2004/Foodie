@@ -19,8 +19,8 @@ import java.util.List;
 
 public class CategoriesMealsAdapter extends RecyclerView.Adapter<CategoriesMealsAdapter.CategoryViewHolder> {
 
-    private List<Category> categories = new ArrayList<>();
     private final onCardClickListener onCardClickListener;
+    private List<Category> categories = new ArrayList<>();
 
     public CategoriesMealsAdapter(onCardClickListener onCardClickListener) {
         this.onCardClickListener = onCardClickListener;

@@ -7,6 +7,7 @@ public interface HomePresenter {
 
 
     void loadUserName();
+
     void destroy();
 
 }

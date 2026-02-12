@@ -1,4 +1,4 @@
-package com.example.foodie.network;
+package com.example.foodie.config.network;
 
 import com.example.foodie.data.home.api.MealHomeService;
 

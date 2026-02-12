@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.foodie.R;
+import com.example.foodie.config.networkconnection.NetworkUtil;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.data.search.model.Area;
 import com.example.foodie.data.search.model.Category;
@@ -27,14 +28,11 @@ import com.example.foodie.presentation.details.view.MealDetailsActivity;
 import com.example.foodie.presentation.search.presenter.SearchPresenter;
 import com.example.foodie.presentation.search.presenter.SearchPresenterImpl;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
@@ -48,10 +46,10 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
     private IngredientAdapter ingredientAdapter;
     private FilteredMealsAdapter filteredMealsAdapter;
 
-    private List<Category> allCategories = new ArrayList<>();
-    private List<Ingredient> allIngredients = new ArrayList<>();
-    private List<Area> allAreas = new ArrayList<>();
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final List<Category> allCategories = new ArrayList<>();
+    private final List<Ingredient> allIngredients = new ArrayList<>();
+    private final List<Area> allAreas = new ArrayList<>();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private boolean isConnected = true;
 
     private int checkedId = -1;
@@ -142,8 +140,13 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
 
     private void setupSearch() {
         binding.searchTxt.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -151,9 +154,10 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
             }
         });
     }
+
     private void observeNetwork() {
         compositeDisposable.add(
-                com.example.utils.NetworkUtil.observeNetwork(requireContext())
+                NetworkUtil.observeNetwork(requireContext())
                         .distinctUntilChanged()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(connected -> {
@@ -184,7 +188,7 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
             binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 3));
             binding.rvCategories.setAdapter(foodAdapter);
             presenter.getAreas();
-        }else {
+        } else {
             binding.rvCategories.setLayoutManager(new GridLayoutManager(getContext(), 2));
             binding.rvCategories.setAdapter(categoryAdapter);
             presenter.getCategories();
@@ -198,15 +202,15 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
 
         if (data.get(0) instanceof Category) {
             allCategories.clear();
-            for (Object o : data) allCategories.add((Category)o);
+            for (Object o : data) allCategories.add((Category) o);
             filterData();
         } else if (data.get(0) instanceof Ingredient) {
             allIngredients.clear();
-            for (Object o : data) allIngredients.add((Ingredient)o);
+            for (Object o : data) allIngredients.add((Ingredient) o);
             filterData();
         } else if (data.get(0) instanceof Area) {
             allAreas.clear();
-            for (Object o : data) allAreas.add((Area)o);
+            for (Object o : data) allAreas.add((Area) o);
             filterData();
         } else {
             filteredMealsAdapter.setMeals(data);
@@ -253,8 +257,13 @@ public class SearchFragment extends Fragment implements SearchView, onCardClickL
         showNetworkErrorOverlay(message);
     }
 
-    @Override public void showLoading() {}
-    @Override public void hideLoading() {}
+    @Override
+    public void showLoading() {
+    }
+
+    @Override
+    public void hideLoading() {
+    }
 
     @Override
     public void goToMealDetails(Meal meal) {

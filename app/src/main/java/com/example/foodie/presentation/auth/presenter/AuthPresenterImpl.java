@@ -8,8 +8,6 @@ import com.example.foodie.data.auth.datasource.AuthRepo;
 import com.example.foodie.presentation.auth.view.AuthView;
 import com.example.foodie.utils.firebase.auth.FirebaseAuthImpl;
 
-import org.checkerframework.checker.units.qual.A;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -20,7 +18,7 @@ public class AuthPresenterImpl implements AuthPresenter {
     private final AuthView authView;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    public AuthPresenterImpl(AuthView authView , Context context) {
+    public AuthPresenterImpl(AuthView authView, Context context) {
         this.authView = authView;
         this.authRepo = new AuthRepo(context);
     }
@@ -68,8 +66,6 @@ public class AuthPresenterImpl implements AuthPresenter {
     }
 
 
-
-
     @Override
     public void firebaseWithGoogle(String idToken) {
         authView.showLoading();
@@ -92,11 +88,11 @@ public class AuthPresenterImpl implements AuthPresenter {
     }
 
     public Intent getGoogleSignInIntent() {
-        return ((FirebaseAuthImpl) authRepo.getAuthService()).getGoogleSignInIntent();
+        return authRepo.getAuthService().getGoogleSignInIntent();
     }
 
     public void handleGoogleSignInResult(Intent data) {
-        String idToken = ((FirebaseAuthImpl) authRepo.getAuthService())
+        String idToken = authRepo.getAuthService()
                 .extractIdTokenFromIntent(data);
 
         loginWithGoogle(idToken);

@@ -2,20 +2,13 @@ package com.example.foodie.presentation.search.presenter;
 
 import android.util.Log;
 
-import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.data.search.MealSearchRepo;
-import com.example.foodie.data.search.model.Area;
-import com.example.foodie.data.search.model.Category;
-import com.example.foodie.data.search.model.FilteredMeal;
-import com.example.foodie.data.search.model.Ingredient;
 import com.example.foodie.presentation.search.view.SearchView;
 
-import java.util.List;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class SearchPresenterImpl implements SearchPresenter {
 
     private final MealSearchRepo repo;

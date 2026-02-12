@@ -1,17 +1,12 @@
 package com.example.foodie.presentation.fav.presenter;
 
 import android.content.Context;
-import android.util.Log;
-
-import androidx.lifecycle.LiveData;
 
 import com.example.foodie.data.core.FavMealsRepo;
-import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.fav.view.FavView;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
@@ -34,7 +29,7 @@ public class FavPresenterImpl implements FavPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess(favMeals -> {
-                    if(favMeals.isEmpty()) {
+                    if (favMeals.isEmpty()) {
                         view.showEmptyFav();
                     }
                     view.hideProgress();

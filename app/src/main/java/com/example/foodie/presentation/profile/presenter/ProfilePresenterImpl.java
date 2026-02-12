@@ -11,12 +11,12 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class ProfilePresenterImpl implements ProfilePresenter {
-    private AuthRepo authRepo;
-    private ProfileView view;
     private final SharedPrefsManager prefs;
     private final CompositeDisposable disposables = new CompositeDisposable();
+    private final AuthRepo authRepo;
+    private final ProfileView view;
 
-    public ProfilePresenterImpl(Activity activity , Context context, ProfileView view) {
+    public ProfilePresenterImpl(Activity activity, Context context, ProfileView view) {
         authRepo = new AuthRepo(activity);
         this.view = view;
         this.prefs = SharedPrefsManager.getInstance(context);

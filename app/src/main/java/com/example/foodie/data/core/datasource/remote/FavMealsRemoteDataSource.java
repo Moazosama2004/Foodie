@@ -3,7 +3,6 @@ package com.example.foodie.data.core.datasource.remote;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.utils.firebase.storage.FirestoreMealStorage;
 import com.example.foodie.utils.services.MealStorage;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 
 import java.util.List;
 
@@ -18,16 +17,15 @@ public class FavMealsRemoteDataSource {
     }
 
 
-
     public Completable saveMeal(Meal meal) {
         return storageService.saveMeal(meal);
     }
 
     public Completable deleteMeal(String id) {
-        return  storageService.deleteMeal(id );
+        return storageService.deleteMeal(id);
     }
 
-    public Single<List<Meal>> getAllFavMeals( ) {
+    public Single<List<Meal>> getAllFavMeals() {
         return storageService.getAllMeals();
     }
 }

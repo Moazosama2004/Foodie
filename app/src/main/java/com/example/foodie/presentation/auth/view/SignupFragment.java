@@ -6,15 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.foodie.R;
 import com.example.foodie.databinding.FragmentSignupBinding;
 import com.example.foodie.presentation.auth.presenter.AuthPresenter;
 import com.example.foodie.presentation.auth.presenter.AuthPresenterImpl;
@@ -46,7 +42,7 @@ public class SignupFragment extends Fragment implements AuthView {
         binding.signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authPresenter.register(binding.signupNameTxt.getText().toString(),binding.signupEmailTxt.getText().toString(), binding.signupPasswordTxt.getText().toString());
+                authPresenter.register(binding.signupNameTxt.getText().toString(), binding.signupEmailTxt.getText().toString(), binding.signupPasswordTxt.getText().toString());
             }
         });
 

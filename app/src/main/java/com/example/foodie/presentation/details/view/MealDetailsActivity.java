@@ -145,13 +145,16 @@ public class MealDetailsActivity extends AppCompatActivity implements DetailsVie
     }
 
     @Override
-    public void showProgress() { }
+    public void showProgress() {
+    }
 
     @Override
-    public void hideProgress() { }
+    public void hideProgress() {
+    }
 
     @Override
-    public void showError(String message) { }
+    public void showError(String message) {
+    }
 
     @Override
     public void onSuccess() {

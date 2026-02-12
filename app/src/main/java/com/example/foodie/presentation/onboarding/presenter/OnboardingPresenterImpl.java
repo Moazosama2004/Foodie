@@ -1,7 +1,6 @@
 package com.example.foodie.presentation.onboarding.presenter;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import com.example.foodie.data.onboarding.OnboardingRepo;
@@ -18,10 +17,12 @@ public class OnboardingPresenterImpl implements OnboardingPresenter {
     private final OnboardingView view;
 
     private final CompositeDisposable disposables = new CompositeDisposable();
+
     public OnboardingPresenterImpl(Context context, OnboardingView view) {
         this.repo = new OnboardingRepo(context);
         this.view = view;
     }
+
     @Override
     public void decideStartDestination() {
         disposables.add(
@@ -36,7 +37,8 @@ public class OnboardingPresenterImpl implements OnboardingPresenter {
                                         disposables.add(
                                                 repo.setOnboardingSeen(true)
                                                         .subscribe(
-                                                                () -> {},
+                                                                () -> {
+                                                                },
                                                                 throwable -> Log.e("Onboarding", throwable.getMessage())
                                                         )
                                         );
@@ -48,7 +50,6 @@ public class OnboardingPresenterImpl implements OnboardingPresenter {
                         )
         );
     }
-
 
 
     private void checkLogin() {

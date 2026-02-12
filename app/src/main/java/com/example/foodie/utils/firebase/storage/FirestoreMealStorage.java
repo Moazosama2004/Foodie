@@ -2,7 +2,6 @@ package com.example.foodie.utils.firebase.storage;
 
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.utils.services.MealStorage;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,7 +29,6 @@ public class FirestoreMealStorage implements MealStorage {
         return auth.getCurrentUser().getUid();
     }
 
-    // ================= SAVE MEAL =================
     public Completable saveMeal(Meal meal) {
         return Completable.create(emitter -> {
             String userId = getUserId();
@@ -44,7 +42,6 @@ public class FirestoreMealStorage implements MealStorage {
         });
     }
 
-    // ================= DELETE MEAL =================
     public Completable deleteMeal(String mealId) {
         return Completable.create(emitter -> {
             String userId = getUserId();
@@ -57,7 +54,6 @@ public class FirestoreMealStorage implements MealStorage {
                     .addOnFailureListener(emitter::onError);
         });
     }
-
 
 
     @Override

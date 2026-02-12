@@ -18,10 +18,9 @@ import java.util.List;
 
 public class FavouriteMealsAdapter extends RecyclerView.Adapter<FavouriteMealsAdapter.FavouriteMealsViewHolder> {
 
-    private List<Meal> favouriteMeals = new ArrayList<>();
     private final OnDeleteClickListener onDeleteClickListener;
-
     private final FavView favView;
+    private List<Meal> favouriteMeals = new ArrayList<>();
 
     public FavouriteMealsAdapter(FavView favView, OnDeleteClickListener onDeleteClickListener) {
         this.onDeleteClickListener = onDeleteClickListener;

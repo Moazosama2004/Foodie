@@ -5,5 +5,6 @@ import io.reactivex.rxjava3.core.Single;
 
 public interface UserSessionManager {
     Single<Boolean> isLoggedIn();
+
     Completable setLoggedIn(boolean loggedIn);
 }

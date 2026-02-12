@@ -27,7 +27,6 @@ public class CalendarMeal {
         this.mealImage = mealImage;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }

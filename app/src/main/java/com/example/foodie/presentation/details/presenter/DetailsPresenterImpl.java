@@ -6,12 +6,8 @@ import android.util.Log;
 import com.example.foodie.data.calender.CalenderMealsRepo;
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.core.FavMealsRepo;
-import com.example.foodie.data.core.model.User;
 import com.example.foodie.data.home.model.response.Meal;
 import com.example.foodie.presentation.details.view.DetailsView;
-
-import java.util.List;
-import java.util.concurrent.Executors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
@@ -63,7 +59,7 @@ public class DetailsPresenterImpl implements DetailsPresenter {
         calendarMeal.setMealName(meal.getStrMeal());
         calendarMeal.setMealImage(meal.getStrMealThumb());
 
-        return calenderMealsRepo.saveMealRemote(calendarMeal)  
+        return calenderMealsRepo.saveMealRemote(calendarMeal)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete(() -> {

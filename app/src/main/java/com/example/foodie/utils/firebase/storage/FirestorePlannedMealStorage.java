@@ -29,7 +29,6 @@ public class FirestorePlannedMealStorage implements PlannedMealStorage {
         return auth.getCurrentUser().getUid();
     }
 
-    // ================= SAVE PLANNED MEAL =================
     @Override
     public Completable saveMeal(CalendarMeal meal) {
         return Completable.create(emitter -> {
@@ -45,7 +44,6 @@ public class FirestorePlannedMealStorage implements PlannedMealStorage {
         });
     }
 
-    // ================= DELETE PLANNED MEAL =================
     @Override
     public Completable deleteMeal(String mealId) {
         return Completable.create(emitter -> {
@@ -61,7 +59,6 @@ public class FirestorePlannedMealStorage implements PlannedMealStorage {
         });
     }
 
-    // ================= GET ALL PLANNED MEALS =================
     @Override
     public Single<List<CalendarMeal>> getAllMeals() {
         return Single.create(emitter -> {

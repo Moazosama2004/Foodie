@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.foodie.config.networkconnection;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

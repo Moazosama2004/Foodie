@@ -1,11 +1,10 @@
 package com.example.foodie.data.calender.datasource.local;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.example.foodie.config.db.AppDatabase;
 import com.example.foodie.data.calender.model.CalendarMeal;
 import com.example.foodie.data.calender.model.CalendarMealsDao;
-import com.example.foodie.db.AppDatabase;
 
 import java.util.List;
 
@@ -20,8 +19,6 @@ public class CalenderMealsLocalDataSource {
     }
 
     public Completable insertMeal(CalendarMeal meal) {
-        Log.d("CalenderMealsLocalDataSource", "Inserting meal: " + meal.getMealName());
-
         return calendarMealsDao.insertMeal(meal);
     }
 

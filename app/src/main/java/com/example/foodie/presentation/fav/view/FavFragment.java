@@ -2,7 +2,6 @@ package com.example.foodie.presentation.fav.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +18,6 @@ import com.example.foodie.databinding.FragmentFavBinding;
 import com.example.foodie.presentation.details.view.MealDetailsActivity;
 import com.example.foodie.presentation.fav.presenter.FavPresenter;
 import com.example.foodie.presentation.fav.presenter.FavPresenterImpl;
-import com.example.foodie.presentation.fav.view.FavView;
-import com.example.foodie.presentation.fav.view.FavouriteMealsAdapter;
-import com.example.foodie.presentation.fav.view.OnDeleteClickListener;
 
 import java.util.List;
 
@@ -30,9 +25,9 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class FavFragment extends Fragment implements FavView, OnDeleteClickListener {
 
+    private final CompositeDisposable disposables = new CompositeDisposable();
     private FavouriteMealsAdapter adapter;
     private FavPresenter presenter;
-    private final CompositeDisposable disposables = new CompositeDisposable();
     private FragmentFavBinding binding;
 
 
@@ -46,7 +41,7 @@ public class FavFragment extends Fragment implements FavView, OnDeleteClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentFavBinding.inflate(inflater, container, false);
-        return  binding.getRoot();
+        return binding.getRoot();
     }
 
     @Override
@@ -86,24 +81,37 @@ public class FavFragment extends Fragment implements FavView, OnDeleteClickListe
         super.onDestroyView();
     }
 
-    @Override public void showProgress() {
+    @Override
+    public void showProgress() {
         binding.loadingOverlay.setVisibility(View.VISIBLE);
         binding.favRecyclerView.setVisibility(View.GONE);
     }
-    @Override public void hideProgress() {
+
+    @Override
+    public void hideProgress() {
         binding.loadingOverlay.setVisibility(View.GONE);
         binding.favRecyclerView.setVisibility(View.VISIBLE);
     }
-    @Override public void showError(String message) {}
-    @Override public void showFavMeals(List<Meal> favMeals) {}
+
+    @Override
+    public void showError(String message) {
+    }
+
+    @Override
+    public void showFavMeals(List<Meal> favMeals) {
+    }
 
 
-    @Override public void goToDetails(Meal meal) {
+    @Override
+    public void goToDetails(Meal meal) {
         Intent intent = new Intent(getContext(), MealDetailsActivity.class);
         intent.putExtra("MEAL_KEY", meal);
         startActivity(intent);
     }
-    @Override public void onSuccess() {}
+
+    @Override
+    public void onSuccess() {
+    }
 
     @Override
     public void showEmptyFav() {
@@ -111,6 +119,11 @@ public class FavFragment extends Fragment implements FavView, OnDeleteClickListe
         binding.favRecyclerView.setVisibility(View.GONE);
     }
 
-    @Override public void showError(Throwable throwable) {}
-    @Override public void onDeleteSuccess(String mealId) {}
+    @Override
+    public void showError(Throwable throwable) {
+    }
+
+    @Override
+    public void onDeleteSuccess(String mealId) {
+    }
 }
