@@ -1,4 +1,5 @@
 # Foodie - Your Personal Comfort Food Companion
+<img width="4800" height="3600" alt="Mockup 2" src="https://github.com/user-attachments/assets/ec437273-c7f7-4834-9bcd-356e7e56b5c7" />
 
 Foodie is a modern Android application designed to help users discover, save, and plan their favorite meals. Whether you're looking for a quick recipe or planning your weekly menu, Foodie provides a seamless and beautiful user experience.
 
@@ -54,4 +55,15 @@ Foodie is a modern Android application designed to help users discover, save, an
 
 ## 📸 Screenshots
 
-*(Add your app screenshots here to showcase the beautiful UI!)*
+| Screenshot 1 | Screenshot 2 | Screenshot 3 |
+|--------------|--------------|--------------|
+| <img width="300" src="https://github.com/user-attachments/assets/7b820967-54cf-4a32-af5f-381259269451" /> | <img width="300" src="https://github.com/user-attachments/assets/dbbec200-b41e-4960-945a-f302da759caa" /> | <img width="300" src="https://github.com/user-attachments/assets/cb87ae3a-8f6d-4e1d-8445-982a4098413f" /> |
+
+| Screenshot 4 | Screenshot 5 | Screenshot 6 |
+|--------------|--------------|--------------|
+| <img width="300" src="https://github.com/user-attachments/assets/1f134754-0327-416d-8ce7-31bff80a1dce" /> | <img width="300" src="https://github.com/user-attachments/assets/e1e83432-01a6-4e8d-a681-7c6e26d43139" /> | <img width="300" src="https://github.com/user-attachments/assets/df9bcb07-9a17-49c4-8b33-cafc2a258c1f" /> |
+
+| Screenshot 7 |
+|--------------|
+| <img width="300" src="https://github.com/user-attachments/assets/298d3482-411a-4a45-808b-6d3f6ac64e6d" /> |
+
